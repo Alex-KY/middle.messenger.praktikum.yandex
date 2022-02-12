@@ -1,0 +1,15 @@
+.error-page {
+  @include flex-center;
+  height: 100%;
+
+  .error-page__block {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .title {
+      margin-top: 20px;
+      margin-bottom: 60px;
+    }
+  }
+}
