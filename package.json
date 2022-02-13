@@ -10,19 +10,19 @@
     "since 2017-06"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.17.2"
+    "@babel/runtime": "7.17.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.2",
-    "@babel/plugin-transform-runtime": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@parcel/transformer-babel": "^2.3.1",
-    "@parcel/transformer-inline-string": "^2.3.1",
-    "@parcel/transformer-sass": "^2.3.1",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "express": "^4.17.2",
-    "node-sass": "^7.0.1",
-    "parcel": "^2.3.1"
+    "@babel/core": "7.17.2",
+    "@babel/plugin-transform-runtime": "7.17.0",
+    "@babel/preset-env": "7.16.11",
+    "@parcel/transformer-babel": "2.3.1",
+    "@parcel/transformer-inline-string": "2.3.1",
+    "@parcel/transformer-sass": "2.3.1",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "express": "4.17.2",
+    "node-sass": "7.0.1",
+    "parcel": "2.3.1"
   },
   "scripts": {
     "start": "rm -rf dist && parcel build src/index.html && node ./src/server.js",

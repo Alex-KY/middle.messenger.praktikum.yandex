@@ -3,9 +3,6 @@ body, p {
 }
 input {
   border: none;
-  &:focus {
-    outline: none;
-  }
 }
 button {
   padding: 0;

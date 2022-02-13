@@ -1,55 +1,53 @@
-window.template = (function() {
-  return `
-    <div class="profile-page__side-button">
-      <button onclick="{{ back }}">{{ icons.arrow }}</button>
+const template = `
+  <div class="profile-page__side-button">
+    <button onclick="{{ back }}">{{ icons.arrow }}</button>
+  </div>
+  <div class="profile-page__content">
+    <div class="profile-page__content__avatar-block">
+      <div class="profile-page__content__avatar-block__avatar">{{ icons.image }}</div>
+      <span>{{ name }}</span>
     </div>
-    <div class="profile-page__content">
-      <div class="profile-page__content__avatar-block">
-        <div class="profile-page__content__avatar-block__avatar">{{ icons.image }}</div>
-        <span>{{ name }}</span>
+    <div class="profile-page__content__data-block dividered-content">
+      <div class="dividered-content__row">
+        <span>{{ rows.1.text }}</span>
+        <span>{{ rows.1.value }}</span>
       </div>
-      <div class="profile-page__content__data-block dividered-content">
-        <div class="dividered-content__row">
-          <span>{{ rows.1.text }}</span>
-          <span>{{ rows.1.value }}</span>
-        </div>
-        <div class="dividered-content__row">
-          <span>{{ rows.2.text }}</span>
-          <span>{{ rows.2.value }}</span>
-        </div>
-        <div class="dividered-content__row">
-          <span>{{ rows.3.text }}</span>
-          <span>{{ rows.3.value }}</span>
-        </div>
-        <div class="dividered-content__row">
-          <span>{{ rows.4.text }}</span>
-          <span>{{ rows.4.value }}</span>
-        </div>
-        <div class="dividered-content__row">
-          <span>{{ rows.5.text }}</span>
-          <span>{{ rows.5.value }}</span>
-        </div>
-        <div class="dividered-content__row">
-          <span>{{ rows.6.text }}</span>
-          <span>{{ rows.6.value }}</span>
-        </div>
+      <div class="dividered-content__row">
+        <span>{{ rows.2.text }}</span>
+        <span>{{ rows.2.value }}</span>
       </div>
-      <div class="profile-page__content__buttons-block dividered-content">
-        <div class="dividered-content__row">
-          <span class="button-text">{{ buttons.1.text }}</span>
-        </div>
-        <div class="dividered-content__row">
-          <span class="button-text">{{ buttons.2.text }}</span>
-        </div>
-        <div class="dividered-content__row">
-          <span class="button-text error-text" onclick="{{ exit }}">{{ buttons.3.text }}</span>
-        </div>
+      <div class="dividered-content__row">
+        <span>{{ rows.3.text }}</span>
+        <span>{{ rows.3.value }}</span>
+      </div>
+      <div class="dividered-content__row">
+        <span>{{ rows.4.text }}</span>
+        <span>{{ rows.4.value }}</span>
+      </div>
+      <div class="dividered-content__row">
+        <span>{{ rows.5.text }}</span>
+        <span>{{ rows.5.value }}</span>
+      </div>
+      <div class="dividered-content__row">
+        <span>{{ rows.6.text }}</span>
+        <span>{{ rows.6.value }}</span>
       </div>
     </div>
-  `;
-})();
+    <div class="profile-page__content__buttons-block dividered-content">
+      <div class="dividered-content__row">
+        <span class="button-text">{{ buttons.1.text }}</span>
+      </div>
+      <div class="dividered-content__row">
+        <span class="button-text">{{ buttons.2.text }}</span>
+      </div>
+      <div class="dividered-content__row">
+        <span class="button-text error-text" onclick="{{ exit }}">{{ buttons.3.text }}</span>
+      </div>
+    </div>
+  </div>
+`;
 
-const tmpl = new Templator(window.template);
+const tmpl = new Templator(template);
 
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
 import * as image from 'bundle-text:/static/icons/image.svg';

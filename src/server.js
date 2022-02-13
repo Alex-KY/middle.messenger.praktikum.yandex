@@ -13,6 +13,6 @@ app.use('/profile', express.static('dist'));
 app.use('/404', express.static('dist'));
 app.use('/500', express.static('dist'));
 
-app.listen(PORT, function () {
+app.listen(process.env.PORT || PORT, function () {
   console.log(`Example app listening on port ${PORT}!`);
 });
