@@ -1,0 +1,6 @@
+button {
+  @include button;
+}
+.button-text {
+  @include link;
+}
