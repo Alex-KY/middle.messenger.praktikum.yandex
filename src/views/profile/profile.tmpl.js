@@ -1,3 +1,5 @@
+import Templator from '../../utils/templater/index';
+
 const template = `
   <div class="profile-page__side-button">
     <button onclick="{{ back }}">{{ icons.arrow }}</button>

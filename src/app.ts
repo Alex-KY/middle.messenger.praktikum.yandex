@@ -1,6 +1,3 @@
-// Инициализируем шаблонизатор
-import './utils/templater/index.js';
-
 // Динамический импорт
 const pages = {
   'login': async function () {

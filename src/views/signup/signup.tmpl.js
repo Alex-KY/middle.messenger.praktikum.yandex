@@ -1,3 +1,5 @@
+import Templator from '../../utils/templater/index';
+
 const template = `
   <div class="sign-block">
     <p class="title">{{ title }}</p>

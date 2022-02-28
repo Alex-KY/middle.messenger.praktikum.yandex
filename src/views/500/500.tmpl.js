@@ -1,3 +1,5 @@
+import Templator from '../../utils/templater/index';
+
 const template = `
   <div class="error-page__block">
     <p class="big-title">500</p>

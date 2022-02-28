@@ -25,7 +25,7 @@
     "parcel": "2.3.1"
   },
   "scripts": {
-    "start": "rm -rf dist && parcel build src/index.html && node ./src/server.js",
+    "start": "rm -rf dist && parcel build src/index.html && node ./src/server.ts",
     "build": "parcel build src/index.html",
     "test": "test"
   },
