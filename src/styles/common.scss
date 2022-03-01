@@ -37,6 +37,10 @@ body {
   font-size: 11px;
   line-height: 11px;
 }
+.message-text {
+  font-size: 12px;
+  line-height: 15px;
+}
 .link-text {
   @include link;
 }
