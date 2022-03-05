@@ -6,7 +6,9 @@ const template = `
   </div>
   <div class="profile-page__content">
     <div class="profile-page__content__avatar-block">
-      <div class="profile-page__content__avatar-block__avatar">{{ icons.image }}</div>
+      <div class="profile-page__content__avatar-block__avatar">
+        <button>{{ icons.image }}</button>
+      </div>
       <span>{{ name }}</span>
     </div>
     <div class="profile-page__content__data-block dividered-content">

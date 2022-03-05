@@ -1,9 +1,11 @@
 .profile-page {
   @include flex-center;
+
   height: 100%;
 
   &__side-button {
     @include flex-center;
+
     background-color: $foggy-light;
     position: fixed;
     left: 0;
@@ -36,6 +38,7 @@
       }
     }
   }
+
   &__content {
     width: 510px;
     height: 100%;
@@ -53,12 +56,13 @@
         cursor: pointer;
         margin: 20px auto;
 
-        svg {
+        button svg {
           position: absolute;
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
         }
+
         &:hover {
           &::after {
             position: absolute;
@@ -69,10 +73,12 @@
             height: 100%;
             border-radius: 50%;
             background-color: $black;
-            opacity: 50%;
+            opacity: 0.5;
           }
+
           &::before {
             @include flex-center;
+
             position: absolute;
             content: "Поменять аватар";
             left: 50%;
@@ -86,12 +92,14 @@
           }
         }
       }
+
       span {
         font-size: 16px;
         line-height: 16px;
         font-weight: 600;
       }
     }
+
     &__data-block,
     &__buttons-block {
       margin-top: 60px;
@@ -103,12 +111,13 @@
         align-items: center;
 
         span:last-child:not(:first-child) {
-          opacity: 50%;
+          opacity: 0.5;
         }
       }
     }
+
     .dividered-content {
-      .dividered-content__row {
+      &__row {
         position: relative;
 
         &::after {
@@ -120,10 +129,11 @@
           height: 1px;
           background-color: $foggy;
         }
-      }
-      .dividered-content__row:last-child {
-        &::after {
-          display: none;
+
+        &:last-child {
+          &::after {
+            display: none;
+          }
         }
       }
     }

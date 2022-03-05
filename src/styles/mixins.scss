@@ -27,7 +27,7 @@
 @mixin text-color($color-name, $color) {
   [class^=#{$color-name}-text],
   [class*= #{$color-name}-text] {
-    color: $color !important;
-    caret-color: $color !important;
+    color: $color;
+    caret-color: $color;
   }
 }

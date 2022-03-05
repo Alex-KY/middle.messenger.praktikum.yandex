@@ -8,6 +8,7 @@
     width: 100%;
     height: auto;
   }
+
   &__side {
     width: 310px;
     border-right: 1px solid $foggy;
@@ -22,9 +23,11 @@
 
       #profile-link {
         @include flex-center;
+
         flex-grow: 1;
         margin: 0 10px;
       }
+
       #search-messages {
         width: calc(100% - 20px);
         height: 32px;
@@ -36,6 +39,7 @@
         align-self: center;
       }
     }
+
     &-list {
       &.unit {
         position: relative;
@@ -46,7 +50,7 @@
 
         &::before {
           position: absolute;
-          content: '';
+          content: "";
           top: 0;
           left: 50%;
           width: calc(100% - 20px);
@@ -54,6 +58,7 @@
           transform: translate(-50%, 0);
           background-color: $foggy;
         }
+
         .unit {
           &__avatar {
             width: 50px;
@@ -62,6 +67,7 @@
             border-radius: 50%;
             background-color: $gray-light;
           }
+
           &__text {
             display: flex;
             flex-direction: column;
@@ -75,6 +81,7 @@
               overflow: hidden;
               text-overflow: ellipsis;
             }
+
             &__message {
               height: 30px;
               overflow: hidden;
@@ -88,11 +95,13 @@
               &__identity {
                 padding-right: 2px;
               }
+
               &__text {
                 color: $gray;
               }
             }
           }
+
           &__parameters {
             display: flex;
             flex-direction: column;
@@ -104,8 +113,10 @@
               white-space: nowrap;
               color: $gray;
             }
+
             &__messages-count {
               @include flex-center;
+
               min-width: 20px;
               height: 20px;
               margin-bottom: 5px;
@@ -117,10 +128,11 @@
             }
           }
         }
+
         &:hover {
           &::after {
             position: absolute;
-            content: '';
+            content: "";
             top: 50%;
             left: 0;
             width: 100%;
@@ -133,8 +145,10 @@
       }
     }
   }
+
   &__messages-block {
     @include flex-center;
+
     flex-grow: 1;
   }
 }

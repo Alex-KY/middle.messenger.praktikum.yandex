@@ -28,13 +28,16 @@
     "express": "4.17.2",
     "nanoid": "3.3.1",
     "node-sass": "7.0.1",
-    "parcel": "2.3.1"
+    "parcel": "2.3.1",
+    "stylelint": "^14.5.3",
+    "stylelint-config-standard-scss": "^3.0.0",
+    "stylelint-scss": "^4.1.0"
   },
   "scripts": {
     "start": "rm -rf dist && parcel build src/index.html && node ./src/server.ts",
     "build": "parcel build src/index.html",
-    "lint": "eclint check src/ && eslint src/",
-    "lint-fix": "eclint fix src/ && eslint --fix src/",
+    "lint": "stylelint src/**/*.scss && eclint check src/ && eslint src/",
+    "lint-fix": "stylelint --fix src/**/*.scss && eclint fix src/ && eslint --fix src/",
     "test": "test"
   },
   "repository": {
