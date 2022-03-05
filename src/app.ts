@@ -1,22 +1,22 @@
 // Динамический импорт
 const pages = {
   'login': async function () {
-    await import('./views/login/login.tmpl');
+    await import('./views/Login');
   },
   'signup': async function () {
-    await import('./views/signup/signup.tmpl');
+    await import('./views/Signup');
   },
   'chat': async function () {
-    await import('./views/chat/chat.tmpl');
+    await import('./views/Chat');
   },
   'profile': async function () {
-    await import('./views/profile/profile.tmpl');
+    await import('./views/Profile');
   },
   '404': async function () {
-    await import('./views/404/404.tmpl');
+    await import('./views/404');
   },
   '500': async function () {
-    await import('./views/500/500.tmpl');
+    await import('./views/500');
   }
 };
 

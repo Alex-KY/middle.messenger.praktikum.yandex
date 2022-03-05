@@ -14,8 +14,10 @@ const context = {
   text: 'Не туда попали'
 };
 
-const renderedTemplate = tmpl.compile(context);
-const root = document.querySelector('.root');
+export default (function () {
+  const renderedTemplate = tmpl.compile(context);
+  const root = document.querySelector('.root') as any;
 
-root.classList = 'root error-page';
-root.innerHTML = renderedTemplate;
+  root.classList = 'root error-page';
+  root.innerHTML = renderedTemplate;
+})();

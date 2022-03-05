@@ -1,7 +1,8 @@
-import get from "./utils/get.js"
+import get from "./utils/get.js";
+import { nanoid } from 'nanoid';
 
 export default class Templator {
-  TEMPLATE_REGEXP = /\{\{(.*?)\}\}/gi;
+  COMPILE_REGEXP = /\{\{(.*?)\}\}/gi;
   SPEC_SYMBOLS_REGEXP = /\[|\]/g;
 
   constructor(template) {
@@ -9,13 +10,18 @@ export default class Templator {
   }
 
   compile(ctx) {
+    this._precompileTemplate(ctx);
     return this._compileTemplate(ctx);
+  }
+
+  _precompileTemplate(ctx) {
+    return ctx;
   }
 
   _compileTemplate(ctx) {
     let tmpl = this._template;
     let key = null;
-    const regExp = this.TEMPLATE_REGEXP;
+    const regExp = this.COMPILE_REGEXP;
 
     // Важно делать exec именно через константу, иначе уйдёте в бесконечный цикл
     while ((key = regExp.exec(tmpl))) {
@@ -30,10 +36,11 @@ export default class Templator {
         const data = get(ctx, tmplValue);
 
         if (typeof data === "function") {
-          window[tmplValue] = data;
+          const id = nanoid(6);
+          window[`${tmplValue}-${id}`] = data;
           tmpl = tmpl.replace(
             new RegExp(tmplKey, "gi"),
-            `window.${key[1].trim()}()`
+            `window['${tmplValue}-${id}']`
           );
           continue;
         }

@@ -1,4 +1,6 @@
-import Templator from '../../utils/templater/index';
+import Block from '../../utils/block';
+import Templator from '../..//utils/templater';
+import renderDOM from '../..//utils/renderDOM';
 
 const template = `
   <div class="chat-page">
@@ -38,14 +40,12 @@ const template = `
       </div>
     </div>
     <div class="chat-page__messages-block">
-      <div class="chat-page__messages-block__empty">{{ empty }}</div>
+      <!--<div class="chat-page__messages-block__empty">{{ empty }}</div>-->
     </div>
   </div>
 `;
 
-const tmpl = new Templator(template);
-
-const context = {
+const props = {
   profile: 'Профиль >',
   empty: 'Выберите чат чтобы отправить сообщение',
   inputs: [
@@ -82,8 +82,16 @@ const context = {
   ]
 };
 
-const renderedTemplate = tmpl.compile(context);
-const root = document.querySelector('.root');
+export default class Chat extends Block {
+  constructor(props: any) {
+    super(props);
+  }
 
-root.classList = 'root chat-page';
-root.innerHTML = renderedTemplate;
+  render(): any {
+    const tmpl = new Templator(template);
+    return tmpl.compile(this.props);
+  }
+};
+
+const renderedTemplate = new Chat(props).render();
+renderDOM(renderedTemplate, {class: 'chat-page'});

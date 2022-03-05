@@ -65,8 +65,10 @@ const context = {
   }
 };
 
-const renderedTemplate = tmpl.compile(context);
-const root = document.querySelector('.root');
+export default (function () {
+  const renderedTemplate = tmpl.compile(context);
+  const root = document.querySelector('.root') as any;
 
-root.classList = 'root signup-page';
-root.innerHTML = renderedTemplate;
+  root.classList = 'root signup-page';
+  root.innerHTML = renderedTemplate;
+})();
