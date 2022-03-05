@@ -11,6 +11,6 @@ function get (obj, path, defaultValue) {
   }
 
   return result ?? defaultValue;
-};
+}
 
 export default get;

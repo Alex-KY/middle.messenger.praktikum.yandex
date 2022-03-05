@@ -34,6 +34,6 @@ async function ready () {
       pages[page]();
     }
   }
-};
+}
 
 document.addEventListener('DOMContentLoaded', ready);

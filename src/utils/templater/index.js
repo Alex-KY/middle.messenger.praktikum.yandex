@@ -26,7 +26,7 @@ export default class Templator {
     // Важно делать exec именно через константу, иначе уйдёте в бесконечный цикл
     while ((key = regExp.exec(tmpl))) {
       if (key[1]) {
-        const tmplValue = key[1].trim()
+        const tmplValue = key[1].trim();
         const tmplKey = key[0]
           .split('')
           .map(char => char.match(this.SPEC_SYMBOLS_REGEXP) ? `\\${char}` : char)
