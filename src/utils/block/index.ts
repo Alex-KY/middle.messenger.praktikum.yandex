@@ -13,8 +13,6 @@ export default class Block {
 
   private _element: HTMLElement | null = null;
 
-  // private _meta: { props: any };
-  
   private _eventBus: () => EventBus;
 
   protected props: any;
@@ -25,7 +23,6 @@ export default class Block {
     // console.log(tagName, props)
     const eventBus = new EventBus();
 
-    // this._meta = { props };
     this._eventBus = () => eventBus;
     this._registerEvents(eventBus);
 
@@ -114,7 +111,7 @@ export default class Block {
         if (prop.indexOf('_') === 0) {
           throw new Error('Отказано в доступе');
         }
-    
+
         const value = target[prop];
         return typeof value === "function" ? value.bind(target) : value;
       },
