@@ -34,7 +34,7 @@ export default class Templator {
           let tmplData = '';
 
           for (let i = 0; i < data.length; i++) {
-            tmplData += `${data[i]}`
+            tmplData += `${data[i]}`;
           }
 
           tmpl = tmpl.replace(new RegExp(tmplKey, "gi"), tmplData || data);
