@@ -1,0 +1,138 @@
+@import "../../../../styles/index";
+
+.left-side {
+  width: 310px;
+  border-right: 1px solid $foggy;
+  background-color: $foggy-light;
+
+  &-top {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    #profile-link {
+      @include flex-center;
+
+      flex-grow: 1;
+      margin: 0 10px;
+    }
+
+    #search-messages {
+      width: calc(100% - 20px);
+      height: 32px;
+      margin: 14px 0;
+      background-color: $gray-light;
+      color: $gray;
+      text-align: center;
+      border-radius: 5px;
+      align-self: center;
+    }
+  }
+
+  &-list {
+    &.unit {
+      position: relative;
+      display: flex;
+      padding: 12px 10px;
+      cursor: pointer;
+      z-index: 1;
+
+      &::before {
+        position: absolute;
+        content: "";
+        top: 0;
+        left: 50%;
+        width: calc(100% - 20px);
+        height: 1px;
+        transform: translate(-50%, 0);
+        background-color: $foggy;
+      }
+
+      .unit {
+        &__avatar {
+          width: 50px;
+          min-width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background-color: $gray-light;
+        }
+
+        &__text {
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+
+          &__name {
+            font-weight: 600;
+            padding: 0 10px;
+            width: calc(100% - 35px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          &__message {
+            height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 200px;
+            padding: 0 10px;
+            padding-top: 5px;
+            flex-grow: 1;
+
+            &__identity {
+              padding-right: 2px;
+            }
+
+            &__text {
+              color: $gray;
+            }
+          }
+        }
+
+        &__parameters {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          width: 30px;
+
+          &__timestamp {
+            flex-grow: 1;
+            white-space: nowrap;
+            color: $gray;
+          }
+
+          &__messages-count {
+            @include flex-center;
+
+            min-width: 20px;
+            height: 20px;
+            margin-bottom: 5px;
+            padding: 0 5px;
+            display: flex;
+            border-radius: 20px;
+            color: $light;
+            background-color: $accent;
+          }
+        }
+      }
+
+      &:hover {
+        &::after {
+          position: absolute;
+          content: "";
+          top: 50%;
+          left: 0;
+          width: 100%;
+          height: calc(100% - 8px);
+          z-index: -1;
+          transform: translate(0, -50%);
+          background-color: $blue-light;
+        }
+      }
+    }
+  }
+}

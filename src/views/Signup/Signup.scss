@@ -1,9 +1,11 @@
+@import "../../styles/index";
+
 .signup-page {
   @include flex-center;
 
   height: 100%;
 
-  .sign-block {
+  .signup-block {
     width: 340px;
     min-height: 460px;
     padding: 30px;

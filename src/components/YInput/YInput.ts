@@ -8,7 +8,7 @@ export default class YInput extends Block {
   }
 
   render(): any {
-    const { focus, blur, input, type, name, placeholder } = this.props;
+    const { focus, blur, input, type, name, placeholder, pattern, required, class: classes } = this.props;
     const template = `
       <input
         ${focus ? `onfocus="{{ focus.fu }}(${focus?.params || ''})"` : ``}
@@ -16,8 +16,10 @@ export default class YInput extends Block {
         ${input ? `oninput="{{ input.fu }}(${input?.params || ''})"` : ``}
         type="${type || 'text'}"
         ${name ? `name="${name}"` : ``}
+        ${pattern ? `pattern="${pattern}"` : ``}
         ${placeholder ? `placeholder="${placeholder}"` : ``}
-        class="{{ class }}"
+        ${required ? `required` : ``}
+        class="y-input ${ classes || '' }"
       >
     `;
 

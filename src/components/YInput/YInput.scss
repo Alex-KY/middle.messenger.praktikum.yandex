@@ -1,3 +1,9 @@
 .y-input {
   min-width: 20px;
+  &:invalid {
+    outline-color: red;
+  }
+  &:valid {
+    outline-color: black;
+  }
 }

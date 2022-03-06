@@ -8,12 +8,12 @@ export default class YButton extends Block {
   }
 
   render(): any {
-    const { click, blur, tagName } = this.props;
+    const { click, blur, tagName, class: classes } = this.props;
     const template = `
       <${tagName || 'button'}
         ${click ? `onclick="{{ click.fu }}(${click?.params || ''})"` : ``}
         ${blur ? `onblur="{{ blur.fu }}(${blur?.params || ''})"` : ``}
-        class="y-btn {{ class }}"
+        class="y-btn ${ classes || '' }"
       >
         {{ text }}
       </${tagName || 'button'}>
