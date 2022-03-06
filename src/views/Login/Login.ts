@@ -12,12 +12,10 @@ const template = `
     <p class="title">{{ title }}</p>
     <form class="sign-block__form" onsubmit="return false">
       <div class="sign-block__form__inputs">
-        {{ inputs[0] }}
-        {{ inputs[1] }}
+        {{ #each inputs }}
       </div>
       <div class="sign-block__form__buttons">
-        {{ buttons[0] }}
-        {{ buttons[1] }}
+      {{ #each buttons }}
       </div>
     </form>
   </div>
