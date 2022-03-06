@@ -101,7 +101,7 @@ const props = {
       name: 'password',
       placeholder: 'Пароль',
       required: true,
-      pattern: '',
+      pattern: '^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,40}$',
       focus: inputEventFocus
     }),
 
@@ -110,7 +110,7 @@ const props = {
       name: 'password',
       placeholder: 'Пароль (ещё раз)',
       required: true,
-      pattern: '',
+      pattern: '^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,40}$',
       focus: inputEventFocus
     })
 

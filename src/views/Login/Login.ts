@@ -1,6 +1,6 @@
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
-import renderDOM from '../..//utils/renderDOM';
+import renderDOM from '../../utils/renderDOM';
 
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
@@ -10,7 +10,7 @@ import "./Login.scss";
 const template = `
   <div class="sign-block">
     <p class="title">{{ title }}</p>
-    <form class="sign-block__form" onsubmit="return false">
+    <form name="login" class="sign-block__form" onsubmit="return false">
       <div class="sign-block__form__inputs">
         {{ #each inputs }}
       </div>

@@ -25,9 +25,16 @@
 }
 
 @mixin text-color($color-name, $color) {
-  [class^=#{$color-name}-text],
+  [class^= #{$color-name}-text],
   [class*= #{$color-name}-text] {
     color: $color;
     caret-color: $color;
+  }
+}
+
+@mixin bg-color($color-name, $color) {
+  [class^= #{$color-name}-color],
+  [class*= #{$color-name}-color] {
+    background-color: $color;
   }
 }
