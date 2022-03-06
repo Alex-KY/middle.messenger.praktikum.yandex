@@ -1,15 +1,26 @@
 @import "/src/styles/index";
 
+button:not(span).y-btn {
+  @include button;
+}
 .y-btn {
   min-width: 40px;
 
   &--fab {
     @include flex-center;
 
-    min-width: 30px;
-    width: 30px;
-    height: 30px;
+    min-width: 28px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     padding: 0;
+
+    > svg {
+      min-width: 28px;
+    }
+  }
+
+  &--link {
+    @include link;
   }
 }

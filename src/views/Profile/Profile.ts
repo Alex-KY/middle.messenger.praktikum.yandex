@@ -1,8 +1,14 @@
-import Templator from '../../utils/templater/index';
+import Block from '../../utils/block';
+import Templator from '../../utils/templater';
+import renderDOM from '../../utils/renderDOM';
+
+import YButton from '../../components/YButton';
+
+import './Profile.scss';
 
 const template = `
   <div class="profile-page__side-button">
-    <button onclick="{{ back }}">{{ icons.arrow }}</button>
+    {{ buttons[3] }}
   </div>
   <div class="profile-page__content">
     <div class="profile-page__content__avatar-block">
@@ -39,33 +45,38 @@ const template = `
     </div>
     <div class="profile-page__content__buttons-block dividered-content">
       <div class="dividered-content__row">
-        <span class="button-text">{{ buttons[0].text }}</span>
+        {{ buttons[0] }}
       </div>
       <div class="dividered-content__row">
-        <span class="button-text">{{ buttons[1].text }}</span>
+      {{ buttons[1] }}
       </div>
       <div class="dividered-content__row">
-        <span class="button-text error-text" onclick="{{ exit }}">{{ buttons[2].text }}</span>
+      {{ buttons[2] }}
       </div>
     </div>
   </div>
 `;
 
-const tmpl = new Templator(template);
+function createNewButton(props) {
+  return new YButton(props)
+    .render();
+};
 
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
 import * as image from 'bundle-text:/static/icons/image.svg';
 
-function exit () {
+function exit() {
   window.location.pathname = '/login';
 }
-function back () {
+function back() {
   window.location.pathname = '/chat';
 }
+function click(e) {
+  console.warn(e);
+}
 
-const context = {
+const props = {
   icons: {
-    arrow,
     image
   },
   name: 'Иван',
@@ -96,24 +107,55 @@ const context = {
     }
   ],
   buttons: [
-    {
-      text: 'Изменить данные'
-    },
-    {
-      text: 'Изменить пароль'
-    },
-    {
-      text: 'Выйти'
-    }
-  ],
-  exit,
-  back
+
+    createNewButton({
+      text: 'Изменить данные',
+      click: {
+        fu: click
+      },
+      tagName: 'span',
+      class: 'y-btn--link'
+    }),
+
+    createNewButton({
+      text: 'Изменить пароль',
+      click: {
+        fu: click
+      },
+      tagName: 'span',
+      class: 'y-btn--link'
+    }),
+
+    createNewButton({
+      text: 'Выйти',
+      click: {
+        fu: exit
+      },
+      tagName: 'span',
+      class: 'y-btn--link error-text'
+    }),
+
+    createNewButton({
+      icon: arrow,
+      click: {
+        fu: back
+      },
+      class: 'y-btn--fab'
+    })
+
+  ]
 };
 
-export default (function () {
-  const renderedTemplate = tmpl.compile(context);
-  const root = document.querySelector('.root') as any;
+export default class Profile extends Block {
+  constructor(props: any) {
+    super(props);
+  }
 
-  root.classList = 'root profile-page';
-  root.innerHTML = renderedTemplate;
-})();
+  render(): any {
+    const tmpl = new Templator(template);
+    return tmpl.compile(this.props);
+  }
+};
+
+const renderedTemplate = new Profile(props).render();
+renderDOM(renderedTemplate, {class: 'profile-page'});

@@ -35,6 +35,10 @@
 @mixin bg-color($color-name, $color) {
   [class^= #{$color-name}-color],
   [class*= #{$color-name}-color] {
-    background-color: $color;
+    background-color: $color !important;
   }
 }
+
+@include text-color("error", $error);
+@include text-color("gray", $gray);
+@include bg-color("transparent", transparent);

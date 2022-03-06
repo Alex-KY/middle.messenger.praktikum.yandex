@@ -1,9 +1,0 @@
-@include bg-color("transparent", transparent);
-
-button {
-  @include button;
-}
-
-.button-text {
-  @include link;
-}
