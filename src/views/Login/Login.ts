@@ -5,6 +5,11 @@ import renderDOM from '../../utils/renderDOM';
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
 
+import {
+  loginPattern,
+  passwordPattern
+} from '../../utils/verifications/patterns';
+
 import "./Login.scss";
 
 const template = `
@@ -21,65 +26,77 @@ const template = `
   </div>
 `;
 
-function login() {
+function toLoginPage() {
   window.location.pathname = '/chat';
 }
-function signup() {
+
+function toSignupPage() {
   window.location.pathname = '/signup';
 }
-function input(e) {
-  console.warn(e);
+
+function checkField(e: Event) {
+  const { target, type } = e;
+  checkInput(target);
+
+  const targetLabel = target.parentNode.querySelector('.y-label');
+  const labelActive = type === 'focus' || (type === 'blur' && target.value);
+  targetLabel.classList.toggle('y-label--active', labelActive);
 }
 
-function createNewButton(props) {
-  return new YButton(props)
-    .render();
-};
+function checkInput (target: HTMLElement) {
+  const { valid } = target.validity;
+  target.classList.toggle('y-input__input--invalid', !valid);
+  return valid;
+}
 
-function createNewInput(props) {
-  return new YInput(props)
-    .render();
-};
+const inputEventFocus = {
+  fu: checkField,
+  params: ['event']
+}
+const inputEventBlur = {
+  fu: checkField,
+  params: ['event']
+}
 
 const props = {
   title: 'Вход',
   inputs: [
 
-    createNewInput({
-      placeholder: 'Логин',
+    new YInput({
+      label: 'Логин',
       name: 'login',
-      input: {
-        fu: input,
-        params: ['event.target.value']
-      }
-    }),
+      required: true,
+      pattern: loginPattern.source,
+      focus: inputEventFocus,
+      blur: inputEventBlur
+    }).render(),
 
-    createNewInput({
-      placeholder: 'Пароль',
+    new YInput({
+      label: 'Пароль',
       name: 'password',
-      input: {
-        fu: input,
-        params: ['event.target.value']
-      }
-    })
+      required: true,
+      pattern: passwordPattern.source,
+      focus: inputEventFocus,
+      blur: inputEventBlur
+    }).render()
 
   ],
   buttons: [
 
-    createNewButton({
+    new YButton({
       text: 'Авторизоваться',
       click: {
-        fu: login
+        fu: toLoginPage
       }
-    }),
+    }).render(),
 
-    createNewButton({
+    new YButton({
       text: 'Нет аккаунта?',
       click: {
-        fu: signup
+        fu: toSignupPage
       },
       tagName: 'a'
-    })
+    }).render()
 
   ]
 };

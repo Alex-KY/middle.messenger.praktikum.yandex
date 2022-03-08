@@ -54,7 +54,6 @@ export default class Templator {
     let key = null;
     const regExp = this.COMPILE_REGEXP;
 
-    // Важно делать exec именно через константу, иначе уйдёте в бесконечный цикл
     while ((key = regExp.exec(tmpl))) {
       if (key[1]) {
         const tmplValue = key[1].trim();
@@ -63,7 +62,6 @@ export default class Templator {
           .map(char => char.match(this.SPEC_SYMBOLS_REGEXP) ? `\\${char}` : char)
           .join('');
 
-        // get — функция, написанная ранее в уроке
         const data = get(ctx, tmplValue);
 
         if (typeof data === "function") {

@@ -76,13 +76,16 @@
       transform: scaleX(-1);
     }
 
-    input[name=message] {
+    .y-input {
       flex-grow: 1;
-      padding: 10px 20px;
       margin: 0 10px;
-      background-color: $gray-light;
-      border-radius: 30px;
-      font-size: 12px;
+
+      > input[name=message] {
+        padding: 10px 20px;
+        background-color: $gray-light;
+        border-radius: 30px;
+        font-size: 12px;
+      }
     }
   }
 

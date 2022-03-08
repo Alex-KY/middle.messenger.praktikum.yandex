@@ -1,6 +1,6 @@
 import Block from '../../utils/block';
-import Templator from '../..//utils/templater';
-import renderDOM from '../..//utils/renderDOM';
+import Templator from '../../utils/templater';
+import renderDOM from '../../utils/renderDOM';
 import LeftSide from './components/LeftSide';
 import MessagesBlock from './components/MessagesBlock';
 

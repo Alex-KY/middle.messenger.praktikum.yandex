@@ -1,4 +1,3 @@
-// Динамический импорт
 const pages = {
   'login': async function () {
     await import('./views/Login');

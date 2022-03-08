@@ -28,31 +28,10 @@ const template = `
   </div>
 `;
 
-function input(e) {
-  console.warn(e);
-}
-function click(e) {
-  console.warn(e);
-}
 function send(e) {
   if (!e.trim()) return
   console.warn(e);
 }
-
-function createNewButton(props) {
-  return new YButton(props)
-    .render();
-};
-
-function createNewInput(props) {
-  return new YInput(props)
-    .render();
-};
-
-function createNewMessage(props) {
-  return new Message(props)
-    .render();
-};
 
 import * as ellipsisVert from 'bundle-text:/static/icons/ellipsis-vert.svg';
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
@@ -65,15 +44,11 @@ const props = {
   header: {
     user: 'Вадим',
     components: [
-      createNewButton({
+      new YButton({
         icon: ellipsisVert,
-        click: {
-          fu: click,
-          params: ['menu']
-        },
         class: 'y-btn--fab',
         color: 'transparent'
-      })
+      }).render()
     ]
   },
   messages: [
@@ -81,25 +56,25 @@ const props = {
       date: '19 июня',
       messages: [
 
-        createNewMessage({
+        new Message({
           time: '17:52',
           text: `'Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.
 
           Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.'`
-        }),
+        }).render(),
 
-        createNewMessage({
+        new Message({
           time: '17:53',
           image: `<img width="100%" height="auto" src="${image}" />`
-        }),
+        }).render(),
 
-        createNewMessage(
+        new Message(
           {
             personal: true,
             time: '17:53',
             text: `Круто!`
           }
-        )
+        ).render()
       ]
     }
   ],
@@ -108,37 +83,26 @@ const props = {
     sendIcon: arrow,
     components: [
 
-      createNewButton({
+      new YButton({
         icon: clip,
-        click: {
-          fu: click,
-          params: ['\'attach\'']
-        },
         class: 'y-btn--fab',
         color: 'transparent'
-      }),
+      }).render(),
 
-      createNewInput({
+      new YInput({
         placeholder: 'Сообщение',
         name: 'message',
-        input: {
-          fu: input,
-          params: ['event.target.value']
-        },
-        keydown: {
-          fu: send,
-          params: ['\'send\'']
-        }
-      }),
+        hideDetails: true
+      }).render(),
 
-      createNewButton({
+      new YButton({
         icon: arrow,
         click: {
           fu: send,
           params: ['\'send\'']
         },
         class: 'y-btn--fab send'
-      })
+      }).render()
 
     ]
   }

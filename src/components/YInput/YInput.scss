@@ -1,9 +1,56 @@
+@import "/src/styles/index";
+
 .y-input {
-  min-width: 20px;
-  &:invalid {
-    outline-color: red;
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 18px;
+
+  &__input {
+    @include input;
+
+    position: relative;
+    border-bottom: $gray solid 1px;
+
+    &:focus {
+      border-color: $accent;
+    }
+
+    &.y-input__input--invalid {
+      border-color: $error;
+
+      ~ .y-input__details {
+        display: block;
+      }
+
+      ~ .y-label {
+        color: $error
+      }
+    }
   }
-  &:valid {
-    outline-color: black;
+
+  &__details {
+    display: none;
+    margin-top: 7px;
+    font-size: 8px;
+    line-height: 8px;
+  }
+
+  > .y-label {
+    position: absolute;
+    right: auto;
+    top: 6px;
+    left: 0;
+    z-index: 1;
+    color: $gray;
+    pointer-events: none;
+
+    &--active {
+      max-width: 133%;
+      transform: translate(-5%, -18px) scale(.75);
+    }
+  }
+
+  &--hide-details {
+    margin-bottom: 0px;
   }
 }

@@ -29,12 +29,6 @@
 
       &__inputs {
         margin-bottom: auto;
-
-        input {
-          @include input;
-
-          margin-bottom: 40px;
-        }
       }
 
       &__buttons {

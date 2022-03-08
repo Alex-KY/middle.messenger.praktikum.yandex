@@ -1,9 +1,17 @@
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
-import renderDOM from '../..//utils/renderDOM';
+import renderDOM from '../../utils/renderDOM';
 
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
+
+import {
+  loginPattern,
+  namePattern,
+  emailPattern,
+  phonePattern,
+  passwordPattern
+} from '../../utils/verifications/patterns';
 
 import "./Signup.scss";
 
@@ -21,38 +29,61 @@ const template = `
   </div>
 `;
 
-function login() {
+function toLoginPage() {
   window.location.pathname = '/chat';
 }
+
 function signup(event: PointerEvent) {
   event.preventDefault();
 
   const { form } = event.target as HTMLButtonElement;
   const formData: any = new FormData(form);
   const formObject = [...formData.entries()]
-    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {})
+    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
 
-  console.warn(formObject)
+  console.warn(formObject);
 
-  // window.location.pathname = '/signup';
+  if (!form.checkValidity()) {
+    [...form.elements].forEach((item: HTMLElement) => {
+      checkInput(item);
+    });
+  } else {
+    window.location.pathname = '/login';
+  }
 }
-function input(e) {
-  // console.warn([e]);
-  // const valid = e?.target?.form
+
+function checkField(e: Event) {
+  const { target, type } = e;
+  checkInput(target);
+
+  const targetLabel = target.parentNode.querySelector('.y-label');
+  const labelActive = type === 'focus' || (type === 'blur' && target.value);
+  targetLabel.classList.toggle('y-label--active', labelActive);
 }
 
-function createNewButton(props) {
-  return new YButton(props)
-    .render();
-};
+function checkPassword(e: Event) {
+  const { target } = e;
+  const { value: passwordValue } = target;
+  const nodePassword = target.form.querySelector('[name=password]') as HTMLElement;
+  const { value: passwordRepeatValue } = nodePassword;
+  const valid = passwordValue.trim() && passwordRepeatValue.trim() && passwordValue === passwordRepeatValue;
 
-function createNewInput(props) {
-  return new YInput(props)
-    .render();
-};
+  target.classList.toggle('y-input__input--invalid', !valid);
+  checkField(e);
+}
+
+function checkInput (target: HTMLElement) {
+  const { valid } = target.validity;
+  target.classList.toggle('y-input__input--invalid', !valid);
+  return valid;
+}
 
 const inputEventFocus = {
-  fu: input,
+  fu: checkField,
+  params: ['event']
+}
+const inputEventBlur = {
+  fu: checkField,
   params: ['event']
 }
 
@@ -60,78 +91,99 @@ const props = {
   title: 'Регистрация',
   inputs: [
 
-    createNewInput({
+    new YInput({
       name: 'email',
-      placeholder: 'Почта',
+      label: 'Почта',
       required: true,
-      pattern: '([a-zA-Z][a-zA-Z0-9\-\_]{1,}|([\d]{1,}[a-zA-Z]{1,}[\d]{0,}))@[a-zA-Z]{2,}.[a-zA-Z]{2,3}',
-      focus: inputEventFocus
-    }),
+      pattern: emailPattern.source,
+      focus: inputEventFocus,
+      blur: inputEventBlur
+    }).render(),
 
-    createNewInput({
+    new YInput({
       name: 'login',
-      placeholder: 'Логин',
-      focus: inputEventFocus
-    }),
+      label: 'Логин',
+      required: true,
+      pattern: loginPattern.source,
+      errorText: 'Латиница 3-20 символов',
+      focus: inputEventFocus,
+      blur: inputEventBlur
+    }).render(),
 
-    createNewInput({
+    new YInput({
       name: 'first_name',
-      placeholder: 'Имя',
+      label: 'Имя',
       required: true,
-      pattern: '([A-Z]{1}[a-zA-Z\-]{1,100}[a-zA-Z]{1})|([А-Я]{1}[а-яА-Я\-]{1,100}[а-яА-Я]{1})',
-      focus: inputEventFocus
-    }),
+      pattern: namePattern.source,
+      errorText: 'Латиница или кирилица с заглавной буквы',
+      focus: inputEventFocus,
+      blur: inputEventBlur
+    }).render(),
 
-    createNewInput({
+    new YInput({
       name: 'second_name',
-      placeholder: 'Фамилия',
-      pattern: '([A-Z]{1}[a-zA-Z\-]{1,100}[a-zA-Z]{1})|([А-Я]{1}[а-яА-Я\-]{1,100}[а-яА-Я]{1})',
-      focus: inputEventFocus
-    }),
+      label: 'Фамилия',
+      pattern: namePattern.source,
+      errorText: 'Латиница или кирилица с заглавной буквы',
+      focus: inputEventFocus,
+      blur: inputEventBlur
+    }).render(),
 
-    createNewInput({
+    new YInput({
       name: 'phone',
-      placeholder: 'Телефон',
-      pattern: '\+?[0-9]{8,15}',
-      focus: inputEventFocus
-    }),
+      label: 'Телефон',
+      pattern: phonePattern.source,
+      errorText: 'Цифры 10-15 символов',
+      focus: inputEventFocus,
+      blur: inputEventBlur
+    }).render(),
 
-    createNewInput({
+    new YInput({
       type: 'password',
       name: 'password',
-      placeholder: 'Пароль',
+      label: 'Пароль',
       required: true,
-      pattern: '^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,40}$',
-      focus: inputEventFocus
-    }),
+      pattern: passwordPattern.source,
+      errorText: '8-40 символов, хотя бы 1 цифра, заглавная буква',
+      focus: inputEventFocus,
+      blur: inputEventBlur
+    }).render(),
 
-    createNewInput({
+    new YInput({
       type: 'password',
-      name: 'password',
-      placeholder: 'Пароль (ещё раз)',
+      name: 'repeatPassword',
+      label: 'Пароль (ещё раз)',
       required: true,
-      pattern: '^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,40}$',
-      focus: inputEventFocus
-    })
+      pattern: passwordPattern.source,
+      errorText: 'Пароли должны совпадать',
+      focus: {
+        fu: checkPassword,
+        params: ['event']
+      },
+      blur: {
+        fu: checkPassword,
+        params: ['event']
+      }
+    }).render()
 
   ],
   buttons: [
 
-    createNewButton({
+    new YButton({
       text: 'Зарегистрироваться',
       click: {
         fu: signup,
         params: ['event']
       }
-    }),
+    }).render(),
 
-    createNewButton({
+    new YButton({
       text: 'Войти',
       click: {
-        fu: login
+        fu: toLoginPage
       },
       tagName: 'a'
-    })
+    }).render()
 
   ]
 };

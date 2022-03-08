@@ -108,40 +108,40 @@ const props = {
   ],
   buttons: [
 
-    createNewButton({
+    new YButton({
       text: 'Изменить данные',
       click: {
         fu: click
       },
       tagName: 'span',
       class: 'y-btn--link'
-    }),
+    }).render(),
 
-    createNewButton({
+    new YButton({
       text: 'Изменить пароль',
       click: {
         fu: click
       },
       tagName: 'span',
       class: 'y-btn--link'
-    }),
+    }).render(),
 
-    createNewButton({
+    new YButton({
       text: 'Выйти',
       click: {
         fu: exit
       },
       tagName: 'span',
       class: 'y-btn--link error-text'
-    }),
+    }).render(),
 
-    createNewButton({
+    new YButton({
       icon: arrow,
       click: {
         fu: back
       },
       class: 'y-btn--fab'
-    })
+    }).render()
 
   ]
 };
