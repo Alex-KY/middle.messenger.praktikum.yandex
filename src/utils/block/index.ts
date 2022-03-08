@@ -20,7 +20,6 @@ export default class Block {
   protected children: Record<string, Block>;
 
   constructor(props: any = {}) {
-    // console.log(tagName, props)
     const eventBus = new EventBus();
 
     this._eventBus = () => eventBus;
@@ -31,7 +30,7 @@ export default class Block {
     eventBus.emit(Block.EVENTS.INIT);
   }
 
-  _registerEvents(eventBus: EventBus) {
+  private _registerEvents(eventBus: EventBus) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
@@ -42,11 +41,10 @@ export default class Block {
     this._eventBus().emit(Block.EVENTS.FLOW_RENDER, this.props);
   }
 
-  _componentDidMount() {
+  private _componentDidMount() {
     this.componentDidMount();
   }
 
-  // Может переопределять пользователь, необязательно трогать
   componentDidMount() {
     this.dispatchComponentDidMount();
   }
@@ -55,13 +53,12 @@ export default class Block {
     this._eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  _componentDidUpdate (oldProps: any, newProps: any) {
+  private _componentDidUpdate (oldProps: any, newProps: any) {
     if (this.componentDidUpdate(oldProps, newProps)) {
       this._eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
 
-  // Может переопределять пользователь, необязательно трогать
   componentDidUpdate(oldProps: any, newProps: any) {
     return true;
   }
@@ -78,7 +75,7 @@ export default class Block {
     return this._element;
   }
 
-  _render() {
+  private _render() {
     const fragment = this.render();
     const newElement = fragment.firstElementChild as HTMLElement;
 
@@ -92,7 +89,6 @@ export default class Block {
     this._addEvents();
   }
 
-  // Может переопределять пользователь, необязательно трогать
   protected render(): DocumentFragment {
     return new DocumentFragment();
   }
@@ -101,13 +97,9 @@ export default class Block {
     return this.element;
   }
 
-  _makePropsProxy(props: any): any {
-    // Можно и так передать this
-    // Такой способ больше не применяется с приходом ES6+
-    const self = this;
-
+  private _makePropsProxy(props: any): any {
     return new Proxy(props as unknown as object, {
-      get(target: Record<string, unknown>, prop: string) {
+      get: (target: Record<string, unknown>, prop: string) => {
         if (prop.indexOf('_') === 0) {
           throw new Error('Отказано в доступе');
         }
@@ -115,19 +107,21 @@ export default class Block {
         const value = target[prop];
         return typeof value === "function" ? value.bind(target) : value;
       },
-      set(target: Record<string, unknown>, prop: string, value: unknown) {
+
+      set: (target: Record<string, unknown>, prop: string, value: unknown) => {
         target[prop] = value;
 
-        self._eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
+        this._eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
         return true;
       },
-      deleteProperty() {
+
+      deleteProperty: () => {
         throw new Error('Отказано в доступе');
       }
     })
   }
 
-  _addEvents() {
+  private _addEvents() {
     const events: Record<string, () => void> = (this.props as any).events;
 
     if (!events || !this._element) {
@@ -139,7 +133,7 @@ export default class Block {
     });
   }
 
-  _removeEvents() {
+  private _removeEvents() {
     const events: Record<string, () => void> = (this.props as any).events;
 
     if (!events || !this._element) {

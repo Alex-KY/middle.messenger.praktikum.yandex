@@ -1,6 +1,5 @@
 import Block from '../../../../utils/block';
 import Templator from '../../../../utils/templater';
-import renderDOM from '../../../../utils/renderDOM';
 
 import "./LeftSide.scss";
 
@@ -42,44 +41,8 @@ const template = `
   </div>
 `;
 
-const props = {
-  profile: 'Профиль >',
-  inputs: [
-    {
-      name: 'search',
-      placeholder: 'Поиск'
-    }
-  ],
-  units: [
-    {
-      username: 'Николай',
-      messages: [
-        {
-          text: 'Друзья, у меня для вас особенный выпуск горячих новостей!',
-          timestamp: '13:52',
-          my: true,
-          readed: false
-        }
-      ],
-      newMessages: 4
-    },
-    {
-      username: '1,2,3 Станислав Леонидович',
-      messages: [
-        {
-          text: 'Так увлёкся работой по курсу, что совсем забыл его анонсировать на своём портале.',
-          timestamp: '1 Мая 2020',
-          my: false,
-          readed: false
-        }
-      ],
-      newMessages: 127
-    }
-  ]
-};
-
 export default class LeftSide extends Block {
-  constructor() {
+  constructor(props: any) {
     super(props);
   }
 
@@ -88,6 +51,3 @@ export default class LeftSide extends Block {
     return tmpl.compile(this.props);
   }
 };
-
-const renderedTemplate = new LeftSide().render();
-renderDOM(renderedTemplate);

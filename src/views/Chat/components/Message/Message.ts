@@ -1,5 +1,5 @@
-import Block from '../../../../../../utils/block';
-import Templator from '../../../../../../utils/templater';
+import Block from '../../../../utils/block';
+import Templator from '../../../../utils/templater';
 
 import './Message.scss';
 
