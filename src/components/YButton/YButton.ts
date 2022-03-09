@@ -7,7 +7,7 @@ import Properties from '../../utils/types';
 
 interface Props extends Properties {
   click?: {
-    fu?: (event: PointerEvent) => void,
+    fu?: (event: PointerEvent | string) => void,
     params?: string[]
   },
   tagName?: string,

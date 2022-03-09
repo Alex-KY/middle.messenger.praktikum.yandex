@@ -59,23 +59,18 @@ const template = `
   </div>
 `;
 
-function createNewButton(props) {
-  return new YButton(props)
-    .render();
-};
-
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
 import * as image from 'bundle-text:/static/icons/image.svg';
 
 function exit() {
   window.location.pathname = '/login';
 }
+
 function back() {
   window.location.pathname = '/chat';
 }
-function click(e) {
-  console.warn(e);
-}
+
+function click() {}
 
 const props = {
   icons: {

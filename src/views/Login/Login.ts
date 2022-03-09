@@ -36,16 +36,18 @@ function toSignupPage() {
   window.location.pathname = '/signup';
 }
 
-function checkField(e) {
-  const { target, type } = e;
+function checkField(e: Event) {
+  const type = e.type as string;
+  const target = e.target as HTMLInputElement;
+
   checkInput(target);
 
-  const targetLabel = target.parentNode.querySelector('.y-label');
-  const labelActive = type === 'focus' || (type === 'blur' && target.value);
-  targetLabel.classList.toggle('y-label--active', labelActive);
+  const targetLabel = target.parentNode?.querySelector('.y-label');
+  const labelActive = type === 'focus' || (type === 'blur' && !!target.value);
+  targetLabel?.classList.toggle('y-label--active', labelActive);
 }
 
-function checkInput (target) {
+function checkInput (target: HTMLInputElement) {
   const { valid } = target.validity;
   target.classList.toggle('y-input__input--invalid', !valid);
   return valid;
@@ -104,11 +106,13 @@ const props = {
 };
 
 interface Props extends Properties {
-
+  title: string,
+  inputs: string[],
+  buttons: string[]
 };
 
 export default class Login extends Block<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.props = props;
   };

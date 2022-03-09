@@ -43,7 +43,23 @@ const template = `
   </div>
 `;
 
-interface Props extends Properties {};
+interface Props extends Properties {
+  profile: string,
+  inputs: {
+      name: string,
+      placeholder: string
+  }[],
+  units: {
+      username: string,
+      messages: {
+          text: string,
+          timestamp: string,
+          my: boolean,
+          readed: boolean
+      }[],
+      newMessages: number
+  }[]
+};
 
 export default class LeftSide extends Block<Props> {
   constructor(props: Props) {

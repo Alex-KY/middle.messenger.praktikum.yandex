@@ -53,7 +53,7 @@ const leftSideProps = {
   ]
 };
 
-function send(e) {
+function send(e: string) {
   if (!e.trim()) return
   console.warn(e);
 };
@@ -139,12 +139,11 @@ const props = {
 };
 
 interface Props extends Properties {
-
+  LeftSide: string,
+  MessageBlock: string
 };
 
 export default class Chat extends Block<Props> {
-  props;
-
   constructor(props: Props) {
     super(props);
   };

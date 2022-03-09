@@ -1,4 +1,4 @@
-function get (obj, path, defaultValue) {
+export default function get (obj: any, path: any, defaultValue?: any) {
   const keys = [...path.match(/\w{1,}/g)];
 
   let result = obj;
@@ -12,5 +12,3 @@ function get (obj, path, defaultValue) {
 
   return result ?? defaultValue;
 }
-
-export default get;

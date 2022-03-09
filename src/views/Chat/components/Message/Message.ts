@@ -6,9 +6,10 @@ import Properties from '../../../../utils/types';
 import './Message.scss';
 
 interface Props extends Properties {
-  time: 'string',
-  text: 'string',
-  image: 'string'
+  time: string,
+  text?: string,
+  image?: string,
+  personal?: boolean
 };
 
 export default class Message extends Block<Props> {
@@ -16,7 +17,7 @@ export default class Message extends Block<Props> {
     super(props);
   }
 
-  _computedClasses(props) {
+  _computedClasses(props: Props) {
     const { text, image, personal } = props
     let classes = [];
 

@@ -116,14 +116,14 @@ export default abstract class Block<Props extends Properties> {
   }
 
   private _addEvents() {
-    const events: Record<string, () => void> = this.props.events;
+    const events: { string: () => void; } | undefined = this.props.events;
 
     if (!events || !this._element) {
       return;
     }
 
     Object.entries(events).forEach(([event, listener]) => {
-      this._element.addEventListener(event, listener);
+      this._element?.addEventListener(event, listener);
     });
   }
 }
