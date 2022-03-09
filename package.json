@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start": "rm -rf dist && parcel build src/index.html && node ./src/server.ts",
-    "build": "parcel build src/index.html",
+    "build": "rm -rf dist && parcel build static/*.html",
     "lint": "stylelint src/**/*.scss && eclint check src/ && eslint src/",
     "lint-fix": "stylelint --fix src/**/*.scss && eclint fix src/ && eslint --fix src/",
     "test": "test"
