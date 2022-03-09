@@ -2,7 +2,8 @@
   "name": "chat-up",
   "version": "1.0.0",
   "description": "",
-  "source": "src/index.html",
+  "source": "src",
+  "default": "dist",
   "engines": {
     "node": ">=12.22.10 <16"
   },
