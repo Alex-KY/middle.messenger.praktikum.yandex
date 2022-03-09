@@ -16,7 +16,7 @@ const context = {
 
 export default (function () {
   const renderedTemplate = tmpl.compile(context);
-  const root = document.querySelector('.root') as any;
+  const root = document.querySelector('.root') as HTMLElement;
 
   root.classList = 'root error-page';
   root.innerHTML = renderedTemplate;

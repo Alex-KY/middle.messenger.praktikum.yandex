@@ -3,13 +3,39 @@ import Templator from '../../utils/templater';
 
 import './YInput.scss';
 
-export default class YInput extends Block {
-  constructor(props: any) {
+import Properties from '../../utils/types';
+
+interface Props extends Properties {
+  focus?: {
+    fu: (e: Event) => void,
+    params: string[]
+  },
+  blur?: {
+    fu: (e: Event) => void,
+    params: string[]
+  },
+  input?: {
+    fu: (e: Event) => void,
+    params: string[]
+  },
+  type?: string,
+  name?: string,
+  label?: string,
+  placeholder?: string,
+  pattern?: string,
+  required?: boolean,
+  class?: string,
+  errorText?: string,
+  hideDetails?: boolean
+};
+
+export default class YInput extends Block<Props> {
+  constructor(props: Props) {
     super(props);
   }
   errorText = 'Введите корректные данные';
 
-  render(): any {
+  render(): string {
     const { focus, blur, input, type, name, label, placeholder, pattern, required, class: classes, errorText = this.errorText, hideDetails = false } = this.props;
     const template = `
       <div class="y-input ${hideDetails ? 'y-input--hide-details ': ''}${classes || ''}">

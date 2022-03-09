@@ -4,6 +4,8 @@ import renderDOM from '../../utils/renderDOM';
 
 import YButton from '../../components/YButton';
 
+import Properties from '../../utils/types';
+
 import './Profile.scss';
 
 const template = `
@@ -146,12 +148,24 @@ const props = {
   ]
 };
 
-export default class Profile extends Block {
-  constructor(props: any) {
+interface Props extends Properties {
+  icons: {
+      image: any
+  },
+  name: string,
+  rows: {
+      text: string,
+      value: string
+  }[],
+  buttons: string[]
+};
+
+export default class Profile extends Block<Props> {
+  constructor(props: Props) {
     super(props);
   }
 
-  render(): any {
+  render(): string {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
   }

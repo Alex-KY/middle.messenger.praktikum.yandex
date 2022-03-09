@@ -3,22 +3,35 @@ import Templator from '../../utils/templater';
 
 import './YButton.scss';
 
-export default class YButton extends Block {
-  constructor(props: any) {
+import Properties from '../../utils/types';
+
+interface Props extends Properties {
+  click?: {
+    fu?: (event: PointerEvent) => void,
+    params?: string[]
+  },
+  tagName?: string,
+  class?: string,
+  text?: string,
+  icon?: string,
+  color?: string
+};
+
+export default class YButton extends Block<Props> {
+  constructor(props: Props) {
     super(props);
   }
 
-  render(): any {
-    const { click, blur, tagName, class: classes, text, icon, color } = this.props;
+  render(): string {
+    const { click, tagName = 'button', class: classes, text, icon, color } = this.props;
     const template = `
-      <${tagName || 'button'}
+      <${tagName}
         ${click ? `onclick="{{ click.fu }}(${click?.params || ''})"` : ``}
-        ${blur ? `onblur="{{ blur.fu }}(${blur?.params || ''})"` : ``}
         class="y-btn ${ classes || '' } ${ color ? `${color}-color` : '' }"
       >
         ${ text || '' }
         ${ icon || '' }
-      </${tagName || 'button'}>
+      </${tagName}>
     `;
 
     const tmpl = new Templator(template);

@@ -1,6 +1,8 @@
 import Block from '../../../../utils/block';
 import Templator from '../../../../utils/templater';
 
+import Properties from '../../../../utils/types';
+
 import "./LeftSide.scss";
 
 const template = `
@@ -41,12 +43,14 @@ const template = `
   </div>
 `;
 
-export default class LeftSide extends Block {
-  constructor(props: any) {
+interface Props extends Properties {};
+
+export default class LeftSide extends Block<Props> {
+  constructor(props: Props) {
     super(props);
   }
 
-  render(): any {
+  render(): string {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
   }

@@ -1,7 +1,9 @@
 import EventBus from '../eventBus';
 import { nanoid } from 'nanoid';
 
-export default class Block {
+import Properties from '../types';
+
+export default abstract class Block<Props extends Properties> {
   static EVENTS = {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
@@ -15,17 +17,17 @@ export default class Block {
 
   private _eventBus: () => EventBus;
 
-  protected props: any;
+  protected props: Props;
 
-  protected children: Record<string, Block>;
+  protected children: Record<string, Block<Props>>;
 
-  constructor(props: any = {}) {
+  constructor(props: Props) {
     const eventBus = new EventBus();
 
     this._eventBus = () => eventBus;
     this._registerEvents(eventBus);
 
-    this.props = this._makePropsProxy(props);
+    this.props = this._makePropsProxy(props) as Props;
 
     eventBus.emit(Block.EVENTS.INIT);
   }
@@ -53,17 +55,17 @@ export default class Block {
     this._eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  private _componentDidUpdate (oldProps: any, newProps: any) {
+  private _componentDidUpdate (oldProps: Props, newProps: Props) {
     if (this.componentDidUpdate(oldProps, newProps)) {
       this._eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
 
-  componentDidUpdate(oldProps: any, newProps: any) {
+  componentDidUpdate(oldProps: Props, newProps: Props) {
     return true;
   }
 
-  setProps = (nextProps: any) => {
+  setProps = (nextProps: Props) => {
     if (!nextProps) {
       return;
     }
@@ -77,19 +79,19 @@ export default class Block {
 
   private _render() {
     const fragment = this.render();
-    const newElement = fragment.firstElementChild as HTMLElement;
+    // const newElement = fragment.firstElementChild as HTMLElement;
 
-    if (this._element) {
-      this._removeEvents();
-      this._element.replaceWith(newElement);
-    }
+    // if (this._element) {
+    //   this._removeEvents();
+    //   this._element.replaceWith(newElement);
+    // }
 
-    this._element = newElement;
+    // this._element = newElement;
 
     this._addEvents();
   }
 
-  protected render(): DocumentFragment {
+  protected render(): DocumentFragment | string {
     return new DocumentFragment();
   }
 
@@ -97,7 +99,7 @@ export default class Block {
     return this.element;
   }
 
-  private _makePropsProxy(props: any): any {
+  private _makePropsProxy(props: Props): object {
     return new Proxy(props as unknown as object, {
       get: (target: Record<string, unknown>, prop: string) => {
         if (prop.indexOf('_') === 0) {
@@ -122,7 +124,7 @@ export default class Block {
   }
 
   private _addEvents() {
-    const events: Record<string, () => void> = (this.props as any).events;
+    const events: Record<string, () => void> = this.props.events;
 
     if (!events || !this._element) {
       return;
@@ -131,25 +133,5 @@ export default class Block {
     Object.entries(events).forEach(([event, listener]) => {
       this._element.addEventListener(event, listener);
     });
-  }
-
-  private _removeEvents() {
-    const events: Record<string, () => void> = (this.props as any).events;
-
-    if (!events || !this._element) {
-      return;
-    }
-
-    Object.entries(events).forEach(([event, listener]) => {
-      this._element.removeEventListener(event, listener);
-    });
-  }
-
-  show() {
-    this.getContent().style.display = "block";
-  }
-
-  hide() {
-    this.getContent().style.display = "none";
   }
 }

@@ -13,6 +13,8 @@ import {
   passwordPattern
 } from '../../utils/verifications/patterns';
 
+import Properties from '../../utils/types';
+
 import "./Signup.scss";
 
 const template = `
@@ -33,11 +35,11 @@ function toLoginPage() {
   window.location.pathname = '/chat';
 }
 
-function signup(event: PointerEvent) {
-  event.preventDefault();
+function signup(e: PointerEvent) {
+  e.preventDefault();
 
-  const { form } = event.target as HTMLButtonElement;
-  const formData: any = new FormData(form);
+  const { form } = e.target as HTMLButtonElement;
+  const formData = new FormData(form);
   const formObject = [...formData.entries()]
     .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
 
@@ -45,7 +47,7 @@ function signup(event: PointerEvent) {
 
   if (!form.checkValidity()) {
     [...form.elements].forEach((item: HTMLElement) => {
-      checkInput(item);
+      checkInput(item as HTMLInputElement);
     });
   } else {
     window.location.pathname = '/login';
@@ -53,18 +55,20 @@ function signup(event: PointerEvent) {
 }
 
 function checkField(e: Event) {
-  const { target, type } = e;
+  const type = e.type as string;
+  const target = e.target as HTMLInputElement;
+
   checkInput(target);
 
   const targetLabel = target.parentNode.querySelector('.y-label');
-  const labelActive = type === 'focus' || (type === 'blur' && target.value);
+  const labelActive = type === 'focus' || (type === 'blur' && !!target.value);
   targetLabel.classList.toggle('y-label--active', labelActive);
 }
 
 function checkPassword(e: Event) {
-  const { target } = e;
-  const { value: passwordValue } = target;
-  const nodePassword = target.form.querySelector('[name=password]') as HTMLElement;
+  const target = e.target as HTMLInputElement;
+  const { value: passwordValue } = target as HTMLInputElement;
+  const nodePassword = target.form.querySelector('[name=password]') as HTMLInputElement;
   const { value: passwordRepeatValue } = nodePassword;
   const valid = passwordValue.trim() && passwordRepeatValue.trim() && passwordValue === passwordRepeatValue;
 
@@ -72,7 +76,7 @@ function checkPassword(e: Event) {
   checkField(e);
 }
 
-function checkInput (target: HTMLElement) {
+function checkInput (target: HTMLInputElement) {
   const { valid } = target.validity;
   target.classList.toggle('y-input__input--invalid', !valid);
   return valid;
@@ -94,6 +98,7 @@ const props = {
     new YInput({
       name: 'email',
       label: 'Почта',
+      type: 'email',
       required: true,
       pattern: emailPattern.source,
       focus: inputEventFocus,
@@ -132,6 +137,7 @@ const props = {
     new YInput({
       name: 'phone',
       label: 'Телефон',
+      type: 'tel',
       pattern: phonePattern.source,
       errorText: 'Цифры 10-15 символов',
       focus: inputEventFocus,
@@ -188,15 +194,21 @@ const props = {
   ]
 };
 
-export default class Signup extends Block {
-  constructor(props: any) {
-    super(props);
-  }
+interface Props extends Properties {
+  title: string,
+  inputs: string[],
+  buttons: string[]
+};
 
-  render(): any {
+export default class Signup extends Block<Props> {
+  constructor(props: Props) {
+    super(props);
+  };
+
+  render(): string {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  }
+  };
 };
 
 const renderedTemplate = new Signup(props).render();

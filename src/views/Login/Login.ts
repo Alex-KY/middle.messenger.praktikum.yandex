@@ -10,6 +10,8 @@ import {
   passwordPattern
 } from '../../utils/verifications/patterns';
 
+import Properties from '../../utils/types';
+
 import "./Login.scss";
 
 const template = `
@@ -34,7 +36,7 @@ function toSignupPage() {
   window.location.pathname = '/signup';
 }
 
-function checkField(e: Event) {
+function checkField(e) {
   const { target, type } = e;
   checkInput(target);
 
@@ -43,7 +45,7 @@ function checkField(e: Event) {
   targetLabel.classList.toggle('y-label--active', labelActive);
 }
 
-function checkInput (target: HTMLElement) {
+function checkInput (target) {
   const { valid } = target.validity;
   target.classList.toggle('y-input__input--invalid', !valid);
   return valid;
@@ -101,15 +103,20 @@ const props = {
   ]
 };
 
-export default class Login extends Block {
-  constructor(props: any) {
-    super(props);
-  }
+interface Props extends Properties {
 
-  render(): any {
+};
+
+export default class Login extends Block<Props> {
+  constructor(props) {
+    super(props);
+    this.props = props;
+  };
+
+  render() {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  }
+  };
 };
 
 const renderedTemplate = new Login(props).render();

@@ -1,6 +1,8 @@
 import Block from '../../../../utils/block';
 import Templator from '../../../../utils/templater';
 
+import Properties from '../../../../utils/types';
+
 import "./MessagesBlock.scss";
 
 const template = `
@@ -23,12 +25,14 @@ const template = `
   </div>
 `;
 
-export default class MessagesBlock extends Block {
-  constructor(props: any) {
+interface Props extends Properties {};
+
+export default class MessagesBlock extends Block<Props> {
+  constructor(props: Props) {
     super(props);
   }
 
-  render(): any {
+  render(): string {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
   }

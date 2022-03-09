@@ -8,6 +8,8 @@ import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
 import Message from './components/Message';
 
+import Properties from '../../utils/types';
+
 import "./Chat.scss";
 
 const template = `
@@ -136,15 +138,21 @@ const props = {
   MessageBlock: new MessagesBlock(messagesBlockProps).render()
 };
 
-export default class Chat extends Block {
-  constructor(props: any) {
-    super(props);
-  }
+interface Props extends Properties {
 
-  render(): any {
+};
+
+export default class Chat extends Block<Props> {
+  props;
+
+  constructor(props: Props) {
+    super(props);
+  };
+
+  render(): string {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  }
+  };
 };
 
 const renderedTemplate = new Chat(props).render();

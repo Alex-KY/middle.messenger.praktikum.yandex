@@ -1,10 +1,18 @@
 import Block from '../../../../utils/block';
 import Templator from '../../../../utils/templater';
 
+import Properties from '../../../../utils/types';
+
 import './Message.scss';
 
-export default class Message extends Block {
-  constructor(props: any) {
+interface Props extends Properties {
+  time: 'string',
+  text: 'string',
+  image: 'string'
+};
+
+export default class Message extends Block<Props> {
+  constructor(props: Props) {
     super(props);
   }
 
@@ -26,7 +34,7 @@ export default class Message extends Block {
     return classes.join(' ');
   }
 
-  render(): any {
+  render(): string {
     const { time, text, image } = this.props;
     const classes = this._computedClasses(this.props)
     const template = `
