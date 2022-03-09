@@ -79,14 +79,6 @@ export default abstract class Block<Props extends Properties> {
 
   private _render() {
     const fragment = this.render();
-    // const newElement = fragment.firstElementChild as HTMLElement;
-
-    // if (this._element) {
-    //   this._removeEvents();
-    //   this._element.replaceWith(newElement);
-    // }
-
-    // this._element = newElement;
 
     this._addEvents();
   }
