@@ -1,0 +1,46 @@
+@import "/src/styles/index";
+
+.message {
+  position: relative;
+  border-radius: 0 10px 10px 10px;
+  padding: 11px;
+  margin: 10px 0;
+  min-width: 100px;
+  max-width: 400px;
+  align-self: flex-start;
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 500;
+
+  &--text {
+    background-color: $foggy-middle;
+
+    &.message--personal {
+      background-color: $blue-light;
+    }
+  }
+
+  &--image {
+    .message__time {
+      color: white;
+      background-color: rgba(82, 82, 82, 0.5);
+    }
+  }
+
+  &--personal {
+    border-radius: 10px 10px 0 10px;
+    align-self: flex-end;
+  }
+
+  &__time {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    min-width: 40px;
+    text-align: center;
+    padding: 3px;
+    font-size: 9px;
+    line-height: 9px;
+    border-radius: 30px;
+  }
+}
