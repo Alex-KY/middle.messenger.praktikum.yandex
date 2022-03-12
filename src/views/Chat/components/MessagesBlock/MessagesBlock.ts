@@ -25,7 +25,22 @@ const template = `
   </div>
 `;
 
-interface Props extends Properties {};
+interface Props extends Properties {
+  empty: string,
+  header: {
+      user: string,
+      components: string[]
+  },
+  messages: {
+      date: string,
+      messages: string[]
+  }[],
+  footer: {
+      attachIcon: any,
+      sendIcon: any,
+      components: string[]
+  }
+};
 
 export default class MessagesBlock extends Block<Props> {
   constructor(props: Props) {

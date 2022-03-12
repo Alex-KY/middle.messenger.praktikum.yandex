@@ -38,7 +38,7 @@ function toLoginPage() {
 function signup(e: PointerEvent) {
   e.preventDefault();
 
-  const { form } = e.target as HTMLButtonElement;
+  const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
   const formObject = [...formData.entries()]
     .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
@@ -60,15 +60,15 @@ function checkField(e: Event) {
 
   checkInput(target);
 
-  const targetLabel = target.parentNode.querySelector('.y-label');
+  const targetLabel = target.parentNode?.querySelector('.y-label');
   const labelActive = type === 'focus' || (type === 'blur' && !!target.value);
-  targetLabel.classList.toggle('y-label--active', labelActive);
+  targetLabel?.classList.toggle('y-label--active', labelActive);
 }
 
 function checkPassword(e: Event) {
   const target = e.target as HTMLInputElement;
   const { value: passwordValue } = target as HTMLInputElement;
-  const nodePassword = target.form.querySelector('[name=password]') as HTMLInputElement;
+  const nodePassword = target.form?.querySelector('[name=password]') as HTMLInputElement;
   const { value: passwordRepeatValue } = nodePassword;
   const valid = passwordValue.trim() && passwordRepeatValue.trim() && passwordValue === passwordRepeatValue;
 
