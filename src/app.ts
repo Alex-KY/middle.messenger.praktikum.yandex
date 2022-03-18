@@ -6,26 +6,26 @@ import Signup from './views/Signup';
 import Chat from './views/Chat';
 import Profile from './views/Profile';
 
-// const pages = {
-//   'login': async function () {
-//     await import('./views/Login');
-//   },
-//   'signup': async function () {
-//     await import('./views/Signup');
-//   },
-//   'chat': async function () {
-//     await import('./views/Chat');
-//   },
-//   'profile': async function () {
-//     await import('./views/Profile');
-//   },
-//   '404': async function () {
-//     await import('./views/404');
-//   },
-//   '500': async function () {
-//     await import('./views/500');
-//   }
-// };
+const pages = {
+  'login': async function () {
+    await import('./views/Login');
+  },
+  'signup': async function () {
+    await import('./views/Signup');
+  },
+  'chat': async function () {
+    await import('./views/Chat');
+  },
+  'profile': async function () {
+    await import('./views/Profile');
+  },
+  '404': async function () {
+    await import('./views/Error');
+  },
+  '500': async function () {
+    await import('./views/Error');
+  }
+};
 
 // Роутинг
 // Стартовая страница - /login
