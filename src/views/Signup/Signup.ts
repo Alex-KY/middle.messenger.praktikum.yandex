@@ -1,6 +1,7 @@
+import Router from '../../utils/router';
+
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
-import renderDOM from '../../utils/renderDOM';
 
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
@@ -31,8 +32,10 @@ const template = `
   </div>
 `;
 
+const router = new Router();
+
 function toLoginPage() {
-  window.location.pathname = '/chat';
+  router.go('/chat');
 }
 
 function signup(e: PointerEvent) {
@@ -50,7 +53,7 @@ function signup(e: PointerEvent) {
       checkInput(item as HTMLInputElement);
     });
   } else {
-    window.location.pathname = '/login';
+    router.go('/login');
   }
 }
 
@@ -91,7 +94,7 @@ const inputEventBlur = {
   params: ['event']
 }
 
-const props = {
+const context = {
   title: 'Регистрация',
   inputs: [
 
@@ -202,7 +205,8 @@ interface Props extends Properties {
 
 export default class Signup extends Block<Props> {
   constructor(props: Props) {
-    super(props);
+    super(props || context);
+    this.props = props || context;
   };
 
   render(): string {
@@ -210,6 +214,3 @@ export default class Signup extends Block<Props> {
     return tmpl.compile(this.props);
   };
 };
-
-const renderedTemplate = new Signup(props).render();
-renderDOM(renderedTemplate, {class: 'signup-page'});

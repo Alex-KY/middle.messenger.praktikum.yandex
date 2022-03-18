@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 
 import Properties from '../types';
 
-export default abstract class Block<Props extends Properties> {
+export default abstract class Block<Props extends unknown | Properties> {
   static EVENTS = {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
@@ -78,8 +78,6 @@ export default abstract class Block<Props extends Properties> {
   }
 
   private _render() {
-    const fragment = this.render();
-
     this._addEvents();
   }
 
@@ -116,7 +114,7 @@ export default abstract class Block<Props extends Properties> {
   }
 
   private _addEvents() {
-    const events: { string: () => void; } | undefined = this.props.events;
+    const events: { string: () => void; } | undefined = this.props?.events;
 
     if (!events || !this._element) {
       return;

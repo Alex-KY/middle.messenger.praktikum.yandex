@@ -1,6 +1,7 @@
+import Router from '../../utils/router';
+
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
-import renderDOM from '../../utils/renderDOM';
 
 import YButton from '../../components/YButton';
 
@@ -59,20 +60,22 @@ const template = `
   </div>
 `;
 
+const router = new Router();
+
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
 import * as image from 'bundle-text:/static/icons/image.svg';
 
 function exit() {
-  window.location.pathname = '/login';
+  router.go('/login');
 }
 
 function back() {
-  window.location.pathname = '/chat';
+  router.go('/chat');
 }
 
 function click() {}
 
-const props = {
+const context = {
   icons: {
     image
   },
@@ -157,14 +160,14 @@ interface Props extends Properties {
 
 export default class Profile extends Block<Props> {
   constructor(props: Props) {
-    super(props);
-  }
+    const concatProps = Object.assign(props, context);
 
-  render(): string {
+    super(concatProps);
+    this.props = concatProps;
+  };
+
+  render() {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  }
+  };
 };
-
-const renderedTemplate = new Profile(props).render();
-renderDOM(renderedTemplate, {class: 'profile-page'});

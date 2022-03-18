@@ -1,6 +1,7 @@
+import Router from '../../utils/router';
+
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
-import renderDOM from '../../utils/renderDOM';
 
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
@@ -28,12 +29,14 @@ const template = `
   </div>
 `;
 
+const router = new Router();
+
 function toLoginPage() {
-  window.location.pathname = '/chat';
+  router.go('/chat');
 }
 
 function toSignupPage() {
-  window.location.pathname = '/signup';
+  router.go('/signup');
 }
 
 function checkField(e: Event) {
@@ -62,7 +65,7 @@ const inputEventBlur = {
   params: ['event']
 }
 
-const props = {
+const context = {
   title: 'Вход',
   inputs: [
 
@@ -113,8 +116,10 @@ interface Props extends Properties {
 
 export default class Login extends Block<Props> {
   constructor(props: Props) {
-    super(props);
-    this.props = props;
+    const concatProps = Object.assign(props, context);
+
+    super(concatProps);
+    this.props = concatProps;
   };
 
   render() {
@@ -122,6 +127,3 @@ export default class Login extends Block<Props> {
     return tmpl.compile(this.props);
   };
 };
-
-const renderedTemplate = new Login(props).render();
-renderDOM(renderedTemplate, {class: 'login-page'});

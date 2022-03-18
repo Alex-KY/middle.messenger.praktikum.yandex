@@ -1,6 +1,6 @@
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
-import renderDOM from '../../utils/renderDOM';
+
 import LeftSide from './components/LeftSide';
 import MessagesBlock from './components/MessagesBlock';
 
@@ -133,7 +133,7 @@ const messagesBlockProps = {
   }
 };
 
-const props = {
+const context = {
   LeftSide: new LeftSide(leftSideProps).render(),
   MessageBlock: new MessagesBlock(messagesBlockProps).render()
 };
@@ -145,14 +145,14 @@ interface Props extends Properties {
 
 export default class Chat extends Block<Props> {
   constructor(props: Props) {
-    super(props);
+    const concatProps = Object.assign(props, context);
+
+    super(concatProps);
+    this.props = concatProps;
   };
 
-  render(): string {
+  render() {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
   };
 };
-
-const renderedTemplate = new Chat(props).render();
-renderDOM(renderedTemplate, {class: 'chat-page'});
