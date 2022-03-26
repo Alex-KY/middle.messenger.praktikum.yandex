@@ -1,8 +1,9 @@
 import EventBus from '../eventBus';
+import renderDOM from '../renderDOM';
+
 import { nanoid } from 'nanoid';
 
-import Properties from '../types';
-
+import { Props as Properties } from '../types';
 export default abstract class Block<Props extends unknown | Properties> {
   static EVENTS = {
     INIT: "init",
@@ -11,7 +12,9 @@ export default abstract class Block<Props extends unknown | Properties> {
     FLOW_RENDER: "flow:render"
   } as const;
 
-  public id = nanoid(6);
+  public id = nanoid(10).replace(/[0-9-_]/g, '');
+
+  private _timeoutId: any;
 
   private _element: HTMLElement | null = null;
 
@@ -20,6 +23,8 @@ export default abstract class Block<Props extends unknown | Properties> {
   protected props: Props;
 
   protected children: Record<string, Block<Props>>;
+
+  protected rootString: string;
 
   constructor(props: Props) {
     const eventBus = new EventBus();
@@ -57,7 +62,13 @@ export default abstract class Block<Props extends unknown | Properties> {
 
   private _componentDidUpdate (oldProps: Props, newProps: Props) {
     if (this.componentDidUpdate(oldProps, newProps)) {
-      this._eventBus().emit(Block.EVENTS.FLOW_RENDER);
+      if (this._timeoutId) return
+
+      this._timeoutId = setTimeout(() => {
+        this._eventBus().emit(Block.EVENTS.FLOW_RENDER);
+        clearTimeout(this._timeoutId);
+        this._timeoutId = undefined;
+      }, 200);
     }
   }
 
@@ -78,11 +89,22 @@ export default abstract class Block<Props extends unknown | Properties> {
   }
 
   private _render() {
+    console.warn('_render', this.id)
+    if (!this.rootString) {
+      const parent = document.querySelector(`#${this.id}`)?.parentElement;
+      if (parent) {
+        this.rootString = parent?.id || [...(parent?.classList || '')]
+          .map(item => item.trim() ? `.${item}` : ``)
+          .join('')
+      }
+    }
+
     this._addEvents();
+    renderDOM(this.render(), this.rootString);
   }
 
-  protected render(): DocumentFragment | string {
-    return new DocumentFragment();
+  protected render(): string {
+    return '';
   }
 
   getContent(): HTMLElement | null {
@@ -102,6 +124,7 @@ export default abstract class Block<Props extends unknown | Properties> {
 
       set: (target: Record<string, unknown>, prop: string, value: unknown) => {
         target[prop] = value;
+        console.warn(target, prop, value)
 
         this._eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
         return true;

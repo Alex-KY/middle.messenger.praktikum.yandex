@@ -1,7 +1,7 @@
 import Block from '../../../../utils/block';
 import Templator from '../../../../utils/templater';
 
-import Properties from '../../../../utils/types';
+import { Props as Properties } from '../../../../utils/types';
 
 import './Message.scss';
 

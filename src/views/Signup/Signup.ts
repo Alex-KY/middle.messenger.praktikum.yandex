@@ -3,6 +3,8 @@ import Router from '../../utils/router';
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
 
+import AuthController from '../../controllers/AuthController';
+
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
 
@@ -14,7 +16,7 @@ import {
   passwordPattern
 } from '../../utils/verifications/patterns';
 
-import Properties from '../../utils/types';
+import { Props as Properties } from '../../utils/types';
 
 import "./Signup.scss";
 
@@ -28,32 +30,46 @@ const template = `
       <div class="signup-block__form__buttons">
         {{ #each buttons }}
       </div>
+      <div class="signup-block__form__response-error"></div>
     </form>
   </div>
 `;
 
 const router = new Router();
+const authController = new AuthController();
 
-function toLoginPage() {
-  router.go('/chat');
+function toSigninPage() {
+  router.go('/signin');
 }
 
-function signup(e: PointerEvent) {
+function setErrorBlock (text?: string) {
+  const errorBlock = document.querySelector('.signup-block__form__response-error');
+  if (errorBlock) {
+    errorBlock.textContent = text || '';
+    errorBlock.classList.toggle('error--active', Boolean(text));
+  }
+}
+
+async function signup(e: PointerEvent) {
   e.preventDefault();
+  setErrorBlock();
 
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
   const formObject = [...formData.entries()]
     .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
 
-  console.warn(formObject);
-
   if (!form.checkValidity()) {
     [...form.elements].forEach((item: HTMLElement) => {
       checkInput(item as HTMLInputElement);
     });
   } else {
-    router.go('/login');
+    const res = await authController.signup(formObject);
+    if (res.status === 200) {
+      toSigninPage();
+    } else {
+      setErrorBlock(`${res.status}. ${res.data.reason || 'Неизвестная ошибка'}`);
+    }
   }
 }
 
@@ -184,14 +200,6 @@ const context = {
         fu: signup,
         params: ['event']
       }
-    }).render(),
-
-    new YButton({
-      text: 'Войти',
-      click: {
-        fu: toLoginPage
-      },
-      tagName: 'a'
     }).render()
 
   ]
@@ -205,8 +213,9 @@ interface Props extends Properties {
 
 export default class Signup extends Block<Props> {
   constructor(props: Props) {
-    super(props || context);
-    this.props = props || context;
+    const concatProps = Object.assign(props, context);
+
+    super(concatProps);
   };
 
   render(): string {

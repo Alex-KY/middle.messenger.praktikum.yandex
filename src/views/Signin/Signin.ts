@@ -3,6 +3,8 @@ import Router from '../../utils/router';
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
 
+import AuthController from '../../controllers/AuthController';
+
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
 
@@ -11,32 +13,59 @@ import {
   passwordPattern
 } from '../../utils/verifications/patterns';
 
-import Properties from '../../utils/types';
+import { Props as Properties } from '../../utils/types';
 
-import "./Login.scss";
+import "./Signin.scss";
 
 const template = `
   <div class="sign-block">
     <p class="title">{{ title }}</p>
-    <form name="login" class="sign-block__form" onsubmit="return false">
+    <form name="signin" class="sign-block__form" onsubmit="return false">
       <div class="sign-block__form__inputs">
         {{ #each inputs }}
       </div>
       <div class="sign-block__form__buttons">
       {{ #each buttons }}
       </div>
+      <div class="sign-block__form__response-error"></div>
     </form>
   </div>
 `;
 
 const router = new Router();
+const authController = new AuthController();
 
-function toLoginPage() {
+function toChatPage() {
   router.go('/chat');
 }
-
 function toSignupPage() {
   router.go('/signup');
+}
+
+function setErrorBlock (text?: string) {
+  const errorBlock = document.querySelector('.sign-block__form__response-error');
+  if (errorBlock) {
+    errorBlock.textContent = text || '';
+    errorBlock.classList.toggle('error--active', Boolean(text));
+  }
+}
+
+async function signin(e: PointerEvent) {
+  e.preventDefault();
+  setErrorBlock();
+
+  const { form } = e.target as HTMLFormElement;
+  const formData = new FormData(form);
+  const formObject = [...formData.entries()]
+    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
+
+  const res = await authController.signin(formObject);
+  console.warn(formObject, res)
+  if (res.status === 200) {
+    toChatPage();
+  } else {
+    setErrorBlock(`${res.status}. ${res.data.reason || 'Неизвестная ошибка'}`);
+  }
 }
 
 function checkField(e: Event) {
@@ -79,6 +108,7 @@ const context = {
     }).render(),
 
     new YInput({
+      type: 'password',
       label: 'Пароль',
       name: 'password',
       required: true,
@@ -93,7 +123,8 @@ const context = {
     new YButton({
       text: 'Авторизоваться',
       click: {
-        fu: toLoginPage
+        fu: signin,
+        params: ['event']
       }
     }).render(),
 
@@ -114,12 +145,11 @@ interface Props extends Properties {
   buttons: string[]
 };
 
-export default class Login extends Block<Props> {
+export default class Signin extends Block<Props> {
   constructor(props: Props) {
     const concatProps = Object.assign(props, context);
 
     super(concatProps);
-    this.props = concatProps;
   };
 
   render() {

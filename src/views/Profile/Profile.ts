@@ -3,9 +3,12 @@ import Router from '../../utils/router';
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
 
-import YButton from '../../components/YButton';
+import AuthController from '../../controllers/AuthController';
 
-import Properties from '../../utils/types';
+import YButton from '../../components/YButton';
+import AvatarDialog from './components/AvatarDialog';
+
+import { Props as Properties } from '../../utils/types';
 
 import './Profile.scss';
 
@@ -16,7 +19,8 @@ const template = `
   <div class="profile-page__content">
     <div class="profile-page__content__avatar-block">
       <div class="profile-page__content__avatar-block__avatar">
-        <button>{{ icons.image }}</button>
+        {{ button }}
+        {{ icons.image }}
       </div>
       <span>{{ name }}</span>
     </div>
@@ -38,12 +42,12 @@ const template = `
         <span>{{ rows[3].value }}</span>
       </div>
       <div class="dividered-content__row">
-        <span>{{ rows[3].text }}</span>
-        <span>{{ rows[3].value }}</span>
+        <span>{{ rows[4].text }}</span>
+        <span>{{ rows[4].value }}</span>
       </div>
       <div class="dividered-content__row">
-      <span>{{ rows[4].text }}</span>
-      <span>{{ rows[4].value }}</span>
+        <span>{{ rows[5].text }}</span>
+        <span>{{ rows[5].value }}</span>
       </div>
     </div>
     <div class="profile-page__content__buttons-block dividered-content">
@@ -51,29 +55,44 @@ const template = `
         {{ buttons[0] }}
       </div>
       <div class="dividered-content__row">
-      {{ buttons[1] }}
+        {{ buttons[1] }}
       </div>
       <div class="dividered-content__row">
-      {{ buttons[2] }}
+        {{ buttons[2] }}
       </div>
     </div>
   </div>
+  {{ AvatarDialog }}
 `;
 
 const router = new Router();
+const authController = new AuthController();
 
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
 import * as image from 'bundle-text:/static/icons/image.svg';
 
-function exit() {
-  router.go('/login');
+function toSigninPage() {
+  router.go('/signin');
 }
-
 function back() {
   router.go('/chat');
 }
 
+async function logout(e: PointerEvent) {
+  e.preventDefault();
+
+  const res = await authController.logout();
+  if (res.status === 200) {
+    toSigninPage();
+  }
+}
+
 function click() {}
+
+function activateDialog() {
+  context.AvatarDialog = new AvatarDialog({ active: true }).render();
+  new Profile().setProps(context);
+}
 
 const context = {
   icons: {
@@ -86,8 +105,8 @@ const context = {
       value: 'pochta@yandex.ru'
     },
     {
-      text: 'Почта',
-      value: 'pochta@yandex.ru'
+      text: 'Логин',
+      value: 'Borislav'
     },
     {
       text: 'Имя',
@@ -106,6 +125,14 @@ const context = {
       value: '+7 (909) 967 30 30'
     }
   ],
+  button:
+    new YButton({
+      text: 'Поменять аватар',
+      class: 'avatar-button',
+      click: {
+        fu: activateDialog
+      }
+    }).render(),
   buttons: [
 
     new YButton({
@@ -129,7 +156,8 @@ const context = {
     new YButton({
       text: 'Выйти',
       click: {
-        fu: exit
+        fu: logout,
+        params: ['event']
       },
       tagName: 'span',
       class: 'y-btn--link error-text'
@@ -143,30 +171,30 @@ const context = {
       class: 'y-btn--fab'
     }).render()
 
-  ]
+  ],
+  AvatarDialog: ''
 };
 
 interface Props extends Properties {
-  icons: {
+  icons?: {
       image: any
   },
-  name: string,
-  rows: {
+  name?: string,
+  rows?: {
       text: string,
       value: string
   }[],
-  buttons: string[]
+  buttons?: string[]
 };
 
 export default class Profile extends Block<Props> {
-  constructor(props: Props) {
+  constructor(props: Props = {}) {
     const concatProps = Object.assign(props, context);
 
     super(concatProps);
-    this.props = concatProps;
   };
 
-  render() {
+  public render() {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
   };

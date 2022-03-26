@@ -1,0 +1,39 @@
+@import "/src/styles/index";
+
+.y-dialog__content {
+  height: 100%;
+
+  .avatar__form {
+    @include flex-center;
+
+    height: 100%;
+    justify-content: space-between;
+    flex-direction: column;
+
+    > .text {
+      @include flex-center;
+
+      font-size: 14px;
+      &:not(.error-text) {
+        color: $gray-text;
+      }
+    }
+
+    > span {
+      flex-grow: 1;
+    }
+
+    &:not(.file--changed) {
+      button.y-btn {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+
+    &.file--changed {
+      span.y-btn {
+        display: none;
+      }
+    }
+  }
+}

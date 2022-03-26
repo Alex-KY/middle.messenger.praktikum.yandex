@@ -8,7 +8,7 @@ import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
 import Message from './components/Message';
 
-import Properties from '../../utils/types';
+import { Props as Properties } from '../../utils/types';
 
 import "./Chat.scss";
 

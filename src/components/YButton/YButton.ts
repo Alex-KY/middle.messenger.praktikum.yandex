@@ -3,7 +3,7 @@ import Templator from '../../utils/templater';
 
 import './YButton.scss';
 
-import Properties from '../../utils/types';
+import { Props as Properties } from '../../utils/types';
 
 interface Props extends Properties {
   click?: {
@@ -13,8 +13,10 @@ interface Props extends Properties {
   tagName?: string,
   class?: string,
   text?: string,
+  textUnderline?: boolean,
   icon?: string,
-  color?: string
+  color?: string,
+  width?: string
 };
 
 export default class YButton extends Block<Props> {
@@ -23,14 +25,15 @@ export default class YButton extends Block<Props> {
   }
 
   render(): string {
-    const { click, tagName = 'button', class: classes, text, icon, color } = this.props;
+    const {click, tagName = 'button', class: classes, text, textUnderline, icon, color, width} = this.props;
     const template = `
       <${tagName}
         ${click ? `onclick="{{ click.fu }}(${click?.params || ''})"` : ``}
-        class="y-btn ${ classes || '' } ${ color ? `${color}-color` : '' }"
+        class="y-btn ${classes || ''} ${color ? `${color}-color` : ''} ${textUnderline ? `text--underline` : ''}"
+        style="${width ? `width: ${width};` : ''}"
       >
-        ${ text || '' }
-        ${ icon || '' }
+        ${text || ''}
+        ${icon || ''}
       </${tagName}>
     `;
 

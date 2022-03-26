@@ -1,6 +1,6 @@
 @import "/src/styles/index";
 
-.login-page {
+.signin-page {
   @include flex-center;
 
   height: 100%;
@@ -48,6 +48,21 @@
 
         a {
           @include link;
+        }
+      }
+
+      &__response-error {
+        display: none;
+        background-color: $error;
+        color: $light;
+        padding: 20px 10px;
+        width: calc(100% + 60px);
+        transform: translate(-30px, 30px);
+        border-radius: 0 0 10px 10px;
+        text-align: center;
+
+        &.error--active {
+          @include flex-center;
         }
       }
     }

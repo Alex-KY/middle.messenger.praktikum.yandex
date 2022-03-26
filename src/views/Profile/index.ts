@@ -1,3 +1,7 @@
 import Profile from './Profile';
 
-export default Profile;
+import { withStore } from '../../utils/store';
+
+export const withUser = withStore((state: any) => ({ ...state.userData }));
+
+export default withUser(Profile);

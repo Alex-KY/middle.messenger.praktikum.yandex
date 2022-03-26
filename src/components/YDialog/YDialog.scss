@@ -1,0 +1,25 @@
+@import "/src/styles/index";
+
+.y-dialog.overlay {
+  @include flex-center;
+
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($black, 0.5);
+  cursor: pointer;
+
+  &:not(.y-dialog--active) {
+    display: none;
+  }
+
+  .y-dialog {
+    width: 340px;
+    height: 260px;
+    flex-direction: column;
+    background-color: $light;
+    padding: 40px 30px;
+    border-radius: 12px;
+    cursor: auto;
+  }
+}

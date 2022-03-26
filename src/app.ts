@@ -1,14 +1,22 @@
 import Router from './utils/router';
 
 import ErrorPage from './views/Error';
-import Login from './views/Login';
+import Signin from './views/Signin';
 import Signup from './views/Signup';
 import Chat from './views/Chat';
 import Profile from './views/Profile';
 
+import authController from './controllers/AuthController';
+
+// Delete
+import store from './utils/store';
+window.store = store;
+//
+
+const controller = new authController();
 // const pages = {
-//   'login': async function () {
-//     await import('./views/Login');
+//   'signin': async function () {
+//     await import('./views/Signin');
 //   },
 //   'signup': async function () {
 //     await import('./views/Signup');
@@ -28,22 +36,23 @@ import Profile from './views/Profile';
 // };
 
 // Роутинг
-// Стартовая страница - /login
+// Стартовая страница - /signin
 // Если страница не найдена - /404
 async function ready () {
   const router = new Router();
+  const user = await controller.fetchUser();
 
   router
     .use('/404', ErrorPage, { classes: 'error-page', code: 404 })
     .use('/500', ErrorPage, { classes: 'error-page', code: 500 })
-    .use('/login', Login, { classes: 'login-page' })
+    .use('/signin', Signin, { classes: 'signin-page' })
     .use('/signup', Signup, { classes: 'signup-page' })
     .use('/chat', Chat, { classes: 'chat-page' })
     .use('/profile', Profile, { classes: 'profile-page' })
     .start();
 
-  if (window.location.pathname === '/') {
-    router.go('/login');
+  if (window.location.pathname === '/' || !user) {
+    router.go('/signin');
   } else {
     const page = window.location.pathname.split('/')[1];
     const path = `/${page}`;

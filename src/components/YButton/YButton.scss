@@ -5,6 +5,7 @@ button:not(span).y-btn {
 }
 .y-btn {
   min-width: 40px;
+  border-radius: 8px;
 
   &--fab {
     @include flex-center;
