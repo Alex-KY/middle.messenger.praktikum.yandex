@@ -1,51 +1,19 @@
-import Block from '../../../../utils/block';
-import Templator from '../../../../utils/templater';
-
 import UserController from '../../../../controllers/UserController';
 
 import YDialog from '../../../../components/YDialog';
 import YButton from '../../../../components/YButton';
 import YInput from '../../../../components/YInput';
-import DialogContent from '../DialogContent';
-
-import { Props as Properties } from '../../../../utils/types';
 
 import "./AvatarDialog.scss";
 
-interface Props extends Properties {
-  active?: boolean,
-  YDialog?: string
-};
-
 const userController = new UserController();
 
-class AvatarDialog extends Block<Props> {
-  constructor(props: Props = {}) {
-    const concatProps = Object.assign(dialogProps, props);
-    context.YDialog = new YDialog(concatProps).render();
-
-    super(context);
+function setErrorBlock (text?: string) {
+  const errorBlock = document.querySelector('.user-avatar__form__response-error');
+  if (errorBlock) {
+    errorBlock.textContent = text || '';
+    errorBlock.classList.toggle('error--active', Boolean(text));
   }
-
-  render(): string {
-    const tmpl = new Templator(template);
-    return tmpl.compile(this.props);
-  }
-};
-
-const template = `
-  {{ YDialog }}
-`;
-
-const context = {
-  YDialog: ''
-};
-
-function setErrorBlock(form: HTMLElement, text: string) {
-  const textItem = form.querySelector('.text') as HTMLElement;
-
-  textItem.textContent = text;
-  textItem.classList.toggle('error-text', true);
 }
 
 function clickOnFileInput(e: PointerEvent) {
@@ -74,57 +42,66 @@ async function sendFile(e: PointerEvent) {
 
   const res = await userController.sendAvatar(formData);
   if (res.status === 200) {
-    const overlay = document.querySelector('y-dialog.overlay') as HTMLElement;
-    overlay.click();
+    dialog.hide();
   } else {
-    setErrorBlock(form, `${res.status}. ${res.data.reason || 'Ошибка, попробуйте ещё раз'}`);
+    setErrorBlock(`${res.status}. ${res.data.reason || 'Ошибка, попробуйте ещё раз'}`);
   }
 }
 
-const contentProps = {
-  text: '',
-  buttons: [
+const template = `
+  <form class="user-avatar__form">
+    <div class="user-avatar__form__buttons">
+      <span class="text"></span>
+      {{ #each content.buttons }}
+    </div>
+    <div class="user-avatar__form__inputs">
+      {{ content.input }}
+    </div>
+    <div class="user-avatar__form__response-error"></div>
+  </form>
+`;
 
-    new YButton({
-      text: 'Выбрать файл на компьютере',
-      textUnderline: true,
-      click: {
-        fu: clickOnFileInput,
-        params: ['event']
-      },
-      tagName: 'span',
-      class: 'y-btn--link'
-    }).render(),
-
-    new YButton({
-      text: 'Поменять',
-      click: {
-        fu: sendFile,
-        params: ['event']
-      },
-      width: '100%'
-    }).render()
-
-  ],
-  input: new YInput({
-      name: 'avatar',
-      type: 'file',
-      accept: 'image/jpeg,image/png,image/gif',
-      required: true,
-      change: {
-        fu: changeFile,
-        params: ['event']
-      },
-      class: 'hidden'
-    }).render()
-};
-
-const content = new DialogContent(contentProps);
-
-const dialogProps = {
+const context = {
   title: 'Загрузите файл',
-  color: 'text',
-  content: content.render()
+  content: {
+    template,
+    buttons: [
+
+      new YButton({
+        text: 'Выбрать файл на компьютере',
+        textUnderline: true,
+        click: {
+          fu: clickOnFileInput,
+          params: ['event']
+        },
+        tagName: 'span',
+        class: 'y-btn--link'
+      }).render(),
+
+      new YButton({
+        text: 'Поменять',
+        click: {
+          fu: sendFile,
+          params: ['event']
+        },
+        width: '100%'
+      }).render()
+
+    ],
+    input: new YInput({
+        name: 'avatar',
+        type: 'file',
+        accept: 'image/jpeg,image/png,image/gif',
+        required: true,
+        change: {
+          fu: changeFile,
+          params: ['event']
+        },
+        class: 'hidden'
+      }).render()
+  }
 };
 
-export default AvatarDialog;
+const dialog = new YDialog(context);
+
+export default dialog;

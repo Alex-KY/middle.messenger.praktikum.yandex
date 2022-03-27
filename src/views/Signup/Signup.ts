@@ -87,7 +87,7 @@ function checkField(e: Event) {
 function checkPassword(e: Event) {
   const target = e.target as HTMLInputElement;
   const { value: passwordValue } = target as HTMLInputElement;
-  const nodePassword = target.form?.querySelector('[name=password]') as HTMLInputElement;
+  const nodePassword = target.form?.querySelector('[type=password]') as HTMLInputElement;
   const { value: passwordRepeatValue } = nodePassword;
   const valid = passwordValue.trim() && passwordRepeatValue.trim() && passwordValue === passwordRepeatValue;
 

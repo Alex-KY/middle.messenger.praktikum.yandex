@@ -5,8 +5,11 @@ import Templator from '../../utils/templater';
 
 import AuthController from '../../controllers/AuthController';
 
+import store from '../../utils/store';
+
 import YButton from '../../components/YButton';
 import AvatarDialog from './components/AvatarDialog';
+import UserPasswordDialog from './components/UserPasswordDialog';
 
 import { Props as Properties } from '../../utils/types';
 
@@ -22,7 +25,7 @@ const template = `
         {{ button }}
         {{ icons.image }}
       </div>
-      <span>{{ name }}</span>
+      <span>{{ first_name }}</span>
     </div>
     <div class="profile-page__content__data-block dividered-content">
       <div class="dividered-content__row">
@@ -62,7 +65,8 @@ const template = `
       </div>
     </div>
   </div>
-  {{ AvatarDialog }}
+  ${ AvatarDialog.render() }
+  ${ UserPasswordDialog.render() }
 `;
 
 const router = new Router();
@@ -89,16 +93,29 @@ async function logout(e: PointerEvent) {
 
 function click() {}
 
-function activateDialog() {
-  context.AvatarDialog = new AvatarDialog({ active: true }).render();
-  new Profile().setProps(context);
+function activateUserAvatarDialog() {
+  AvatarDialog.assignProps({ active: true });
+}
+function activateUserPasswordDialog() {
+  UserPasswordDialog.assignProps({ active: true });
+}
+
+function prepareProps(props: any) {
+  const userData = store.getState().userData;
+  const newProps = Object.assign({}, props);
+  if (userData) {
+    Object.entries(userData).forEach(([key, value]) => {
+      Object.assign(newProps, { [key]: value });
+    });
+  }
+  return newProps;
 }
 
 const context = {
   icons: {
     image
   },
-  name: 'Иван',
+  first_name: 'Иван',
   rows: [
     {
       text: 'Почта',
@@ -130,7 +147,7 @@ const context = {
       text: 'Поменять аватар',
       class: 'avatar-button',
       click: {
-        fu: activateDialog
+        fu: activateUserAvatarDialog
       }
     }).render(),
   buttons: [
@@ -147,7 +164,7 @@ const context = {
     new YButton({
       text: 'Изменить пароль',
       click: {
-        fu: click
+        fu: activateUserPasswordDialog
       },
       tagName: 'span',
       class: 'y-btn--link'
@@ -171,8 +188,7 @@ const context = {
       class: 'y-btn--fab'
     }).render()
 
-  ],
-  AvatarDialog: ''
+  ]
 };
 
 interface Props extends Properties {
@@ -189,7 +205,7 @@ interface Props extends Properties {
 
 export default class Profile extends Block<Props> {
   constructor(props: Props = {}) {
-    const concatProps = Object.assign(props, context);
+    const concatProps = Object.assign(props, prepareProps(context));
 
     super(concatProps);
   };

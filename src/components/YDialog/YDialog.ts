@@ -1,52 +1,51 @@
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
 
-import { nanoid } from 'nanoid';
-
 import './YDialog.scss';
 
 import { Props as Properties } from '../../utils/types';
-
-const id = nanoid(6);
-
-function hideDialog (e: PointerEvent) {
-  const target = e.target as HTMLInputElement;
-  if (!target.classList.contains('overlay')) return
-
-  const yDialog = document.getElementById(id);
-  yDialog?.classList.toggle('y-dialog--active', false);
-}
 
 interface Props extends Properties {
   active?: boolean,
   class?: string,
   title?: string,
   color?: string,
-  content?: string
+  content?: {
+    template: string
+  }
 };
 
 export default class YDialog extends Block<Props> {
-  public id = id;
-
   constructor(props: Props) {
-    const concatProps = Object.assign(props, { hideDialog });
-    super(concatProps);
+    super(props);
   }
 
-  render(): string {
-    const {active, class: classes, title, color, content} = this.props;
+  public hide(e?: PointerEvent) {
+    const target = (e ? e.target : document.getElementById(this.id)) as HTMLElement;
+
+    if (!target.classList.contains('overlay')) return;
+
+    target.classList.toggle('y-dialog--active', false);
+  }
+
+  public render(): string {
+    const {active, class: classes, title, color} = this.props;
+    const contentTemplate = this.props.content?.template || '';
+
+    window[`hide-dialog__${this.id}`] = this.hide;
+
     const template = `
       <div
         id="${this.id}"
         class="y-dialog overlay ${active ? `y-dialog--active` : ''}"
-        onclick="{{hideDialog}}(event)"
+        onclick="window['hide-dialog__${this.id}'](event)"
       >
         <div class="y-dialog ${classes || ''}">
           <div class="y-dialog__title title ${color ? `${color}-color` : ''}">
             ${title || ''}
           </div>
           <div class="y-dialog__content">
-            ${content || ''}
+            ${contentTemplate}
           </div>
         </div>
       </div>

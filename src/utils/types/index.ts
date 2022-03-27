@@ -3,6 +3,13 @@ interface Props {
   events?: { string: () => void }
 };
 
+interface API {
+  data: any,
+  responseText: string,
+  status: number,
+  statusText: string
+}
+
 interface User {
   id: string,
   first_name: string,
@@ -28,4 +35,9 @@ interface SinginFormModel {
   password: string
 };
 
-export { Props, User, SingupFormModel, SinginFormModel };
+interface userPasswordFormModel {
+  oldPassword: string,
+  newPassword: string
+};
+
+export { Props, API, User, SingupFormModel, SinginFormModel, userPasswordFormModel };

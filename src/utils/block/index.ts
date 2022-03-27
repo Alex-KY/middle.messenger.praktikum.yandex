@@ -52,11 +52,11 @@ export default abstract class Block<Props extends unknown | Properties> {
     this.componentDidMount();
   }
 
-  componentDidMount() {
+  protected componentDidMount() {
     this.dispatchComponentDidMount();
   }
 
-  dispatchComponentDidMount() {
+  protected dispatchComponentDidMount() {
     this._eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
@@ -72,11 +72,19 @@ export default abstract class Block<Props extends unknown | Properties> {
     }
   }
 
-  componentDidUpdate(oldProps: Props, newProps: Props) {
+  protected componentDidUpdate(oldProps: Props, newProps: Props) {
     return true;
   }
 
-  setProps = (nextProps: Props) => {
+  public assignProps = (props: Props) => {
+    if (!props) {
+      return;
+    }
+
+    Object.assign(this.props, props);
+  }
+
+  public setProps = (nextProps: Props) => {
     if (!nextProps) {
       return;
     }
@@ -89,18 +97,24 @@ export default abstract class Block<Props extends unknown | Properties> {
   }
 
   private _render() {
-    console.warn('_render', this.id)
-    if (!this.rootString) {
-      const parent = document.querySelector(`#${this.id}`)?.parentElement;
-      if (parent) {
-        this.rootString = parent?.id || [...(parent?.classList || '')]
-          .map(item => item.trim() ? `.${item}` : ``)
-          .join('')
-      }
-    }
+    // console.warn('_render', this.id)
+    // if (!this.rootString) {
+    //   const parent = document.querySelector(`#${this.id}`)?.parentElement;
+    //   if (parent) {
+    //     console.warn([parent])
+    //     this.rootString = parent?.id || [...(parent?.classList || '')]
+    //       .map(item => item.trim() ? `.${item}` : ``)
+    //       .join('')
+    //   }
+    // }
 
     this._addEvents();
-    renderDOM(this.render(), this.rootString);
+    const element = document.querySelector(`#${this.id}`) as HTMLElement;
+    console.warn([element], this.id)
+    if (element) {
+      element.outerHTML = this.render();
+    }
+    // renderDOM(this.render(), this.rootString);
   }
 
   protected render(): string {
@@ -124,7 +138,6 @@ export default abstract class Block<Props extends unknown | Properties> {
 
       set: (target: Record<string, unknown>, prop: string, value: unknown) => {
         target[prop] = value;
-        console.warn(target, prop, value)
 
         this._eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
         return true;

@@ -1,3 +1,5 @@
+import { API } from "../types";
+
 enum METHOD {
   GET = 'GET',
   POST = 'POST',
@@ -14,24 +16,40 @@ type Options = {
 
 type OptionsWithoutMethod = Omit<Options, 'method'>;
 
+
+
 export default class HTTPTransport {
   constructor(endpoint?: string) {
     this.APIUrl += (endpoint || '');
   }
   protected APIUrl = 'https://ya-praktikum.tech/api/v2';
 
-  public get(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+  protected formingResponse(res: any) {
+    const { response, responseText, status, statusText } = res;
+    let data;
+
+    try {
+      data = JSON.parse(response);
+    } catch (err) {
+      data = JSON.parse(JSON.stringify(response));
+    }
+
+    return { data, responseText, status, statusText };
+  }
+
+  public get(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
     return this.request(`${this.APIUrl}${url}`, { ...options, method: METHOD.GET });
   }
-  public post(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+  public post(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
     return this.request(`${this.APIUrl}${url}`, { ...options, method: METHOD.POST });
   }
-  public put(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+  public put(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
     return this.request(`${this.APIUrl}${url}`, { ...options, method: METHOD.PUT });
   }
 
-  protected request(url: string, options: Options = { method: METHOD.GET }): Promise<XMLHttpRequest> {
-    const { method, data, contentType = 'application/json' } = options;
+  protected async request(url: string, options: Options = { method: METHOD.GET }): Promise<API | string> {
+    const { method, contentType = 'application/json' } = options;
+    let data = options.data;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -39,7 +57,10 @@ export default class HTTPTransport {
       xhr.withCredentials = true;
       xhr.setRequestHeader('credentials', 'include');
       xhr.setRequestHeader('mode', 'cors');
-      if (!(data instanceof FormData)) xhr.setRequestHeader('content-type', contentType);
+      if (!(data instanceof FormData)) {
+        xhr.setRequestHeader('content-type', contentType);
+        data = JSON.stringify(data);
+      }
 
       xhr.onload = function() {
         resolve(xhr);
@@ -54,6 +75,8 @@ export default class HTTPTransport {
       } else {
         xhr.send(data);
       }
-    });
+    })
+    .then(this.formingResponse)
+    .catch((error: string) => error);
   }
 }
