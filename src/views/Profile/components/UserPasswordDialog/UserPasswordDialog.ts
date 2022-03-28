@@ -35,7 +35,7 @@ function checkInput (target: HTMLInputElement) {
   return valid;
 }
 
-async function changePassword(e: PointerEvent) {
+async function changeUserPassword(e: PointerEvent) {
   e.preventDefault();
   setErrorBlock();
 
@@ -49,7 +49,7 @@ async function changePassword(e: PointerEvent) {
       checkInput(item as HTMLInputElement);
     });
   } else {
-    const res = await userController.changePassword(formObject);
+    const res = await userController.changeUserPassword(formObject);
     if (res.status === 200) {
       dialog.hide();
     } else {
@@ -80,7 +80,7 @@ const template = `
 `;
 
 const context = {
-  title: 'Поменять пароль',
+  title: 'Изменить пароль',
   content: {
     template,
     inputs: [
@@ -111,7 +111,7 @@ const context = {
     button: new YButton({
         text: 'Поменять',
         click: {
-          fu: changePassword,
+          fu: changeUserPassword,
           params: ['event']
         }
       }).render()

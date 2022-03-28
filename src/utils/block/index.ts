@@ -137,9 +137,10 @@ export default abstract class Block<Props extends unknown | Properties> {
       },
 
       set: (target: Record<string, unknown>, prop: string, value: unknown) => {
+        const oldProps = {...target};
         target[prop] = value;
 
-        this._eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
+        this._eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target);
         return true;
       },
 

@@ -4,7 +4,7 @@ import YDialog from '../../../../components/YDialog';
 import YButton from '../../../../components/YButton';
 import YInput from '../../../../components/YInput';
 
-import "./AvatarDialog.scss";
+import "./UserAvatarDialog.scss";
 
 const userController = new UserController();
 
@@ -34,13 +34,13 @@ function changeFile(e: PointerEvent) {
   text.textContent = fileName;
 }
 
-async function sendFile(e: PointerEvent) {
+async function changeUserAvatar(e: PointerEvent) {
   e.preventDefault();
 
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
 
-  const res = await userController.sendAvatar(formData);
+  const res = await userController.changeUserAvatar(formData);
   if (res.status === 200) {
     dialog.hide();
   } else {
@@ -81,7 +81,7 @@ const context = {
       new YButton({
         text: 'Поменять',
         click: {
-          fu: sendFile,
+          fu: changeUserAvatar,
           params: ['event']
         },
         width: '100%'

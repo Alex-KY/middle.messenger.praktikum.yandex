@@ -51,11 +51,15 @@ async function ready () {
     .use('/profile', Profile, { classes: 'profile-page' })
     .start();
 
-  if (window.location.pathname === '/' || !user) {
+  if (!user) {
     router.go('/signin');
   } else {
     const page = window.location.pathname.split('/')[1];
     const path = `/${page}`;
+
+    if (['/', '/signin', '/signup'].includes(path)) {
+      router.go('/chat');
+    }
 
     if (router.getRoute(path)) {
       router.go(path);

@@ -59,7 +59,7 @@ export default class YInput extends Block<Props> {
           class="y-input__input"
           ${value ? `value="${value}"` : ``}
         >
-        ${label ? `<label class="y-label">${label}</label>` : ''}
+        ${label ? `<label class="y-label ${value ? `y-label--active` : ``}">${label}</label>` : ''}
         ${hideDetails ? '' : `<div class="y-input__details error-text">${errorText}</div>`}
       </div>
     `;

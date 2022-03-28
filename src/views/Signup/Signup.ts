@@ -23,7 +23,7 @@ import "./Signup.scss";
 const template = `
   <div class="signup-block">
     <p class="title">{{ title }}</p>
-    <form name="signup" class="signup-block__form" onsubmit={{ signup }}>
+    <form name="signup" class="signup-block__form">
       <div class="signup-block__form__inputs">
         {{ #each inputs }}
       </div>
@@ -87,7 +87,7 @@ function checkField(e: Event) {
 function checkPassword(e: Event) {
   const target = e.target as HTMLInputElement;
   const { value: passwordValue } = target as HTMLInputElement;
-  const nodePassword = target.form?.querySelector('[type=password]') as HTMLInputElement;
+  const nodePassword = target.form?.querySelector('[name=repeatPassword]') as HTMLInputElement;
   const { value: passwordRepeatValue } = nodePassword;
   const valid = passwordValue.trim() && passwordRepeatValue.trim() && passwordValue === passwordRepeatValue;
 

@@ -40,4 +40,13 @@ interface userPasswordFormModel {
   newPassword: string
 };
 
-export { Props, API, User, SingupFormModel, SinginFormModel, userPasswordFormModel };
+interface userDataFormModel {
+  first_name: string,
+  second_name: string,
+  display_name: string,
+  login: string,
+  email: string,
+  phone: string
+};
+
+export { Props, API, User, SingupFormModel, SinginFormModel, userPasswordFormModel, userDataFormModel };

@@ -50,15 +50,18 @@
       text-align: center;
 
       &__avatar {
+        @include flex-center;
+
         width: 130px;
         height: 130px;
         border-radius: 50%;
         background-color: $gray-light;
+        background-position: center;
+        background-repeat: no-repeat;
         position: relative;
         cursor: pointer;
         margin: 20px auto;
 
-        > svg,
         button.avatar-button {
           position: absolute;
           left: 50%;
@@ -81,36 +84,6 @@
             display: block;
           }
         }
-
-        // &:hover {
-        //   &::after {
-        //     position: absolute;
-        //     content: "";
-        //     top: 0;
-        //     left: 0;
-        //     width: 100%;
-        //     height: 100%;
-        //     border-radius: 50%;
-        //     background-color: $black;
-        //     opacity: 0.5;
-        //     z-index: -1;
-        //   }
-
-        //   &::before {
-        //     @include flex-center;
-
-        //     position: absolute;
-        //     content: "Поменять аватар";
-        //     left: 50%;
-        //     top: 50%;
-        //     transform: translate(-50%, -50%);
-        //     width: 100%;
-        //     height: 100%;
-        //     word-spacing: 100vw;
-        //     color: $light;
-        //     z-index: -1;
-        //   }
-        // }
       }
 
       span {

@@ -8,8 +8,11 @@ import AuthController from '../../controllers/AuthController';
 import store from '../../utils/store';
 
 import YButton from '../../components/YButton';
-import AvatarDialog from './components/AvatarDialog';
+import UserAvatarDialog from './components/UserAvatarDialog';
+import UserDataDialog from './components/UserDataDialog';
 import UserPasswordDialog from './components/UserPasswordDialog';
+
+import { getContext } from './components/UserDataDialog';
 
 import { Props as Properties } from '../../utils/types';
 
@@ -17,15 +20,14 @@ import './Profile.scss';
 
 const template = `
   <div class="profile-page__side-button">
-    {{ buttons[3] }}
+    {{ buttonBack }}
   </div>
   <div class="profile-page__content">
     <div class="profile-page__content__avatar-block">
-      <div class="profile-page__content__avatar-block__avatar">
-        {{ button }}
-        {{ icons.image }}
+      <div style="background-image: url({{ userData.avatar }})" class="profile-page__content__avatar-block__avatar">
+        {{ buttonAvatar }}
       </div>
-      <span>{{ first_name }}</span>
+      <span>{{ userData.first_name }}</span>
     </div>
     <div class="profile-page__content__data-block dividered-content">
       <div class="dividered-content__row">
@@ -65,7 +67,8 @@ const template = `
       </div>
     </div>
   </div>
-  ${ AvatarDialog.render() }
+  ${ UserAvatarDialog.render() }
+  ${ UserDataDialog.render() }
   ${ UserPasswordDialog.render() }
 `;
 
@@ -73,7 +76,7 @@ const router = new Router();
 const authController = new AuthController();
 
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
-import * as image from 'bundle-text:/static/icons/image.svg';
+const image = require('/static/icons/image.svg');
 
 function toSigninPage() {
   router.go('/signin');
@@ -91,31 +94,33 @@ async function logout(e: PointerEvent) {
   }
 }
 
-function click() {}
-
 function activateUserAvatarDialog() {
-  AvatarDialog.assignProps({ active: true });
+  UserAvatarDialog.assignProps({ active: true });
+}
+function activateUserDataDialog() {
+  getContext();
+  UserDataDialog.assignProps({ active: true });
 }
 function activateUserPasswordDialog() {
   UserPasswordDialog.assignProps({ active: true });
 }
 
 function prepareProps(props: any) {
-  const userData = store.getState().userData;
-  const newProps = Object.assign({}, props);
-  if (userData) {
-    Object.entries(userData).forEach(([key, value]) => {
-      Object.assign(newProps, { [key]: value });
-    });
-  }
-  return newProps;
+  const avatar = !props.userData.avatar ? image : `https://ya-praktikum.tech/api/v2/resources${props.userData.avatar}`;
+  Object.assign(props.userData, { avatar });
+  return { ...props };
 }
 
 const context = {
-  icons: {
-    image
+  userData: {
+    first_name: '',
+    second_name: '',
+    display_name: '',
+    login: '',
+    email: '',
+    phone: '',
+    avatar: image
   },
-  first_name: 'Иван',
   rows: [
     {
       text: 'Почта',
@@ -142,7 +147,7 @@ const context = {
       value: '+7 (909) 967 30 30'
     }
   ],
-  button:
+  buttonAvatar:
     new YButton({
       text: 'Поменять аватар',
       class: 'avatar-button',
@@ -150,12 +155,19 @@ const context = {
         fu: activateUserAvatarDialog
       }
     }).render(),
+  buttonBack: new YButton({
+      icon: arrow,
+      click: {
+        fu: back
+      },
+      class: 'y-btn--fab'
+    }).render(),
   buttons: [
 
     new YButton({
       text: 'Изменить данные',
       click: {
-        fu: click
+        fu: activateUserDataDialog
       },
       tagName: 'span',
       class: 'y-btn--link'
@@ -178,14 +190,6 @@ const context = {
       },
       tagName: 'span',
       class: 'y-btn--link error-text'
-    }).render(),
-
-    new YButton({
-      icon: arrow,
-      click: {
-        fu: back
-      },
-      class: 'y-btn--fab'
     }).render()
 
   ]
@@ -205,12 +209,12 @@ interface Props extends Properties {
 
 export default class Profile extends Block<Props> {
   constructor(props: Props = {}) {
-    const concatProps = Object.assign(props, prepareProps(context));
+    const concatProps = Object.assign(context, prepareProps(props));
 
     super(concatProps);
   };
 
-  public render() {
+  render() {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
   };
