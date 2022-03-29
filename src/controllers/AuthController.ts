@@ -1,13 +1,21 @@
 import AuthAPI from '../utils/api/AuthAPI';
-
 import store from '../utils/store';
 
-import { SingupFormModel, SinginFormModel } from '../utils/types';
+import { baseResourcesApiUrl } from '../utils/HTTPTransport';
+
+import { API, SingupFormModel, SinginFormModel } from '../utils/types';
 
 const authApi = new AuthAPI();
 
 function prepareDataToRequest(data: SingupFormModel | SinginFormModel) {
   return JSON.stringify(data);
+}
+
+function prepareUserData(data: any) {
+  const url = data.avatar;
+  const path = url ? `${baseResourcesApiUrl}${url}` : url;
+
+  return Object.assign(data, { avatar: path });
 }
 
 export default class AuthController {
@@ -45,8 +53,8 @@ export default class AuthController {
     try {
 
       return authApi.getUserInfo()
-        .then((res: any) => {
-          store.set('userData', res.data);
+        .then((res: API) => {
+          store.set('userData', prepareUserData(res.data));
           return res;
         });
 

@@ -1,9 +1,18 @@
 import UserAPI from '../utils/api/UserAPI';
 import store from '../utils/store';
 
+import { baseResourcesApiUrl } from '../utils/HTTPTransport';
+
 import { API, userPasswordFormModel, userDataFormModel } from '../utils/types';
 
 const userApi = new UserAPI();
+
+function prepareUserData(data: any) {
+  const url = data.avatar;
+  const path = url ? `${baseResourcesApiUrl}${url}` : url;
+
+  return Object.assign(data, { avatar: path });
+}
 
 export default class UserController {
   public changeUserAvatar(form: FormData) {
@@ -11,7 +20,7 @@ export default class UserController {
 
       return userApi.changeUserAvatar(form)
         .then((res: API) => {
-          store.set('userData', res.data);
+          store.set('userData', prepareUserData(res.data));
           return res;
         });
 
@@ -35,7 +44,7 @@ export default class UserController {
 
       return userApi.changeUserData(data)
       .then((res: API) => {
-        store.set('userData', res.data);
+        store.set('userData', prepareUserData(res.data));
         return res;
       });
 

@@ -16,13 +16,14 @@ type Options = {
 
 type OptionsWithoutMethod = Omit<Options, 'method'>;
 
-
+export const baseApiUrl = 'https://ya-praktikum.tech/api/v2';
+export const baseResourcesApiUrl = `${baseApiUrl}/resources`;
 
 export default class HTTPTransport {
   constructor(endpoint?: string) {
     this.APIUrl += (endpoint || '');
   }
-  protected APIUrl = 'https://ya-praktikum.tech/api/v2';
+  protected APIUrl = baseApiUrl;
 
   protected formingResponse(res: any) {
     const { response, responseText, status, statusText } = res;

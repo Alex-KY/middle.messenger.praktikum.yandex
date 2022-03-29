@@ -5,8 +5,6 @@ import Templator from '../../utils/templater';
 
 import AuthController from '../../controllers/AuthController';
 
-import store from '../../utils/store';
-
 import YButton from '../../components/YButton';
 import UserAvatarDialog from './components/UserAvatarDialog';
 import UserDataDialog from './components/UserDataDialog';
@@ -24,10 +22,10 @@ const template = `
   </div>
   <div class="profile-page__content">
     <div class="profile-page__content__avatar-block">
-      <div style="background-image: url({{ userData.avatar }})" class="profile-page__content__avatar-block__avatar">
+      <div style="background-image: url({{ state.avatar }})" class="profile-page__content__avatar-block__avatar">
         {{ buttonAvatar }}
       </div>
-      <span>{{ userData.first_name }}</span>
+      <span>{{ state.first_name }}</span>
     </div>
     <div class="profile-page__content__data-block dividered-content">
       <div class="dividered-content__row">
@@ -105,20 +103,8 @@ function activateUserPasswordDialog() {
   UserPasswordDialog.assignProps({ active: true });
 }
 
-function prepareProps(props: any) {
-  const avatar = !props.userData.avatar ? image : `https://ya-praktikum.tech/api/v2/resources${props.userData.avatar}`;
-  Object.assign(props.userData, { avatar });
-  return { ...props };
-}
-
 const context = {
-  userData: {
-    first_name: '',
-    second_name: '',
-    display_name: '',
-    login: '',
-    email: '',
-    phone: '',
+  state: {
     avatar: image
   },
   rows: [
@@ -209,7 +195,7 @@ interface Props extends Properties {
 
 export default class Profile extends Block<Props> {
   constructor(props: Props = {}) {
-    const concatProps = Object.assign(context, prepareProps(props));
+    const concatProps = Object.assign(context, props, { _state: 'userData', rootString: '#root' });
 
     super(concatProps);
   };

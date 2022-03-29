@@ -31,18 +31,34 @@ function set(object: Indexed | unknown, path: string, value: unknown): Indexed |
     return merge(object as Indexed, result);
 }
 
+const eventBus = new EventBus();
+
 // наследуем Store от EventBus, чтобы его методы были сразу доступны у экземпляра Store
 class Store extends EventBus {
-  private state: storeData = {};
+  static EVENTS = {
+    STATE_SDU: "state:state-did-update"
+  } as const;
 
-  public getState() {
-    return this.state;
+  private _state: storeData = {};
+
+  public getState(path?: string) {
+    return path ? this._state[path] : this._state;
+  }
+
+  public eventBus = eventBus;
+
+  public getEvents() {
+    return Store.EVENTS;
   }
 
   public set(path: keyof storeData, value: unknown) {
-    set(this.state, path, value);
+    set(this._state, path, value);
 
-    this.emit(StoreEvents.Updated);
+    this.eventBus.emit(Store.EVENTS.STATE_SDU, path, value);
+  }
+
+  public get(path: keyof storeData) {
+    return this._state[path];
   }
 }
 

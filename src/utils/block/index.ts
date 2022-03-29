@@ -1,5 +1,7 @@
 import EventBus from '../eventBus';
-import renderDOM from '../renderDOM';
+// import renderDOM from '../renderDOM';
+
+import store from '../store';
 
 import { nanoid } from 'nanoid';
 
@@ -11,6 +13,8 @@ export default abstract class Block<Props extends unknown | Properties> {
     FLOW_CDU: "flow:component-did-update",
     FLOW_RENDER: "flow:render"
   } as const;
+
+  private _state: string;
 
   public id = nanoid(10).replace(/[0-9-_]/g, '');
 
@@ -32,6 +36,15 @@ export default abstract class Block<Props extends unknown | Properties> {
     this._eventBus = () => eventBus;
     this._registerEvents(eventBus);
 
+    this._state = props?._state;
+
+    if (!props.state && this._state) {
+      const state = store.getState(this._state);
+      props.state = state;
+    }
+
+    this.rootString = props.rootString;
+
     this.props = this._makePropsProxy(props) as Props;
 
     eventBus.emit(Block.EVENTS.INIT);
@@ -42,10 +55,26 @@ export default abstract class Block<Props extends unknown | Properties> {
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+    store.eventBus.on(store.getEvents().STATE_SDU, this._storeDidUpdate.bind(this));
   }
 
   init() {
     this._eventBus().emit(Block.EVENTS.FLOW_RENDER, this.props);
+  }
+
+  private _storeDidUpdate(path: string) {
+    if (!this._state || !path.includes(this._state)) return;
+
+    // const { ...params } = store.getState(this._state);
+    // const state = this.props.state;
+
+    // Object.entries(params).forEach(([key, propValue]) => {
+    //   if (propValue !== state[key]) {
+    //     state[key] = propValue;
+    //   }
+    // })
+
+    this._render();
   }
 
   private _componentDidMount() {
@@ -97,29 +126,36 @@ export default abstract class Block<Props extends unknown | Properties> {
   }
 
   private _render() {
-    // console.warn('_render', this.id)
-    // if (!this.rootString) {
-    //   const parent = document.querySelector(`#${this.id}`)?.parentElement;
-    //   if (parent) {
-    //     console.warn([parent])
-    //     this.rootString = parent?.id || [...(parent?.classList || '')]
-    //       .map(item => item.trim() ? `.${item}` : ``)
-    //       .join('')
-    //   }
+    // const fragment = this.render();
+
+    // const newElement = fragment.firstElementChild as HTMLElement;
+
+    // if (this._element) {
+    //   this._element.replaceWith(newElement);
     // }
 
+    // this._element = newElement;
+
     this._addEvents();
+
+
     const element = document.querySelector(`#${this.id}`) as HTMLElement;
-    console.warn([element], this.id)
+    const root = document.querySelector(`${this.rootString}`) as HTMLElement;
     if (element) {
       element.outerHTML = this.render();
+    } else if (root) {
+      root.innerHTML = this.render();
     }
+
     // renderDOM(this.render(), this.rootString);
   }
 
   protected render(): string {
     return '';
   }
+  // protected render(): DocumentFragment {
+  //   return new DocumentFragment;
+  // }
 
   getContent(): HTMLElement | null {
     return this.element;
@@ -161,4 +197,18 @@ export default abstract class Block<Props extends unknown | Properties> {
       this._element?.addEventListener(event, listener);
     });
   }
+
+  // private _createDocumentElement(tagName: string) {
+  //   return document.createElement(tagName);
+  // }
+
+  // compile(template: any, context: Props) {
+  //   const fragment = this._createDocumentElement('template') as HTMLTemplateElement;
+
+  //   const HTMLString = '';
+
+  //   fragment.innerHTML = HTMLString;
+
+  //   return fragment.content;
+  // }
 }
