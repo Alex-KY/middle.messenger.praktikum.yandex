@@ -59,9 +59,7 @@ async function ready () {
 
     if (['/', '/signin', '/signup'].includes(path)) {
       router.go('/chat');
-    }
-
-    if (router.getRoute(path)) {
+    } else if (router.getRoute(path)) {
       router.go(path);
     } else {
       router.replace('/404');
