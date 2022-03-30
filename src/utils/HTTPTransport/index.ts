@@ -29,10 +29,12 @@ export default class HTTPTransport {
     const { response, responseText, status, statusText } = res;
     let data;
 
-    try {
-      data = JSON.parse(response);
-    } catch (err) {
-      data = JSON.parse(JSON.stringify(response));
+    if (typeof response === 'string') {
+      try {
+        data = JSON.parse(response);
+      } catch (err) {
+        data = JSON.parse(JSON.stringify(response));
+      }
     }
 
     return { data, responseText, status, statusText };
@@ -46,6 +48,9 @@ export default class HTTPTransport {
   }
   public put(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
     return this.request(`${this.APIUrl}${url}`, { ...options, method: METHOD.PUT });
+  }
+  public delete(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
+    return this.request(`${this.APIUrl}${url}`, { ...options, method: METHOD.DELETE });
   }
 
   protected async request(url: string, options: Options = { method: METHOD.GET }): Promise<API | string> {
@@ -78,6 +83,6 @@ export default class HTTPTransport {
       }
     })
     .then(this.formingResponse)
-    .catch((error: string) => error);
+    .catch(this.formingResponse);
   }
 }

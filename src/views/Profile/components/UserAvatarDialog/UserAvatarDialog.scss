@@ -1,49 +1,22 @@
 @import "/src/styles/index";
 
 .user-avatar__form {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  @include dialog-form;
 
-  &__inputs {
-    margin-bottom: auto;
+  .y-btn:not(.y-btn--link) {
+    width: 100%;
+    border-radius: 8px;
+    margin: 15px 0;
   }
 
-  &__buttons {
-    @include flex-center;
-
-    flex-direction: column;
-
-    .y-btn:not(.y-btn--link) {
-      width: 100%;
-      border-radius: 8px;
-      margin: 15px 0;
-    }
-
-    span.y-btn {
-      margin: 30px 0;
-    }
-
-    .text {
-      font-size: 14px;
-      color: $gray-text;
-    }
-  }
-
-  &__response-error {
-    display: none;
-    background-color: $error;
-    color: $light;
-    padding: 20px 10px;
-    width: calc(100% + 60px);
-    transform: translate(-30px, 30px);
-    border-radius: 0 0 10px 10px;
+  span.y-btn {
+    margin: 30px 0;
     text-align: center;
+  }
 
-    &.error--active {
-      @include flex-center;
-    }
+  .text {
+    font-size: 14px;
+    color: $gray-text;
   }
 
   &:not(.file--changed) {

@@ -1,9 +1,10 @@
 import UserAPI from '../utils/api/UserAPI';
+
 import store from '../utils/store';
 
 import { baseResourcesApiUrl } from '../utils/HTTPTransport';
 
-import { API, userPasswordFormModel, userDataFormModel } from '../utils/types';
+import { API, UserPasswordFormModel, UserDataFormModel, UserSearchModel } from '../utils/types';
 
 const userApi = new UserAPI();
 
@@ -20,7 +21,11 @@ export default class UserController {
 
       return userApi.changeUserAvatar(form)
         .then((res: API) => {
-          store.set('userData', prepareUserData(res.data));
+          if (res.data) {
+            store.set('userData', prepareUserData(res.data));
+          }
+
+          console.warn(res)
           return res;
         });
 
@@ -29,7 +34,7 @@ export default class UserController {
     }
   }
 
-  public changeUserPassword(data: userPasswordFormModel) {
+  public changeUserPassword(data: UserPasswordFormModel) {
     try {
 
       return userApi.changeUserPassword(data);
@@ -39,14 +44,27 @@ export default class UserController {
     }
   }
 
-  public changeUserData(data: userDataFormModel) {
+  public changeUserData(data: UserDataFormModel) {
     try {
 
       return userApi.changeUserData(data)
       .then((res: API) => {
-        store.set('userData', prepareUserData(res.data));
+        if (res.data) {
+          store.set('userData', prepareUserData(res.data));
+        }
+
         return res;
       });
+
+    } catch (error) {
+      return error;
+    }
+  }
+
+  public searchUser(data: UserSearchModel) {
+    try {
+
+      return userApi.searchUser(data);
 
     } catch (error) {
       return error;

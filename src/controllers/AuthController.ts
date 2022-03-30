@@ -1,4 +1,5 @@
 import AuthAPI from '../utils/api/AuthAPI';
+
 import store from '../utils/store';
 
 import { baseResourcesApiUrl } from '../utils/HTTPTransport';
@@ -54,7 +55,10 @@ export default class AuthController {
 
       return authApi.getUserInfo()
         .then((res: API) => {
-          store.set('userData', prepareUserData(res.data));
+          if (res.data) {
+            store.set('userData', prepareUserData(res.data));
+          }
+
           return res;
         });
 

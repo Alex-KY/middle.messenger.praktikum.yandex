@@ -44,7 +44,8 @@ async function changeUserAvatar(e: PointerEvent) {
   if (res.status === 200) {
     dialog.hide();
   } else {
-    setErrorBlock(`${res.status}. ${res.data.reason || 'Ошибка, попробуйте ещё раз'}`);
+    const status = res.status ? `${res.status}. ` : ``;
+    setErrorBlock(`${status}${res.data?.reason || 'Неизвестная ошибка'}`);
   }
 }
 

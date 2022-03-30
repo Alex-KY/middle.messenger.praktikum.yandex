@@ -39,14 +39,15 @@
     position: absolute;
     right: auto;
     top: 6px;
-    left: 0;
+    left: 5px;
     z-index: 1;
     color: $gray;
     pointer-events: none;
+    transform-origin: left top;
 
     &--active {
       max-width: 133%;
-      transform: translate(-5%, -18px) scale(.75);
+      transform: translateY(-18px) scale(.75);
     }
   }
 

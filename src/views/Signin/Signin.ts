@@ -36,7 +36,7 @@ const router = new Router();
 const authController = new AuthController();
 
 function toChatPage() {
-  router.go('/chat');
+  router.go('/chats');
 }
 function toSignupPage() {
   router.go('/signup');

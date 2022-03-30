@@ -1,6 +1,8 @@
 interface Props {
   id?: string,
-  events?: { string: () => void }
+  events?: {
+    string: () => void
+  }
 };
 
 interface API {
@@ -21,6 +23,14 @@ interface User {
   avatar: string
 };
 
+interface Chats {
+
+};
+
+interface Chat {
+  id: string
+};
+
 interface SingupFormModel {
   first_name: string,
   second_name: string,
@@ -35,12 +45,12 @@ interface SinginFormModel {
   password: string
 };
 
-interface userPasswordFormModel {
+interface UserPasswordFormModel {
   oldPassword: string,
   newPassword: string
 };
 
-interface userDataFormModel {
+interface UserDataFormModel {
   first_name: string,
   second_name: string,
   display_name: string,
@@ -49,4 +59,37 @@ interface userDataFormModel {
   phone: string
 };
 
-export { Props, API, User, SingupFormModel, SinginFormModel, userPasswordFormModel, userDataFormModel };
+interface DeleteChatFormModel {
+  chatId: number
+};
+
+interface UserSearchModel {
+  login: string
+};
+
+interface ChatsParamsModel {
+  offset: number,
+  limit: number,
+  title: string
+};
+
+interface CreateChatModel {
+  title: string
+};
+
+interface ChatUsersModel {
+  users: number[],
+  chatId: number
+};
+
+export {
+  Props, API,
+
+  User, Chats, Chat,
+
+  SingupFormModel, SinginFormModel,
+
+  UserPasswordFormModel, UserDataFormModel, UserSearchModel, DeleteChatFormModel,
+
+  ChatsParamsModel, CreateChatModel, ChatUsersModel
+};

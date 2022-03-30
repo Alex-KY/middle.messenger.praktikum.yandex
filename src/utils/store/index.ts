@@ -4,18 +4,16 @@ import Block from '../block';
 
 import { merge, isEqual } from '../helpers';
 
-import { Props, User } from '../../utils/types';
-
-export enum StoreEvents {
-  Updated = 'updated'
-}
+import { Props, User, Chats, Chat } from '../../utils/types';
 
 type Indexed<T = unknown> = {
   [key in string]: T;
 }
 
 interface storeData {
-  userData?: User
+  userData: User,
+  chats: Chats,
+  currentChat: Chat
 }
 
 function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {

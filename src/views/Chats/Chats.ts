@@ -1,8 +1,13 @@
+import Router from '../../utils/router';
+
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
 
+import ChatsController from '../../controllers/ChatsController';
+
 import LeftSide from './components/LeftSide';
 import MessagesBlock from './components/MessagesBlock';
+import CreateChatDialog from './components/CreateChatDialog';
 
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
@@ -10,15 +15,27 @@ import Message from './components/Message';
 
 import { Props as Properties } from '../../utils/types';
 
-import "./Chat.scss";
+import "./Chats.scss";
 
 const template = `
   {{ LeftSide }}
   {{ MessageBlock }}
+  ${ CreateChatDialog.render() }
 `;
 
+const router = new Router();
+const chatsController = new ChatsController();
+
 const leftSideProps = {
-  profile: 'Профиль >',
+  button:
+    new YButton({
+      text: 'Профиль >',
+      click: {
+        fu: toProfilePage
+      },
+      tagName: 'span',
+      class: 'y-btn--link gray-text'
+    }).render(),
   inputs: [
     {
       name: 'search',
@@ -56,22 +73,58 @@ const leftSideProps = {
 function send(e: string) {
   if (!e.trim()) return
   console.warn(e);
-};
+}
+function toProfilePage() {
+  router.go('/profile');
+}
 
-import * as ellipsisVert from 'bundle-text:/static/icons/ellipsis-vert.svg';
+async function fetchChats(offset = 0, limit = 5, title = '') {
+  const params = { offset, limit, title };
+  await chatsController.fetchChats(params);
+}
+
+function activateCreateChatDialog() {
+  CreateChatDialog.assignProps({ active: true });
+}
+
+async function deleteChat() {
+  const chatId = store.getState('currentChat')?.id;
+  await chatsController.deleteChat({ chatId });
+  fetchChats();
+}
+
+fetchChats();
+
+import * as deleteIcon from 'bundle-text:/static/icons/delete.svg';
+import * as plus from 'bundle-text:/static/icons/plus.svg';
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
 import * as clip from 'bundle-text:/static/icons/clip.svg';
+import store from '../../utils/store';
 
 const image = require('/static/imgs/photo.png');
 
 const messagesBlockProps = {
   empty: 'Выберите чат чтобы отправить сообщение',
+  buttonAdd:
+    new YButton({
+      icon: plus,
+      click: {
+        fu: activateCreateChatDialog
+      },
+      title: 'Добавить пользователя',
+      class: 'y-btn--fab',
+      color: 'transparent'
+    }).render(),
   header: {
     user: 'Вадим',
     components: [
       new YButton({
-        icon: ellipsisVert,
+        icon: deleteIcon,
         class: 'y-btn--fab',
+        title: 'Удалить чат',
+        click: {
+          fu: deleteChat
+        },
         color: 'transparent'
       }).render()
     ]
@@ -133,10 +186,12 @@ const messagesBlockProps = {
   }
 };
 
-const context = {
-  LeftSide: new LeftSide(leftSideProps).render(),
-  MessageBlock: new MessagesBlock(messagesBlockProps).render()
-};
+function generateTemplate() {
+  return {
+    LeftSide: new LeftSide(leftSideProps).render(),
+    MessageBlock: new MessagesBlock(messagesBlockProps).render()
+  }
+}
 
 interface Props extends Properties {
   LeftSide: string,
@@ -145,10 +200,9 @@ interface Props extends Properties {
 
 export default class Chat extends Block<Props> {
   constructor(props: Props) {
-    const concatProps = Object.assign(props, context);
+    const concatProps = Object.assign(generateTemplate(), props);
 
     super(concatProps);
-    this.props = concatProps;
   };
 
   render() {

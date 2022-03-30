@@ -53,7 +53,8 @@ async function changeUserPassword(e: PointerEvent) {
     if (res.status === 200) {
       dialog.hide();
     } else {
-      setErrorBlock(`${res.status}. ${res.data.reason || 'Неизвестная ошибка'}`);
+      const status = res.status ? `${res.status}. ` : ``;
+      setErrorBlock(`${status}${res.data?.reason || 'Неизвестная ошибка'}`);
     }
   }
 }
@@ -88,7 +89,7 @@ const context = {
       new YInput({
         type: 'password',
         name: 'oldPassword',
-        label: 'Пароль',
+        label: 'Текущий пароль',
         required: true,
         pattern: passwordPattern.source,
         errorText: '8-40 символов, хотя бы 1 цифра, заглавная буква',
@@ -99,7 +100,7 @@ const context = {
       new YInput({
         type: 'password',
         name: 'newPassword',
-        label: 'Пароль (ещё раз)',
+        label: 'Новый пароль',
         required: true,
         pattern: passwordPattern.source,
         errorText: '8-40 символов, хотя бы 1 цифра, заглавная буква',

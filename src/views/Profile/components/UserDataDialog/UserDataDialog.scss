@@ -1,39 +1,5 @@
 @import "/src/styles/index";
 
 .user-data__form {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-
-  &__inputs {
-    margin-bottom: auto;
-  }
-
-  &__buttons {
-    @include flex-center;
-
-    flex-direction: column;
-
-    .y-btn {
-      width: 100%;
-      border-radius: 8px;
-      margin: 15px 0;
-    }
-  }
-
-  &__response-error {
-    display: none;
-    background-color: $error;
-    color: $light;
-    padding: 20px 10px;
-    width: calc(100% + 60px);
-    transform: translate(-30px, 30px);
-    border-radius: 0 0 10px 10px;
-    text-align: center;
-
-    &.error--active {
-      @include flex-center;
-    }
-  }
+  @include dialog-form;
 }

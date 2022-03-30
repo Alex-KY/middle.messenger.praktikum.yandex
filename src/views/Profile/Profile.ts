@@ -30,27 +30,27 @@ const template = `
     <div class="profile-page__content__data-block dividered-content">
       <div class="dividered-content__row">
         <span>{{ rows[0].text }}</span>
-        <span>{{ rows[0].value }}</span>
+        <span>{{ state.email }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[1].text }}</span>
-        <span>{{ rows[1].value }}</span>
+        <span>{{ state.login }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[2].text }}</span>
-        <span>{{ rows[2].value }}</span>
+        <span>{{ state.first_name }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[3].text }}</span>
-        <span>{{ rows[3].value }}</span>
+        <span>{{ state.second_name }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[4].text }}</span>
-        <span>{{ rows[4].value }}</span>
+        <span>{{ state.display_name }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[5].text }}</span>
-        <span>{{ rows[5].value }}</span>
+        <span>{{ state.phone }}</span>
       </div>
     </div>
     <div class="profile-page__content__buttons-block dividered-content">
@@ -80,7 +80,7 @@ function toSigninPage() {
   router.go('/signin');
 }
 function back() {
-  router.go('/chat');
+  router.go('/chats');
 }
 
 async function logout(e: PointerEvent) {
@@ -109,28 +109,22 @@ const context = {
   },
   rows: [
     {
-      text: 'Почта',
-      value: 'pochta@yandex.ru'
+      text: 'Почта'
     },
     {
-      text: 'Логин',
-      value: 'Borislav'
+      text: 'Логин'
     },
     {
-      text: 'Имя',
-      value: 'Иван'
+      text: 'Имя'
     },
     {
-      text: 'Фамилия',
-      value: 'Иванов'
+      text: 'Фамилия'
     },
     {
-      text: 'Имя в чате',
-      value: 'Иван'
+      text: 'Имя в чате'
     },
     {
-      text: 'Телефон',
-      value: '+7 (909) 967 30 30'
+      text: 'Телефон'
     }
   ],
   buttonAvatar:

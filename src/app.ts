@@ -3,7 +3,7 @@ import Router from './utils/router';
 import ErrorPage from './views/Error';
 import Signin from './views/Signin';
 import Signup from './views/Signup';
-import Chat from './views/Chat';
+import Chats from './views/Chats';
 import Profile from './views/Profile';
 
 import authController from './controllers/AuthController';
@@ -14,30 +14,7 @@ window.store = store;
 //
 
 const controller = new authController();
-// const pages = {
-//   'signin': async function () {
-//     await import('./views/Signin');
-//   },
-//   'signup': async function () {
-//     await import('./views/Signup');
-//   },
-//   'chat': async function () {
-//     await import('./views/Chat');
-//   },
-//   'profile': async function () {
-//     await import('./views/Profile');
-//   },
-//   '404': async function () {
-//     await import('./views/404');
-//   },
-//   '500': async function () {
-//     await import('./views/500');
-//   }
-// };
 
-// Роутинг
-// Стартовая страница - /signin
-// Если страница не найдена - /404
 async function ready () {
   const router = new Router();
   const user = await controller.fetchUser();
@@ -47,7 +24,7 @@ async function ready () {
     .use('/500', ErrorPage, { classes: 'error-page', code: 500 })
     .use('/signin', Signin, { classes: 'signin-page' })
     .use('/signup', Signup, { classes: 'signup-page' })
-    .use('/chat', Chat, { classes: 'chat-page' })
+    .use('/chats', Chats, { classes: 'chats-page' })
     .use('/profile', Profile, { classes: 'profile-page' })
     .start();
 
@@ -58,7 +35,7 @@ async function ready () {
     const path = `/${page}`;
 
     if (['/', '/signin', '/signup'].includes(path)) {
-      router.go('/chat');
+      router.go('/chats');
     } else if (router.getRoute(path)) {
       router.go(path);
     } else {

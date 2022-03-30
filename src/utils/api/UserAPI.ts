@@ -1,6 +1,6 @@
 import BaseAPI from './BaseAPI';
 
-import { userPasswordFormModel, userDataFormModel } from '../types';
+import { UserPasswordFormModel, UserDataFormModel, UserSearchModel } from '../types';
 
 export default class UserAPI extends BaseAPI {
   constructor() {
@@ -11,11 +11,15 @@ export default class UserAPI extends BaseAPI {
     return this.$http.put('/profile/avatar', { data: form });
   }
 
-  public changeUserPassword(data: userPasswordFormModel) {
+  public changeUserPassword(data: UserPasswordFormModel) {
     return this.$http.put('/password', { data });
   }
 
-  public changeUserData(data: userDataFormModel) {
+  public changeUserData(data: UserDataFormModel) {
     return this.$http.put('/profile', { data });
+  }
+
+  public searchUser(data: UserSearchModel) {
+    return this.$http.post('/search', { data });
   }
 }

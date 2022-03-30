@@ -1,17 +1,27 @@
 import Block from '../../../../utils/block';
 import Templator from '../../../../utils/templater';
 
+import store from '../../../../utils/store';
+
 import { Props as Properties } from '../../../../utils/types';
 
 import "./MessagesBlock.scss";
 
-const template = `
-  <div class="messages-block">
-    <!--<div class="messages-block__empty">{{ empty }}</div>-->
+function emptyBlock() {
+  return `
+    <div class="messages-block__empty">
+      {{ buttonAdd }}
+      <span>{{ empty }}</span>
+    </div>
+  `;
+}
+
+function activeChatBlock(title: string) {
+  return `
     <div class="messages-block__header">
       <div class="user">
         <div class="user__avatar"></div>
-        <div class="user__name">{{ header.user }}</div>
+        <div class="user__name">${ title }</div>
       </div>
       {{ #each header.components }}
     </div>
@@ -22,8 +32,27 @@ const template = `
     <form class="messages-block__footer" onsubmit="return false">
       {{ #each footer.components }}
     </div>
-  </div>
-`;
+  `;
+}
+
+function generateTemplate() {
+  const activeChat = store.getState('currentChat');
+  let body = '';
+
+  if (!activeChat) {
+    body = emptyBlock();
+  } else {
+    const chats = store.getState('chats');
+    const title = chats.find(({ id }) => id === activeChat.id).title;
+    body = activeChatBlock(title);
+  }
+
+  return `
+    <div id={{ id }} class="messages-block">
+      ${body}
+    </div>
+  `;
+}
 
 interface Props extends Properties {
   empty: string,
@@ -44,11 +73,14 @@ interface Props extends Properties {
 
 export default class MessagesBlock extends Block<Props> {
   constructor(props: Props) {
-    super(props);
+    const concatProps = Object.assign({}, props, { _state: 'currentChat' });
+
+    super(concatProps);
   }
 
   render(): string {
-    const tmpl = new Templator(template);
+    this.props.id = this.id;
+    const tmpl = new Templator(generateTemplate());
     return tmpl.compile(this.props);
   }
 };

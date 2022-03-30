@@ -10,6 +10,7 @@ interface Props extends Properties {
     fu?: (event: PointerEvent | string) => void,
     params?: string[]
   },
+  title?: string,
   tagName?: string,
   class?: string,
   text?: string,
@@ -25,10 +26,11 @@ export default class YButton extends Block<Props> {
   }
 
   render(): string {
-    const {click, tagName = 'button', class: classes, text, textUnderline, icon, color, width} = this.props;
+    const {click, tagName = 'button', title, class: classes, text, textUnderline, icon, color, width} = this.props;
     const template = `
       <${tagName}
         ${click ? `onclick="{{ click.fu }}(${click?.params || ''})"` : ``}
+        ${title ? `title="${title}"` : ``}
         class="y-btn ${classes || ''} ${color ? `${color}-color` : ''} ${textUnderline ? `text--underline` : ''}"
         style="${width ? `width: ${width};` : ''}"
       >

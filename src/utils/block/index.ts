@@ -34,9 +34,10 @@ export default abstract class Block<Props extends unknown | Properties> {
     const eventBus = new EventBus();
 
     this._eventBus = () => eventBus;
-    this._registerEvents(eventBus);
 
     this._state = props?._state;
+
+    this._registerEvents(eventBus);
 
     if (!props.state && this._state) {
       const state = store.getState(this._state);
@@ -55,7 +56,9 @@ export default abstract class Block<Props extends unknown | Properties> {
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
-    store.eventBus.on(store.getEvents().STATE_SDU, this._storeDidUpdate.bind(this));
+    if (this._state) {
+      store.eventBus.on(store.getEvents().STATE_SDU, this._storeDidUpdate.bind(this));
+    }
   }
 
   init() {
@@ -73,6 +76,9 @@ export default abstract class Block<Props extends unknown | Properties> {
     //     state[key] = propValue;
     //   }
     // })
+
+    this.state = store.getState(this._state);
+    // console.warn('123', this._state, path, this.props)
 
     this._render();
   }
@@ -138,7 +144,6 @@ export default abstract class Block<Props extends unknown | Properties> {
 
     this._addEvents();
 
-
     const element = document.querySelector(`#${this.id}`) as HTMLElement;
     const root = document.querySelector(`${this.rootString}`) as HTMLElement;
     if (element) {
@@ -146,6 +151,7 @@ export default abstract class Block<Props extends unknown | Properties> {
     } else if (root) {
       root.innerHTML = this.render();
     }
+    // console.warn(element, root)
 
     // renderDOM(this.render(), this.rootString);
   }

@@ -89,9 +89,19 @@
     }
   }
 
-  &.empty {
+  &__empty {
     @include flex-center;
 
     flex-grow: 1;
+
+    .y-btn {
+      position: absolute;
+      right: 5px;
+      top: 10px;
+
+      & > svg {
+        transform: scale(1.25);
+      }
+    }
   }
 }
