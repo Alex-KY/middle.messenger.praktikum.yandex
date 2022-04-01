@@ -8,10 +8,6 @@ import { API, SingupFormModel, SinginFormModel } from '../utils/types';
 
 const authApi = new AuthAPI();
 
-function prepareDataToRequest(data: SingupFormModel | SinginFormModel) {
-  return JSON.stringify(data);
-}
-
 function prepareUserData(data: any) {
   const url = data.avatar;
   const path = url ? `${baseResourcesApiUrl}${url}` : url;
@@ -23,7 +19,7 @@ export default class AuthController {
   public signup(data: SingupFormModel) {
     try {
 
-      return authApi.signup(prepareDataToRequest(data));
+      return authApi.signup(data);
 
     } catch (error) {
       return error;
@@ -33,7 +29,7 @@ export default class AuthController {
   public signin(data: SinginFormModel) {
     try {
 
-      return authApi.signin(prepareDataToRequest(data));
+      return authApi.signin(data);
 
     } catch (error) {
       return error;
@@ -43,7 +39,16 @@ export default class AuthController {
   public logout() {
     try {
 
-      return authApi.logout();
+      return authApi.logout()
+      .then((res: API) => {
+        if (res.data) {
+          if (!res.data.reason) {
+            store.clear();
+          }
+        }
+
+        return res;
+      });
 
     } catch (error) {
       return error;
@@ -53,10 +58,12 @@ export default class AuthController {
   public fetchUser() {
     try {
 
-      return authApi.getUserInfo()
+      return authApi.fetchUser()
         .then((res: API) => {
           if (res.data) {
-            store.set('userData', prepareUserData(res.data));
+            if (!res.data.reason) {
+              store.set('userData', prepareUserData(res.data));
+            }
           }
 
           return res;

@@ -63,7 +63,7 @@ export default class HTTPTransport {
       xhr.withCredentials = true;
       xhr.setRequestHeader('credentials', 'include');
       xhr.setRequestHeader('mode', 'cors');
-      if (!(data instanceof FormData)) {
+      if (data && !(data instanceof FormData)) {
         xhr.setRequestHeader('content-type', contentType);
         data = JSON.stringify(data);
       }

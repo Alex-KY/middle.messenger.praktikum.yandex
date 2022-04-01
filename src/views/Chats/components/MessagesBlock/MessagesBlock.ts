@@ -29,14 +29,14 @@ function activeChatBlock(title: string) {
       <p class="messages-block__messages__date">{{ messages[0].date }}</p>
       {{ #each messages[0].messages }}
     </div>
-    <form class="messages-block__footer" onsubmit="return false">
+    <form class="messages-block__footer" onsubmit="{{ footer.fnSubmit }}(event)">
       {{ #each footer.components }}
-    </div>
+    </form>
   `;
 }
 
 function generateTemplate() {
-  const activeChat = store.getState('currentChat');
+  const activeChat = store.getState('activeChat');
   let body = '';
 
   if (!activeChat) {
@@ -57,7 +57,6 @@ function generateTemplate() {
 interface Props extends Properties {
   empty: string,
   header: {
-      user: string,
       components: string[]
   },
   messages: {
@@ -65,15 +64,16 @@ interface Props extends Properties {
       messages: string[]
   }[],
   footer: {
-      attachIcon: any,
-      sendIcon: any,
-      components: string[]
+      attachIcon: string,
+      sendIcon: string,
+      components: string[],
+      fnSubmit: any
   }
 };
 
 export default class MessagesBlock extends Block<Props> {
   constructor(props: Props) {
-    const concatProps = Object.assign({}, props, { _state: 'currentChat' });
+    const concatProps = Object.assign({}, props, { _state: 'activeChat' });
 
     super(concatProps);
   }

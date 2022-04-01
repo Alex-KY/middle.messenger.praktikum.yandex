@@ -6,13 +6,13 @@ import { API, ChatsParamsModel, CreateChatModel, ChatUsersModel, DeleteChatFormM
 
 const chatsApi = new ChatsAPI();
 
-export default class UserController {
+export default class ChatsController {
   public fetchChats(params: ChatsParamsModel) {
     try {
 
       return chatsApi.fetchChats(params)
         .then((res: API) => {
-          if (res.data) {
+          if (!res.data.reason) {
             store.set('chats', res.data);
           }
 
@@ -37,14 +37,7 @@ export default class UserController {
   public setChatUsers(data: ChatUsersModel) {
     try {
 
-      return chatsApi.setChatUsers(data)
-      .then((res: API) => {
-        // if (res.data) {
-        //   store.set('userData', prepareUserData(res.data));
-        // }
-
-        return res;
-      });
+      return chatsApi.setChatUsers(data);
 
     } catch (error) {
       return error;
@@ -57,8 +50,8 @@ export default class UserController {
       return chatsApi.fetchChat(id)
         .then((res: API) => {
           if (res.data) {
-            // store.set('currentChat', res.data);
-            store.set('currentChat', { id });
+            // store.set('activeChat', res.data);
+            store.set('activeChat', { id });
           }
 
           return res;
@@ -75,7 +68,7 @@ export default class UserController {
       return chatsApi.deleteChat(data)
         .then((res: API) => {
           if (res.data) {
-            store.set('currentChat', null);
+            store.set('activeChat', null);
           }
 
           return res;

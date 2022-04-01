@@ -10,20 +10,10 @@ import { Props as Properties } from '../../../../utils/types';
 import "./LeftSide.scss";
 
 interface Props extends Properties {
-  profile: string,
+  button: string,
   inputs: {
       name: string,
       placeholder: string
-  }[],
-  units: {
-      username: string,
-      messages: {
-          text: string,
-          timestamp: string,
-          my: boolean,
-          readed: boolean
-      }[],
-      newMessages: number
   }[]
 };
 
@@ -68,6 +58,8 @@ function generateTemplate() {
       </div>
     `
   })
+    .join('');
+
   return `
     <div id="{{ id }}" class="left-side">
       <div class="left-side__top">

@@ -6,7 +6,7 @@ export default class AuthAPI extends BaseAPI {
   }
 
   public logout() {
-    return this.$http.post('/logout', { data: null });
+    return this.$http.post('/logout');
   }
 
   public signin(data: any) {
@@ -17,7 +17,7 @@ export default class AuthAPI extends BaseAPI {
     return this.$http.post('/signup', { data });
   }
 
-  public getUserInfo() {
+  public fetchUser() {
     return this.$http.get('/user');
   }
 }

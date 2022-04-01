@@ -16,9 +16,9 @@ window.store = store;
 const controller = new authController();
 
 async function ready () {
-  const router = new Router();
-  const user = await controller.fetchUser();
+  await controller.fetchUser();
 
+  const router = new Router();
   router
     .use('/404', ErrorPage, { classes: 'error-page', code: 404 })
     .use('/500', ErrorPage, { classes: 'error-page', code: 500 })
@@ -27,6 +27,8 @@ async function ready () {
     .use('/chats', Chats, { classes: 'chats-page' })
     .use('/profile', Profile, { classes: 'profile-page' })
     .start();
+
+  const user = store.getState('userData');
 
   if (!user) {
     router.go('/signin');

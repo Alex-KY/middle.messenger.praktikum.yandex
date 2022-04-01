@@ -11,9 +11,9 @@ type Indexed<T = unknown> = {
 }
 
 interface storeData {
-  userData: User,
-  chats: Chats,
-  currentChat: Chat
+  userData?: User,
+  chats?: Chats,
+  activeChat?: Chat
 }
 
 function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {
@@ -31,7 +31,6 @@ function set(object: Indexed | unknown, path: string, value: unknown): Indexed |
 
 const eventBus = new EventBus();
 
-// наследуем Store от EventBus, чтобы его методы были сразу доступны у экземпляра Store
 class Store extends EventBus {
   static EVENTS = {
     STATE_SDU: "state:state-did-update"
@@ -57,6 +56,10 @@ class Store extends EventBus {
 
   public get(path: keyof storeData) {
     return this._state[path];
+  }
+
+  public clear () {
+    this._state = {};
   }
 }
 

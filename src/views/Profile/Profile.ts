@@ -22,7 +22,8 @@ const template = `
   </div>
   <div class="profile-page__content">
     <div class="profile-page__content__avatar-block">
-      <div style="background-image: url({{ state.avatar }})" class="profile-page__content__avatar-block__avatar">
+      <div class="profile-page__content__avatar-block__avatar">
+        <img src="{{ state.avatar }}" />
         {{ buttonAvatar }}
       </div>
       <span>{{ state.first_name }}</span>

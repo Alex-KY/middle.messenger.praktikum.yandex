@@ -60,9 +60,14 @@ async function signin(e: PointerEvent) {
     .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
 
   const res = await authController.signin(formObject);
-  console.warn(formObject, res)
+
   if (res.status === 200) {
-    toChatPage();
+    const res = await authController.fetchUser();
+    if (res.data?.id) {
+      toChatPage();
+    } else {
+      setErrorBlock(`Ошибка входа. Попробуйте позже`);
+    }
   } else {
     setErrorBlock(`${res.status}. ${res.data.reason || 'Неизвестная ошибка'}`);
   }

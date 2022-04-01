@@ -3,6 +3,8 @@ import Router from '../../utils/router';
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
 
+import store from '../../utils/store';
+
 import ChatsController from '../../controllers/ChatsController';
 
 import LeftSide from './components/LeftSide';
@@ -41,39 +43,23 @@ const leftSideProps = {
       name: 'search',
       placeholder: 'Поиск'
     }
-  ],
-  units: [
-    {
-      username: 'Николай',
-      messages: [
-        {
-          text: 'Друзья, у меня для вас особенный выпуск горячих новостей!',
-          timestamp: '13:52',
-          my: true,
-          readed: false
-        }
-      ],
-      newMessages: 4
-    },
-    {
-      username: '1,2,3 Станислав Леонидович',
-      messages: [
-        {
-          text: 'Так увлёкся работой по курсу, что совсем забыл его анонсировать на своём портале.',
-          timestamp: '1 Мая 2020',
-          my: false,
-          readed: false
-        }
-      ],
-      newMessages: 127
-    }
   ]
 };
 
-function send(e: string) {
-  if (!e.trim()) return
-  console.warn(e);
+function send(e: PointerEvent) {
+  e.preventDefault();
+  let value: string;
+  const target = e.target as HTMLInputElement | HTMLFormElement;
+
+  const form = target.localName === 'form' ? target : target.form;
+  const input = form.querySelector('.y-input__input') as HTMLInputElement;
+  value = input.value;
+
+  if (!value.trim()) return;
+
+  console.warn(value);
 }
+
 function toProfilePage() {
   router.go('/profile');
 }
@@ -88,18 +74,15 @@ function activateCreateChatDialog() {
 }
 
 async function deleteChat() {
-  const chatId = store.getState('currentChat')?.id;
+  const chatId = store.getState('activeChat')?.id;
   await chatsController.deleteChat({ chatId });
   fetchChats();
 }
-
-fetchChats();
 
 import * as deleteIcon from 'bundle-text:/static/icons/delete.svg';
 import * as plus from 'bundle-text:/static/icons/plus.svg';
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
 import * as clip from 'bundle-text:/static/icons/clip.svg';
-import store from '../../utils/store';
 
 const image = require('/static/imgs/photo.png');
 
@@ -116,7 +99,6 @@ const messagesBlockProps = {
       color: 'transparent'
     }).render(),
   header: {
-    user: 'Вадим',
     components: [
       new YButton({
         icon: deleteIcon,
@@ -177,12 +159,13 @@ const messagesBlockProps = {
         icon: arrow,
         click: {
           fu: send,
-          params: ['\'send\'']
+          params: ['event']
         },
         class: 'y-btn--fab send'
       }).render()
 
-    ]
+    ],
+    fnSubmit: send
   }
 };
 
@@ -200,12 +183,15 @@ interface Props extends Properties {
 
 export default class Chat extends Block<Props> {
   constructor(props: Props) {
-    const concatProps = Object.assign(generateTemplate(), props);
+    const concatProps = Object.assign(generateTemplate(), props,  { _state: 'userData' });
 
     super(concatProps);
   };
 
   render() {
+    if (store.getState('userData')) {
+      fetchChats();
+    }
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
   };

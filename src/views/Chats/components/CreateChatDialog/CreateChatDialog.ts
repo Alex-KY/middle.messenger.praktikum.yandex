@@ -18,6 +18,11 @@ function setErrorBlock (text?: string) {
   }
 }
 
+async function fetchChats(offset = 0, limit = 5, title = '') {
+  const params = { offset, limit, title };
+  await chatsController.fetchChats(params);
+}
+
 async function createChat(e: PointerEvent) {
   e.preventDefault();
   setErrorBlock();
@@ -40,12 +45,12 @@ async function createChat(e: PointerEvent) {
       const newChat = { users: [id], chatId };
 
       res = await chatsController.setChatUsers(newChat);
-      console.warn(res)
     }
   }
 
   if (res.status === 200) {
     dialog.hide();
+    fetchChats();
   } else {
     const status = res.status ? `${res.status}. ` : ``;
     setErrorBlock(`${status}${res.data?.reason || 'Неизвестная ошибка'}`);

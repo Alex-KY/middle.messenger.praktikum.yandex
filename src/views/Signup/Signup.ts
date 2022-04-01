@@ -38,8 +38,8 @@ const template = `
 const router = new Router();
 const authController = new AuthController();
 
-function toSigninPage() {
-  router.go('/signin');
+function toChatPage() {
+  router.go('/chats');
 }
 
 function setErrorBlock (text?: string) {
@@ -57,7 +57,7 @@ async function signup(e: PointerEvent) {
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
   const formObject = [...formData.entries()]
-    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
+    .reduce((accum, [key, value]) => value ? Object.assign(accum, { [key]: value }) : accum, {});
 
   if (!form.checkValidity()) {
     [...form.elements].forEach((item: HTMLElement) => {
@@ -66,7 +66,12 @@ async function signup(e: PointerEvent) {
   } else {
     const res = await authController.signup(formObject);
     if (res.status === 200) {
-      toSigninPage();
+      const res = await authController.fetchUser();
+      if (res.data?.id) {
+        toChatPage();
+      } else {
+        setErrorBlock(`Ошибка входа. Попробуйте позже`);
+      }
     } else {
       setErrorBlock(`${res.status}. ${res.data.reason || 'Неизвестная ошибка'}`);
     }
@@ -147,6 +152,7 @@ const context = {
     new YInput({
       name: 'second_name',
       label: 'Фамилия',
+      required: true,
       pattern: namePattern.source,
       errorText: 'Латиница или кирилица с заглавной буквы',
       focus: inputEventFocus,
@@ -157,6 +163,7 @@ const context = {
       name: 'phone',
       label: 'Телефон',
       type: 'tel',
+      required: true,
       pattern: phonePattern.source,
       errorText: 'Цифры 10-15 символов',
       focus: inputEventFocus,
