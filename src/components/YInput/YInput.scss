@@ -5,29 +5,6 @@
   margin-top: 10px;
   margin-bottom: 18px;
 
-  &__input {
-    @include input;
-
-    position: relative;
-    border-bottom: $gray solid 1px;
-
-    &:focus {
-      border-color: $accent;
-    }
-
-    &.y-input__input--invalid {
-      border-color: $error;
-
-      ~ .y-input__details {
-        display: block;
-      }
-
-      ~ .y-label {
-        color: $error
-      }
-    }
-  }
-
   &__details {
     display: none;
     margin-top: 7px;
@@ -47,11 +24,34 @@
 
     &--active {
       max-width: 133%;
-      transform: translateY(-18px) scale(.75);
+      transform: translateY(-18px) scale(0.75);
+    }
+  }
+
+  &__input {
+    @include input;
+
+    position: relative;
+    border-bottom: $gray solid 1px;
+
+    &:focus {
+      border-color: $accent;
+    }
+
+    &.y-input__input--invalid {
+      border-color: $error;
+
+      ~ .y-input__details {
+        display: block;
+      }
+
+      ~ .y-label {
+        color: $error;
+      }
     }
   }
 
   &--hide-details {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 }

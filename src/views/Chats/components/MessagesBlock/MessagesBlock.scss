@@ -13,7 +13,7 @@
     align-items: center;
     padding-bottom: 20px;
 
-    &:before {
+    &::before {
       position: absolute;
       content: "";
       bottom: 5px;
@@ -68,7 +68,7 @@
     padding-top: 20px;
     padding-bottom: 10px;
 
-    &:before {
+    &::before {
       position: absolute;
       content: "";
       top: 5px;
@@ -79,7 +79,7 @@
       background-color: $foggy;
     }
 
-    button.send svg {
+    .send svg {
       transform: scaleX(-1);
     }
 
@@ -87,7 +87,7 @@
       flex-grow: 1;
       margin: 0 10px;
 
-      > input[name=message] {
+      > input[name="message"] {
         padding: 10px 20px;
         background-color: $gray-light;
         border-radius: 30px;
