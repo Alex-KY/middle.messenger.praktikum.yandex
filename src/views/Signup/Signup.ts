@@ -109,11 +109,11 @@ function checkInput (target: HTMLInputElement) {
 const inputEventFocus = {
   fu: checkField,
   params: ['event']
-}
+};
 const inputEventBlur = {
   fu: checkField,
   params: ['event']
-}
+};
 
 const context = {
   title: 'Регистрация',
@@ -216,17 +216,17 @@ interface Props extends Properties {
   title: string,
   inputs: string[],
   buttons: string[]
-};
+}
 
 export default class Signup extends Block<Props> {
   constructor(props: Props) {
     const concatProps = Object.assign(props, context);
 
     super(concatProps);
-  };
+  }
 
   render(): string {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  };
-};
+  }
+}

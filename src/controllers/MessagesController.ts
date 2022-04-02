@@ -14,18 +14,18 @@ const INTERVAL = 2000;
 const messagesController = class MessagesController {
   static EventBus: EventBus = new EventBus();
   static status: string;
-  static timeout: any;
+  static timeout: NodeJS.Timer;
   private _events(): Props['callback'] {
     return {
       onOpen: this._onOpenHandler.bind(this),
       onClose: this._onCloseHandler.bind(this),
       onMessage: this._onMessageHandler.bind(this),
       onError: this._onErrorHandler.bind(this)
-    }
-  };
+    };
+  }
   private $wss: MessagesAPI;
 
-  protected formingResponse(res: any) {
+  protected formingResponse(res: MessageFormModel) {
     const { data: response, type } = res;
     let data;
 
@@ -87,8 +87,8 @@ const messagesController = class MessagesController {
   }
 
   private _ping() {
-    if (MessagesController.timeout) {
-      MessagesController.timeout = clearTimeout(MessagesController.timeout);
+    if ((MessagesController.timeout as unknown as number) % 2 === 0) {
+      clearTimeout(MessagesController.timeout);
     }
 
     MessagesController.timeout = setTimeout(() => {
@@ -103,10 +103,10 @@ const messagesController = class MessagesController {
 
   private _onCloseHandler() {
     MessagesController.status = 'offline';
-    MessagesController.timeout = clearTimeout(MessagesController.timeout);
+    clearTimeout(MessagesController.timeout);
   }
 
-  private _onMessageHandler(e: any) {
+  private _onMessageHandler(e: Event) {
     const res = this.formingResponse(e);
 
     if (res.data?.type === 'pong') {
@@ -127,6 +127,6 @@ const messagesController = class MessagesController {
     MessagesController.status = 'offline';
     this.$wss.close();
   }
-}
+};
 
 export default new messagesController();

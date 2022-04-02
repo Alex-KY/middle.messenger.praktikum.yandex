@@ -145,20 +145,20 @@ function generateTemplate() {
   return {
     LeftSide: new LeftSide(leftSideProps).render(),
     MessageBlock: new MessagesBlock(messagesBlockProps).render()
-  }
+  };
 }
 
 interface Props extends Properties {
   LeftSide: string,
   MessageBlock: string
-};
+}
 
 export default class Chat extends Block<Props> {
   constructor(props: Props) {
     const concatProps = Object.assign(generateTemplate(), props,  { _state: 'userData' });
 
     super(concatProps);
-  };
+  }
 
   render() {
     if (store.getState('userData')) {
@@ -166,5 +166,5 @@ export default class Chat extends Block<Props> {
     }
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  };
-};
+  }
+}

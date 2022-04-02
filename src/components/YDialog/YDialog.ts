@@ -13,7 +13,7 @@ interface Props extends Properties {
   content?: {
     template: string
   }
-};
+}
 
 export default class YDialog extends Block<Props> {
   constructor(props: Props) {

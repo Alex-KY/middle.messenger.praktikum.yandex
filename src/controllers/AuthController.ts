@@ -4,11 +4,11 @@ import store from '../utils/store';
 
 import { baseResourcesApiUrl } from '../utils/HTTPTransport';
 
-import { API, SingupFormModel, SinginFormModel } from '../utils/types';
+import { API, User, SingupFormModel, SinginFormModel } from '../utils/types';
 
 const authApi = new AuthAPI();
 
-function prepareUserData(data: any) {
+function prepareUserData(data: User) {
   const url = data.avatar;
   const path = url ? `${baseResourcesApiUrl}${url}` : url;
 

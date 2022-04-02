@@ -18,7 +18,7 @@ interface Props extends Properties {
   icon?: string,
   color?: string,
   width?: string
-};
+}
 
 export default class YButton extends Block<Props> {
   constructor(props: Props) {

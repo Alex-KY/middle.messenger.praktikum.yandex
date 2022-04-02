@@ -21,6 +21,8 @@
     "@parcel/transformer-inline-string": "2.3.1",
     "@parcel/transformer-sass": "2.3.1",
     "@types/node": "17.0.21",
+    "@typescript-eslint/eslint-plugin": "5.17.0",
+    "@typescript-eslint/parser": "5.17.0",
     "babel-plugin-transform-runtime": "6.23.0",
     "date-fns": "2.28.0",
     "eclint": "2.8.1",
@@ -38,8 +40,8 @@
   "scripts": {
     "start": "rm -rf dist && parcel build src/index.html && node ./src/server.ts",
     "build": "parcel build src/index.html",
-    "lint": "stylelint src/**/*.scss && eclint check src/ && eslint src/",
-    "lint-fix": "stylelint --fix src/**/*.scss && eclint fix src/ && eslint --fix src/",
+    "lint": "stylelint **.scss && eclint check src/ && eslint \"src/**/*.{js,ts}\"",
+    "lint-fix": "stylelint --fix **.scss && eclint fix src/ && eslint --fix \"src/**/*.{js,ts}\"",
     "test": "test"
   },
   "repository": {

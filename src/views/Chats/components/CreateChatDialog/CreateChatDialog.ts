@@ -32,7 +32,7 @@ async function createChat(e: PointerEvent) {
   const formObject: any = [...formData.entries()]
     .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
 
-  let res = await userController.searchUser(formObject)
+  let res = await userController.searchUser(formObject);
 
   if (res.status === 200 && res.data?.length > 0) {
     const { first_name, second_name, id } = res.data[0];

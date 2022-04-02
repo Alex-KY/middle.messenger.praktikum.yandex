@@ -186,17 +186,17 @@ interface Props extends Properties {
       value: string
   }[],
   buttons?: string[]
-};
+}
 
 export default class Profile extends Block<Props> {
   constructor(props: Props = {}) {
     const concatProps = Object.assign(context, props, { _state: 'userData', rootString: '#root' });
 
     super(concatProps);
-  };
+  }
 
   render() {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  };
-};
+  }
+}

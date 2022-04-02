@@ -32,8 +32,8 @@ interface Props extends Properties {
   class?: string,
   errorText?: string,
   hideDetails?: boolean,
-  value?: any
-};
+  value?: string
+}
 
 export default class YInput extends Block<Props> {
   constructor(props: Props) {

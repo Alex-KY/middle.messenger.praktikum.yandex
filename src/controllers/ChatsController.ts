@@ -8,7 +8,7 @@ const chatsApi = new ChatsAPI();
 
 export default class ChatsController {
   public fetchChats(params?: ChatsParamsModel) {
-    const data = params ? params : { offset: 0, limit: 5, title: '' }
+    const data = params ? params : { offset: 0, limit: 5, title: '' };
     try {
 
       return chatsApi.fetchChats(data)

@@ -4,11 +4,11 @@ import store from '../utils/store';
 
 import { baseResourcesApiUrl } from '../utils/HTTPTransport';
 
-import { API, UserPasswordFormModel, UserDataFormModel, UserSearchModel } from '../utils/types';
+import { API, User, UserPasswordFormModel, UserDataFormModel, UserSearchModel } from '../utils/types';
 
 const userApi = new UserAPI();
 
-function prepareUserData(data: any) {
+function prepareUserData(data: User) {
   const url = data.avatar;
   const path = url ? `${baseResourcesApiUrl}${url}` : url;
   const preparedData = Object.entries(data)
@@ -29,7 +29,6 @@ export default class UserController {
             store.set('userData', prepareUserData(res.data));
           }
 
-          console.warn(res)
           return res;
         });
 

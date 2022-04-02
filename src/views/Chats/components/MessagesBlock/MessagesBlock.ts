@@ -76,7 +76,7 @@ interface Props extends Properties {
       components: string[],
       fnSubmit: any
   }
-};
+}
 
 export default class MessagesBlock extends Block<Props> {
   constructor(props: Props) {
@@ -90,4 +90,4 @@ export default class MessagesBlock extends Block<Props> {
     const tmpl = new Templator(generateTemplate());
     return tmpl.compile(this.props);
   }
-};
+}

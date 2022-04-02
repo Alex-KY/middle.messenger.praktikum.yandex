@@ -62,11 +62,11 @@ async function changeUserPassword(e: PointerEvent) {
 const inputEventFocus = {
   fu: checkField,
   params: ['event']
-}
+};
 const inputEventBlur = {
   fu: checkField,
   params: ['event']
-}
+};
 
 const template = `
   <form class="user-password__form">

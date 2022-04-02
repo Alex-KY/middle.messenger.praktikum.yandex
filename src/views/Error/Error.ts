@@ -24,8 +24,7 @@ const context = [
   }
 ];
 
-interface Props extends Properties {
-};
+type Props = Properties;
 
 export default class ErrorPage extends Block<Props> {
   constructor(props: Props) {
@@ -35,10 +34,10 @@ export default class ErrorPage extends Block<Props> {
 
     super(concatProps);
     this.props = concatProps;
-  };
+  }
 
   render() {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  };
-};
+  }
+}

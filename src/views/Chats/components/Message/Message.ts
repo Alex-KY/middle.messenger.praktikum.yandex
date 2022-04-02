@@ -14,7 +14,7 @@ interface Props extends Properties {
   content?: string,
   file?: string,
   user_id?: number
-};
+}
 
 export default class Message extends Block<Props> {
   constructor(props: Props) {
@@ -26,7 +26,7 @@ export default class Message extends Block<Props> {
     const id = store.getState('userData')?.id;
     const isMine = id === userId;
 
-    let classes = [];
+    const classes = [];
 
     if (content && !file) {
       classes.push('message--text');

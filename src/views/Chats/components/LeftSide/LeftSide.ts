@@ -21,7 +21,7 @@ interface Props extends Properties {
       name: string,
       placeholder: string
   }[]
-};
+}
 
 const chatsController = new ChatsController();
 
@@ -87,7 +87,7 @@ function generateTemplate() {
         }
         </div>
       </div>
-    `
+    `;
   })
     .join('');
 
@@ -101,7 +101,7 @@ function generateTemplate() {
         ${chats}
       </div>
     </div>
-  `
+  `;
 }
 
 export default class LeftSide extends Block<Props> {
@@ -116,4 +116,4 @@ export default class LeftSide extends Block<Props> {
     const tmpl = new Templator(generateTemplate());
     return tmpl.compile(this.props);
   }
-};
+}

@@ -70,11 +70,12 @@ async function changeUserData(e: PointerEvent) {
 const inputEventFocus = {
   fu: checkField,
   params: ['event']
-}
+};
+
 const inputEventBlur = {
   fu: checkField,
   params: ['event']
-}
+};
 
 const template = `
   <form class="user-data__form">
@@ -152,7 +153,7 @@ const inputs = () => {
       value: state('phone')
     }).render()
 
-  ]
+  ];
 };
 
 export function getContext() {
