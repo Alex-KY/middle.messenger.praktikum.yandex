@@ -36,6 +36,10 @@
       cursor: pointer;
       z-index: 1;
 
+      &--active {
+        background-color: $blue-light;
+      }
+
       &::before {
         position: absolute;
         content: "";
@@ -49,11 +53,19 @@
 
       .unit {
         &__avatar {
+          @include flex-center;
+
           width: 50px;
           min-width: 50px;
           height: 50px;
           border-radius: 50%;
           background-color: $gray-light;
+          overflow: hidden;
+
+          > img {
+            max-width: 100%;
+            max-height: 100%;
+          }
         }
 
         &__text {

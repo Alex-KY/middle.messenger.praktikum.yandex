@@ -2,7 +2,8 @@ interface Props {
   id?: string,
   events?: {
     string: () => void
-  }
+  },
+  state?: {}
 };
 
 interface API {
@@ -10,7 +11,19 @@ interface API {
   responseText: string,
   status: number,
   statusText: string
-}
+};
+
+interface MessagesAPI {
+  userId: number,
+  chatId: number,
+  token: string,
+  callback: {
+    onOpen: () => void
+    onClose: (event: CloseEvent) => void
+    onError: (event: ErrorEvent) => void
+    onMessage: (event: MessageEvent) => void
+  }
+};
 
 interface User {
   id: string,
@@ -82,8 +95,13 @@ interface ChatUsersModel {
   chatId: number
 };
 
+interface MessageFormModel {
+  content?: string,
+  type?: string
+};
+
 export {
-  Props, API,
+  Props, API, MessagesAPI,
 
   User, Chats, Chat,
 
@@ -91,5 +109,7 @@ export {
 
   UserPasswordFormModel, UserDataFormModel, UserSearchModel, DeleteChatFormModel,
 
-  ChatsParamsModel, CreateChatModel, ChatUsersModel
+  ChatsParamsModel, CreateChatModel, ChatUsersModel,
+
+  MessageFormModel
 };

@@ -1,15 +1,19 @@
 import Block from '../../../../utils/block';
 import Templator from '../../../../utils/templater';
 
+import store from '../../../../utils/store';
+
+import { messageTime, datetime } from '../../../../utils/helpers';
+
 import { Props as Properties } from '../../../../utils/types';
 
 import './Message.scss';
 
 interface Props extends Properties {
   time: string,
-  text?: string,
-  image?: string,
-  personal?: boolean
+  content?: string,
+  file?: string,
+  user_id?: number
 };
 
 export default class Message extends Block<Props> {
@@ -18,31 +22,35 @@ export default class Message extends Block<Props> {
   }
 
   _computedClasses(props: Props) {
-    const { text, image, personal } = props
+    const { content, file, user_id: userId } = props;
+    const id = store.getState('userData')?.id;
+    const isMine = id === userId;
+
     let classes = [];
 
-    if (text && !image) {
+    if (content && !file) {
       classes.push('message--text');
     }
 
-    if (!text && image) {
+    if (!content && file) {
       classes.push('message--image');
     }
-    if (personal) {
-      classes.push('message--personal');
+
+    if (isMine) {
+      classes.push('message--mine');
     }
 
     return classes.join(' ');
   }
 
   render(): string {
-    const { time, text, image } = this.props;
-    const classes = this._computedClasses(this.props)
+    const { time, content, file } = this.props;
+    const classes = this._computedClasses(this.props);
     const template = `
       <div class="message ${classes}">
-        ${ text || '' }
-        ${ image || '' }
-        <span class="message__time">${ time || '' }</span>
+        ${ content || '' }
+        ${ file || '' }
+        <span class="message__time" title="${datetime(time)}">${ messageTime(time) }</span>
       </div>
     `;
 

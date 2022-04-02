@@ -4,7 +4,8 @@
   position: relative;
   border-radius: 0 10px 10px 10px;
   padding: 11px;
-  margin: 10px 0;
+  padding-right: 50px;
+  margin: 10px 20px;
   min-width: 100px;
   max-width: 400px;
   align-self: flex-start;
@@ -12,10 +13,14 @@
   line-height: 15px;
   font-weight: 500;
 
+  &:not(.message--mine) {
+    margin-right: 10px;
+  }
+
   &--text {
     background-color: $foggy-middle;
 
-    &.message--personal {
+    &.message--mine {
       background-color: $blue-light;
     }
   }
@@ -27,9 +32,10 @@
     }
   }
 
-  &--personal {
+  &--mine {
     border-radius: 10px 10px 0 10px;
     align-self: flex-end;
+    margin-left: 0;
   }
 
   &__time {

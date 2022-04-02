@@ -6,6 +6,7 @@ import Templator from '../../utils/templater';
 import store from '../../utils/store';
 
 import ChatsController from '../../controllers/ChatsController';
+import MessagesController from '../../controllers/MessagesController';
 
 import LeftSide from './components/LeftSide';
 import MessagesBlock from './components/MessagesBlock';
@@ -13,7 +14,6 @@ import CreateChatDialog from './components/CreateChatDialog';
 
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
-import Message from './components/Message';
 
 import { Props as Properties } from '../../utils/types';
 
@@ -57,7 +57,8 @@ function send(e: PointerEvent) {
 
   if (!value.trim()) return;
 
-  console.warn(value);
+  MessagesController.sendMessage({ type: 'message', content: value });
+  input.value = '';
 }
 
 function toProfilePage() {
@@ -84,8 +85,6 @@ import * as plus from 'bundle-text:/static/icons/plus.svg';
 import * as arrow from 'bundle-text:/static/icons/arrow.svg';
 import * as clip from 'bundle-text:/static/icons/clip.svg';
 
-const image = require('/static/imgs/photo.png');
-
 const messagesBlockProps = {
   empty: 'Выберите чат чтобы отправить сообщение',
   buttonAdd:
@@ -111,33 +110,6 @@ const messagesBlockProps = {
       }).render()
     ]
   },
-  messages: [
-    {
-      date: '19 июня',
-      messages: [
-
-        new Message({
-          time: '17:52',
-          text: `'Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.
-
-          Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.'`
-        }).render(),
-
-        new Message({
-          time: '17:53',
-          image: `<img width="100%" height="auto" src="${image}" />`
-        }).render(),
-
-        new Message(
-          {
-            personal: true,
-            time: '17:53',
-            text: `Круто!`
-          }
-        ).render()
-      ]
-    }
-  ],
   footer: {
     attachIcon: clip,
     sendIcon: arrow,

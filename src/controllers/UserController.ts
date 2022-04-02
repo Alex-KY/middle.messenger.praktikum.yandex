@@ -11,8 +11,12 @@ const userApi = new UserAPI();
 function prepareUserData(data: any) {
   const url = data.avatar;
   const path = url ? `${baseResourcesApiUrl}${url}` : url;
+  const preparedData = Object.entries(data)
+    .reduce((acc, [key, value]) => {
+      return Object.assign(acc, { [key]: [null, undefined].includes(value) ? '' : value });
+    }, {});
 
-  return Object.assign(data, { avatar: path });
+  return Object.assign(preparedData, { avatar: path });
 }
 
 export default class UserController {

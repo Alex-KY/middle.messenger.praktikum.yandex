@@ -7,10 +7,11 @@ import { API, ChatsParamsModel, CreateChatModel, ChatUsersModel, DeleteChatFormM
 const chatsApi = new ChatsAPI();
 
 export default class ChatsController {
-  public fetchChats(params: ChatsParamsModel) {
+  public fetchChats(params?: ChatsParamsModel) {
+    const data = params ? params : { offset: 0, limit: 5, title: '' }
     try {
 
-      return chatsApi.fetchChats(params)
+      return chatsApi.fetchChats(data)
         .then((res: API) => {
           if (!res.data.reason) {
             store.set('chats', res.data);
@@ -44,24 +45,6 @@ export default class ChatsController {
     }
   }
 
-  public fetchChat(id: number) {
-    try {
-
-      return chatsApi.fetchChat(id)
-        .then((res: API) => {
-          if (res.data) {
-            // store.set('activeChat', res.data);
-            store.set('activeChat', { id });
-          }
-
-          return res;
-        });
-
-    } catch (error) {
-      return error;
-    }
-  }
-
   public deleteChat(data: DeleteChatFormModel) {
     try {
 
@@ -72,6 +55,19 @@ export default class ChatsController {
           }
 
           return res;
+        });
+
+    } catch (error) {
+      return error;
+    }
+  }
+
+  public fetchChatToken(id: number) {
+    try {
+
+      return chatsApi.fetchChatToken(id)
+        .then((res: API) => {
+          return res.data?.token || res;
         });
 
     } catch (error) {

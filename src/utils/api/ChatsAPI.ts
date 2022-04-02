@@ -25,11 +25,11 @@ export default class UserAPI extends BaseAPI {
     return this.$http.put('/users', { data });
   }
 
-  public fetchChat(id: number) {
-    return this.$http.get(`/${id}/common`);
-  }
-
   public deleteChat(data: DeleteChatFormModel) {
     return this.$http.delete(``, { data });
+  }
+
+  public fetchChatToken(id: number) {
+    return this.$http.post(`/token/${ id }`);
   }
 }

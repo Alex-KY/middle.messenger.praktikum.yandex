@@ -13,7 +13,8 @@ type Indexed<T = unknown> = {
 interface storeData {
   userData?: User,
   chats?: Chats,
-  activeChat?: Chat
+  activeChat?: Chat,
+  activeChatMessages?: {}
 }
 
 function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {

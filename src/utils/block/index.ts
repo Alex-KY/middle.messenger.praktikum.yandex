@@ -14,7 +14,7 @@ export default abstract class Block<Props extends unknown | Properties> {
     FLOW_RENDER: "flow:render"
   } as const;
 
-  private _state: string;
+  private _state: string | string[];
 
   public id = nanoid(10).replace(/[0-9-_]/g, '');
 
@@ -39,9 +39,8 @@ export default abstract class Block<Props extends unknown | Properties> {
 
     this._registerEvents(eventBus);
 
-    if (!props.state && this._state) {
-      const state = store.getState(this._state);
-      props.state = state;
+    if (!props.$state && this._state) {
+      Object.assign(props, this._computeState());
     }
 
     this.rootString = props.rootString;
@@ -65,8 +64,21 @@ export default abstract class Block<Props extends unknown | Properties> {
     this._eventBus().emit(Block.EVENTS.FLOW_RENDER, this.props);
   }
 
+  private _computeState() {
+    if (Array.isArray(this._state)) {
+      return this._state.reduce((acc, key) => {
+        return Object.assign(acc, { [`$${key}`]: store.getState(key) });
+      }, {});
+    } else if (typeof this._state === 'string') {
+      return { [`$${this._state}`]: store.getState(this._state) };
+    }
+    return {};
+  }
+
   private _storeDidUpdate(path: string) {
-    if (!this._state || !path.includes(this._state)) return;
+    const keys = Array.isArray(this._state) ?  this._state : [this._state];
+
+    if (!this._state || !keys.some(key => path.includes(key))) return;
 
     // const { ...params } = store.getState(this._state);
     // const state = this.props.state;
@@ -77,7 +89,7 @@ export default abstract class Block<Props extends unknown | Properties> {
     //   }
     // })
 
-    this.state = store.getState(this._state);
+    // this.state = store.getState(this._state);
     // console.warn('123', this._state, path, this.props)
 
     this._render();
