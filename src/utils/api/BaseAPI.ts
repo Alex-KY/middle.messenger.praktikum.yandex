@@ -5,5 +5,5 @@ export default abstract class BaseAPI {
     this.$http = new HTTPTransport(endpoint);
   }
 
-  protected $http: any;
+  protected $http;
 }

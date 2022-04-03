@@ -1,7 +1,16 @@
-export default class EventBus {
-  private _listeners: any = {};
+type Void = () => void;
+interface Events {
+  [k: string]: Void[]
+}
 
-  on(event: any, callback: any) {
+export default class EventBus {
+  private _listeners: Events;
+
+  constructor() {
+    this._listeners = {};
+  }
+
+  on(event: string, callback: () => Void) {
     if (!this._listeners[event]) {
       this._listeners[event] = [];
     }
@@ -9,23 +18,25 @@ export default class EventBus {
     this._listeners[event].push(callback);
   }
 
-  off(event: any, callback: any) {
+  off(event: string, callback: () => Void) {
     if (!this._listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
 
     this._listeners[event] = this._listeners[event].filter(
-      (listener: any) => listener !== callback
+      (listener: Void) => listener !== callback
     );
   }
 
-  emit(event: any, ...args: any[]) {
+  emit(event: string, ...args: Void[]) {
     if (!this._listeners[event]) {
       return;
     }
 
-    this._listeners[event]!.forEach(function(listener: any) {
-      listener(...args);
-    });
+    if (Array.isArray(this._listeners[event])) {
+      this._listeners[event].forEach(function(listener: () => void) {
+        listener(...args);
+      });
+    }
   }
 }

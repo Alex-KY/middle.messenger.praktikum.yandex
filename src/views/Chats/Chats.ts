@@ -48,12 +48,11 @@ const leftSideProps = {
 
 function send(e: PointerEvent) {
   e.preventDefault();
-  let value: string;
   const target = e.target as HTMLInputElement | HTMLFormElement;
 
   const form = target.localName === 'form' ? target : target.form;
   const input = form.querySelector('.y-input__input') as HTMLInputElement;
-  value = input.value;
+  const value = input.value;
 
   if (!value.trim()) return;
 

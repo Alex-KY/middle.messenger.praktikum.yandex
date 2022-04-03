@@ -3,15 +3,16 @@ interface Props {
   events?: {
     string: () => void
   },
-  state?: {}
-};
+  state?: unknown
+}
 
 interface API {
-  data: any,
+  data: unknown,
+  response?: string,
   responseText: string,
   status: number,
   statusText: string
-};
+}
 
 interface MessagesAPI {
   userId: number,
@@ -23,7 +24,7 @@ interface MessagesAPI {
     onError: (event: ErrorEvent) => void
     onMessage: (event: MessageEvent) => void
   }
-};
+}
 
 interface User {
   id: string,
@@ -34,15 +35,30 @@ interface User {
   password: string,
   phone: string,
   avatar: string
-};
+}
 
-interface Chats {
-
-};
+type Chats = unknown[];
 
 interface Chat {
   id: string
-};
+}
+
+interface ChatMessage {
+  chat_id: number,
+  time: string,
+  type: string,
+  user_id: number,
+  content: string,
+  file?: {
+    id: number,
+    user_id: number,
+    path: string,
+    filename: string,
+    content_type: string,
+    content_size: number,
+    upload_date: string,
+  }
+}
 
 interface SingupFormModel {
   first_name: string,
@@ -51,17 +67,17 @@ interface SingupFormModel {
   email: string,
   password: string,
   phone: string
-};
+}
 
 interface SinginFormModel {
   login: string,
   password: string
-};
+}
 
 interface UserPasswordFormModel {
   oldPassword: string,
   newPassword: string
-};
+}
 
 interface UserDataFormModel {
   first_name: string,
@@ -70,40 +86,41 @@ interface UserDataFormModel {
   login: string,
   email: string,
   phone: string
-};
+}
 
 interface DeleteChatFormModel {
   chatId: number
-};
+}
 
 interface UserSearchModel {
   login: string
-};
+}
 
 interface ChatsParamsModel {
   offset: number,
   limit: number,
   title: string
-};
+}
 
 interface CreateChatModel {
   title: string
-};
+}
 
 interface ChatUsersModel {
   users: number[],
   chatId: number
-};
+}
 
 interface MessageFormModel {
+  data?: string,
   content?: string,
   type?: string
-};
+}
 
 export {
   Props, API, MessagesAPI,
 
-  User, Chats, Chat,
+  User, Chats, Chat, ChatMessage,
 
   SingupFormModel, SinginFormModel,
 

@@ -74,7 +74,7 @@ interface Props extends Properties {
       attachIcon: string,
       sendIcon: string,
       components: string[],
-      fnSubmit: any
+      fnSubmit: void
   }
 }
 

@@ -1,6 +1,5 @@
-
 import { format, parseISO } from 'date-fns';
-import { ru as locale } from 'date-fns/locale'
+import { ru as locale } from 'date-fns/locale';
 
 function localeFormat(dateString: string, formatPattern: string) {
   const date = parseISO(dateString);
@@ -41,12 +40,12 @@ function trim(str: string, sym?: string): string {
 }
 
 
-type Indexed<T = any> = {
+type Indexed<T = unknown> = {
   [key in string]: T;
 }
 
 function merge(lhs: Indexed, rhs: Indexed): Indexed {
-  for (let p in rhs) {
+  for (const p in rhs) {
       if (!rhs.hasOwnProperty(p)) {
           continue;
       }
@@ -63,7 +62,7 @@ function merge(lhs: Indexed, rhs: Indexed): Indexed {
   return lhs;
 }
 
-function isEqual(obj1: any, obj2: any) {
+function isEqual(obj1: unknown, obj2: unknown) {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
 

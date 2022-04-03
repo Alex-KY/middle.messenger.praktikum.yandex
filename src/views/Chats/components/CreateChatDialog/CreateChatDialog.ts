@@ -5,6 +5,8 @@ import YDialog from '../../../../components/YDialog';
 import YButton from '../../../../components/YButton';
 import YInput from '../../../../components/YInput';
 
+import { UserSearchModel } from '../../../../utils/types';
+
 import "./CreateChatDialog.scss";
 
 const chatsController = new ChatsController();
@@ -29,7 +31,7 @@ async function createChat(e: PointerEvent) {
 
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
-  const formObject: any = [...formData.entries()]
+  const formObject: UserSearchModel = [...formData.entries()]
     .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
 
   let res = await userController.searchUser(formObject);

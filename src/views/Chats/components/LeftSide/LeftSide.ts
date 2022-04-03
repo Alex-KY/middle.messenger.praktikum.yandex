@@ -43,7 +43,7 @@ function generateTemplate() {
   const state = store.getState('chats') || [];
   const activeChat = store.getState('activeChat');
 
-  const chats = state.map((chat: any) => {
+  const chats = state.map(chat => {
     const { id, title, last_message, unread_count } = chat;
     const { avatar, first_name, second_name } = (last_message?.user || {});
 

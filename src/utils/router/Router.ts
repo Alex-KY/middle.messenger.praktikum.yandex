@@ -58,11 +58,11 @@ export default class Router {
   }
 
   public back() {
-    this._history.back()
+    this._history.back();
   }
 
   public forward() {
-    this._history.forward()
+    this._history.forward();
   }
 
   private _getRoute(pathname: string) {

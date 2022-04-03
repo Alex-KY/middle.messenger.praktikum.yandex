@@ -178,7 +178,7 @@ const context = {
 
 interface Props extends Properties {
   icons?: {
-      image: any
+      image: string
   },
   name?: string,
   rows?: {

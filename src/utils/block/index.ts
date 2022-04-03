@@ -18,7 +18,7 @@ export default abstract class Block<Props extends unknown | Properties> {
 
   public id = nanoid(10).replace(/[0-9-_]/g, '');
 
-  private _timeoutId: any;
+  private _timeoutId: NodeJS.Timer;
 
   private _element: HTMLElement | null = null;
 
@@ -109,18 +109,17 @@ export default abstract class Block<Props extends unknown | Properties> {
 
   private _componentDidUpdate (oldProps: Props, newProps: Props) {
     if (this.componentDidUpdate(oldProps, newProps)) {
-      if (this._timeoutId) return
+      if (this._timeoutId) return;
 
       this._timeoutId = setTimeout(() => {
         this._eventBus().emit(Block.EVENTS.FLOW_RENDER);
         clearTimeout(this._timeoutId);
-        this._timeoutId = undefined;
       }, 200);
     }
   }
 
   protected componentDidUpdate(oldProps: Props, newProps: Props) {
-    return true;
+    return oldProps === newProps || true;
   }
 
   public assignProps = (props: Props) => {
@@ -129,7 +128,7 @@ export default abstract class Block<Props extends unknown | Properties> {
     }
 
     Object.assign(this.props, props);
-  }
+  };
 
   public setProps = (nextProps: Props) => {
     if (!nextProps) {
@@ -201,7 +200,7 @@ export default abstract class Block<Props extends unknown | Properties> {
       deleteProperty: () => {
         throw new Error('Отказано в доступе');
       }
-    })
+    });
   }
 
   private _addEvents() {

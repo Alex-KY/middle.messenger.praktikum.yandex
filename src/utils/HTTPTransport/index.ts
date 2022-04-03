@@ -5,11 +5,11 @@ enum METHOD {
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE'
-};
+}
 
 type Options = {
   method: METHOD,
-  data?: any,
+  data?: string | FormData,
   title?: string,
   contentType?: string
 };
@@ -25,7 +25,7 @@ export default class HTTPTransport {
   }
   protected APIUrl = baseApiUrl;
 
-  protected formingResponse(res: any) {
+  protected formingResponse(res: API) {
     const { response, responseText, status, statusText } = res;
     let data;
 

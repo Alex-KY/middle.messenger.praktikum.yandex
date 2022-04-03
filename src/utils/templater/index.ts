@@ -2,17 +2,17 @@ import get from "./utils/get";
 import { nanoid } from 'nanoid';
 
 interface Properties {
-
-};
+  template?: string
+}
 
 export default class Templator<Props extends Properties> {
   PRECOMPILE_REGEXP = /\{\{\s?#(each)(.*?)\}\}/gi;
   COMPILE_REGEXP = /\{\{(.*?)\}\}/gi;
   SPEC_SYMBOLS_REGEXP = /\[|\]/g;
 
-  _template;
+  _template: string;
 
-  constructor(template: Props) {
+  constructor(template: string) {
     this._template = template;
   }
 
@@ -22,7 +22,7 @@ export default class Templator<Props extends Properties> {
   }
 
   _precompileTemplate(ctx: Props) {
-    let tmpl: any = this._template;
+    let tmpl: string = this._template;
     let key = null;
     const regExp = this.PRECOMPILE_REGEXP;
 
@@ -43,7 +43,9 @@ export default class Templator<Props extends Properties> {
             tmplData += `${data[i]}`;
           }
 
-          tmpl = tmpl.replace(new RegExp(tmplKey, "gi"), tmplData || data);
+          const key = tmplData || (data || '');
+
+          tmpl = tmpl.replace(new RegExp(tmplKey, "gi"), key.toString());
 
           continue;
         }
@@ -56,7 +58,7 @@ export default class Templator<Props extends Properties> {
   }
 
   _compileTemplate(ctx: Props) {
-    let tmpl: any = this._template;
+    let tmpl: string = this._template;
     let key = null;
     const regExp = this.COMPILE_REGEXP;
 
@@ -72,7 +74,7 @@ export default class Templator<Props extends Properties> {
 
         if (typeof data === "function") {
           const id: string = nanoid(6);
-          const key: any = `${tmplValue}-${id}`;
+          const key = `${tmplValue}-${id}`;
           window[key] = data;
           tmpl = tmpl.replace(
             new RegExp(tmplKey, "gi"),

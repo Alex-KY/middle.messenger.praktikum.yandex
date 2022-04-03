@@ -4,7 +4,7 @@ import Block from '../block';
 
 import { merge, isEqual } from '../helpers';
 
-import { Props, User, Chats, Chat } from '../../utils/types';
+import { Props, User, Chats, Chat, ChatMessage } from '../../utils/types';
 
 type Indexed<T = unknown> = {
   [key in string]: T;
@@ -14,7 +14,7 @@ interface storeData {
   userData?: User,
   chats?: Chats,
   activeChat?: Chat,
-  activeChatMessages?: {}
+  activeChatMessages?: ChatMessage[]
 }
 
 function set(object: Indexed | unknown, path: string, value: unknown): Indexed | unknown {
@@ -26,7 +26,7 @@ function set(object: Indexed | unknown, path: string, value: unknown): Indexed |
     }
     const result = path.split('.').reduceRight<Indexed>((acc, key) => ({
         [key]: acc,
-    }), value as any);
+    }), value as Indexed<unknown>);
     return merge(object as Indexed, result);
 }
 
@@ -69,7 +69,7 @@ const store = new Store();
 export function withStore(mapStateToProps: (state: storeData) => Record<string, unknown>) {
   return function(Component: typeof Block) {
     return class extends Component<Props> {
-      constructor(props: any) {
+      constructor(props: Props) {
         const state = mapStateToProps(store.getState());
 
         super({...props, ...state});
@@ -82,8 +82,8 @@ export function withStore(mapStateToProps: (state: storeData) => Record<string, 
           });
         }
       }
-    }
-  }
-};
+    };
+  };
+}
 
 export default store;

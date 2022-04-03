@@ -1,15 +1,22 @@
+import { Props as Properties } from '../types';
+
+interface Props extends Properties{
+  rootQuery: string,
+  classes: string
+}
+
 export default class Route {
   private _pathname: string;
-  private _blockClass: any;
+  private _blockClass: unknown;
   private _block: string | null;
-  private _props: any;
-  private _root: HTMLElement;
+  private _props: Props;
+  private _root: HTMLElement | null;
 
-  constructor(pathname: string, view: any, props: object = {}) {
+  constructor(pathname: string, view: unknown, props: Props) {
     this._pathname = pathname;
     this._blockClass = view;
     this._block = null;
-    this._props = props;
+    this._props = props || {};
     this._root = document.querySelector(this._props.rootQuery);
   }
 
@@ -23,6 +30,9 @@ export default class Route {
   leave() {
     if (this._block) {
       this._block = null;
+
+      if (!this._root) return;
+
       this._root.innerHTML = '';
     }
   }
@@ -40,10 +50,10 @@ export default class Route {
       throw new Error('Root not found');
     }
 
-    const { classes = '' } = this._props;
+    const classes: string[] = (this._props.classes).split(' ');
 
     this._root.classList.remove(...this._root.classList);
-    this._root.classList.add(classes.split(' '));
+    this._root.classList.add(...classes);
 
     this._root.innerHTML = this._block || '';
   }
