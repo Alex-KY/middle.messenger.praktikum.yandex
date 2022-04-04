@@ -1,1 +1,1 @@
-https://github.com/Alex-KY/middle.messenger.praktikum.yandex/pull/2
+https://github.com/Alex-KY/middle.messenger.praktikum.yandex/pull/3
