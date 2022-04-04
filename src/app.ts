@@ -8,11 +8,6 @@ import Profile from './views/Profile';
 
 import authController from './controllers/AuthController';
 
-// Delete
-import store from './utils/store';
-window.store = store;
-//
-
 const controller = new authController();
 
 async function ready () {

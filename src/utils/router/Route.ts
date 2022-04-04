@@ -1,5 +1,7 @@
 import { Props as Properties } from '../types';
 
+import sanitize from '../helpers';
+
 interface Props extends Properties{
   rootQuery: string,
   classes: string
@@ -55,6 +57,6 @@ export default class Route {
     this._root.classList.remove(...this._root.classList);
     this._root.classList.add(...classes);
 
-    this._root.innerHTML = this._block || '';
+    this._root.innerHTML = sanitize(this._block || '');
   }
 }

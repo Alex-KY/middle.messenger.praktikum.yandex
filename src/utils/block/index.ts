@@ -1,5 +1,6 @@
 import EventBus from '../eventBus';
-// import renderDOM from '../renderDOM';
+
+import sanitize from 'sanitize-html';
 
 import store from '../store';
 
@@ -80,18 +81,6 @@ export default abstract class Block<Props extends unknown | Properties> {
 
     if (!this._state || !keys.some(key => path.includes(key))) return;
 
-    // const { ...params } = store.getState(this._state);
-    // const state = this.props.state;
-
-    // Object.entries(params).forEach(([key, propValue]) => {
-    //   if (propValue !== state[key]) {
-    //     state[key] = propValue;
-    //   }
-    // })
-
-    // this.state = store.getState(this._state);
-    // console.warn('123', this._state, path, this.props)
-
     this._render();
   }
 
@@ -143,36 +132,21 @@ export default abstract class Block<Props extends unknown | Properties> {
   }
 
   private _render() {
-    // const fragment = this.render();
-
-    // const newElement = fragment.firstElementChild as HTMLElement;
-
-    // if (this._element) {
-    //   this._element.replaceWith(newElement);
-    // }
-
-    // this._element = newElement;
 
     this._addEvents();
 
     const element = document.querySelector(`#${this.id}`) as HTMLElement;
     const root = document.querySelector(`${this.rootString}`) as HTMLElement;
     if (element) {
-      element.outerHTML = this.render();
+      element.outerHTML = sanitize(this.render());
     } else if (root) {
-      root.innerHTML = this.render();
+      root.innerHTML = sanitize(this.render());
     }
-    // console.warn(element, root)
-
-    // renderDOM(this.render(), this.rootString);
   }
 
   protected render(): string {
     return '';
   }
-  // protected render(): DocumentFragment {
-  //   return new DocumentFragment;
-  // }
 
   getContent(): HTMLElement | null {
     return this.element;
@@ -214,18 +188,4 @@ export default abstract class Block<Props extends unknown | Properties> {
       this._element?.addEventListener(event, listener);
     });
   }
-
-  // private _createDocumentElement(tagName: string) {
-  //   return document.createElement(tagName);
-  // }
-
-  // compile(template: any, context: Props) {
-  //   const fragment = this._createDocumentElement('template') as HTMLTemplateElement;
-
-  //   const HTMLString = '';
-
-  //   fragment.innerHTML = HTMLString;
-
-  //   return fragment.content;
-  // }
 }

@@ -66,4 +66,14 @@ function isEqual(obj1: unknown, obj2: unknown) {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
 
+import sanitizeHtml from 'sanitize-html';
+
+export function sanitize (html: string) {
+  return sanitizeHtml(html, {
+    allowedAttributes: { a: ['href'], img: ['src', 'alt'] },
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ])
+  })
+}
+
+
 export { trim, merge, isEqual, lastMessageDate, messageTime, datetime };
