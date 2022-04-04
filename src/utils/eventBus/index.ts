@@ -1,34 +1,42 @@
-export default class EventBus {
-  constructor() {
-    this.listeners = {};
-  }
-  listeners: object;
+type Void = () => void;
+interface Events {
+  [k: string]: Void[]
+}
 
-  on(event, callback) {
-    if (!this.listeners[event]) {
-      this.listeners[event] = [];
+export default class EventBus {
+  private _listeners: Events;
+
+  constructor() {
+    this._listeners = {};
+  }
+
+  on(event: string, callback: () => Void) {
+    if (!this._listeners[event]) {
+      this._listeners[event] = [];
     }
 
-    this.listeners[event].push(callback);
+    this._listeners[event].push(callback);
   }
 
-  off(event, callback) {
-        if (!this.listeners[event]) {
+  off(event: string, callback: () => Void) {
+    if (!this._listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
 
-    this.listeners[event] = this.listeners[event].filter(
-      listener => listener !== callback
+    this._listeners[event] = this._listeners[event].filter(
+      (listener: Void) => listener !== callback
     );
   }
 
-  emit(event, ...args) {
-    if (!this.listeners[event]) {
-      throw new Error(`Нет события: ${event}`);
+  emit(event: string, ...args: Void[]) {
+    if (!this._listeners[event]) {
+      return;
     }
 
-    this.listeners[event].forEach(function(listener) {
-      listener(...args);
-    });
+    if (Array.isArray(this._listeners[event])) {
+      this._listeners[event].forEach(function(listener: () => void) {
+        listener(...args);
+      });
+    }
   }
 }

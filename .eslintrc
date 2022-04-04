@@ -7,18 +7,20 @@
   },
 
   "extends": [
-    "eslint:recommended"
+    "plugin:@typescript-eslint/recommended"
   ],
 
-  "parser": "@babel/eslint-parser",
+  "parser": "@typescript-eslint/parser",
 
   "parserOptions": {
       "sourceType": "module",
+      "ecmaVersion": 2018,
       "project": ["./tsconfig.json"]
   },
 
   "rules": {
-    "semi": "error"
+    "semi": "error",
+    "@typescript-eslint/no-var-requires": 0
   },
 
   "plugins": [

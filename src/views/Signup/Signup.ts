@@ -3,6 +3,8 @@ import Router from '../../utils/router';
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
 
+import AuthController from '../../controllers/AuthController';
+
 import YButton from '../../components/YButton';
 import YInput from '../../components/YInput';
 
@@ -14,46 +16,65 @@ import {
   passwordPattern
 } from '../../utils/verifications/patterns';
 
-import Properties from '../../utils/types';
+import { Props as Properties } from '../../utils/types';
 
 import "./Signup.scss";
 
 const template = `
   <div class="signup-block">
     <p class="title">{{ title }}</p>
-    <form name="signup" class="signup-block__form" onsubmit={{ signup }}>
+    <form name="signup" class="signup-block__form">
       <div class="signup-block__form__inputs">
         {{ #each inputs }}
       </div>
       <div class="signup-block__form__buttons">
         {{ #each buttons }}
       </div>
+      <div class="signup-block__form__response-error"></div>
     </form>
   </div>
 `;
 
 const router = new Router();
+const authController = new AuthController();
 
-function toLoginPage() {
-  router.go('/chat');
+function toChatPage() {
+  router.go('/chats');
 }
 
-function signup(e: PointerEvent) {
+function setErrorBlock (text?: string) {
+  const errorBlock = document.querySelector('.signup-block__form__response-error');
+  if (errorBlock) {
+    errorBlock.textContent = text || '';
+    errorBlock.classList.toggle('error--active', Boolean(text));
+  }
+}
+
+async function signup(e: PointerEvent) {
   e.preventDefault();
+  setErrorBlock();
 
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
   const formObject = [...formData.entries()]
-    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
-
-  console.warn(formObject);
+    .reduce((accum, [key, value]) => value ? Object.assign(accum, { [key]: value }) : accum, {});
 
   if (!form.checkValidity()) {
     [...form.elements].forEach((item: HTMLElement) => {
       checkInput(item as HTMLInputElement);
     });
   } else {
-    router.go('/login');
+    const res = await authController.signup(formObject);
+    if (res.status === 200) {
+      const res = await authController.fetchUser();
+      if (res.data?.id) {
+        toChatPage();
+      } else {
+        setErrorBlock(`Ошибка входа. Попробуйте позже`);
+      }
+    } else {
+      setErrorBlock(`${res.status}. ${res.data.reason || 'Неизвестная ошибка'}`);
+    }
   }
 }
 
@@ -71,7 +92,7 @@ function checkField(e: Event) {
 function checkPassword(e: Event) {
   const target = e.target as HTMLInputElement;
   const { value: passwordValue } = target as HTMLInputElement;
-  const nodePassword = target.form?.querySelector('[name=password]') as HTMLInputElement;
+  const nodePassword = target.form?.querySelector('[name=repeatPassword]') as HTMLInputElement;
   const { value: passwordRepeatValue } = nodePassword;
   const valid = passwordValue.trim() && passwordRepeatValue.trim() && passwordValue === passwordRepeatValue;
 
@@ -88,11 +109,11 @@ function checkInput (target: HTMLInputElement) {
 const inputEventFocus = {
   fu: checkField,
   params: ['event']
-}
+};
 const inputEventBlur = {
   fu: checkField,
   params: ['event']
-}
+};
 
 const context = {
   title: 'Регистрация',
@@ -131,6 +152,7 @@ const context = {
     new YInput({
       name: 'second_name',
       label: 'Фамилия',
+      required: true,
       pattern: namePattern.source,
       errorText: 'Латиница или кирилица с заглавной буквы',
       focus: inputEventFocus,
@@ -141,6 +163,7 @@ const context = {
       name: 'phone',
       label: 'Телефон',
       type: 'tel',
+      required: true,
       pattern: phonePattern.source,
       errorText: 'Цифры 10-15 символов',
       focus: inputEventFocus,
@@ -184,14 +207,6 @@ const context = {
         fu: signup,
         params: ['event']
       }
-    }).render(),
-
-    new YButton({
-      text: 'Войти',
-      click: {
-        fu: toLoginPage
-      },
-      tagName: 'a'
     }).render()
 
   ]
@@ -201,16 +216,17 @@ interface Props extends Properties {
   title: string,
   inputs: string[],
   buttons: string[]
-};
+}
 
 export default class Signup extends Block<Props> {
   constructor(props: Props) {
-    super(props || context);
-    this.props = props || context;
-  };
+    const concatProps = Object.assign(props, context);
+
+    super(concatProps);
+  }
 
   render(): string {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  };
-};
+  }
+}

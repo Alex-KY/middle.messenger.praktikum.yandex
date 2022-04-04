@@ -1,7 +1,7 @@
 import Block from '../../utils/block';
 import Templator from '../../utils/templater';
 
-import Properties from '../../utils/types';
+import { Props as Properties } from '../../utils/types';
 
 import "./Error.scss";
 
@@ -24,8 +24,7 @@ const context = [
   }
 ];
 
-interface Props extends Properties {
-};
+type Props = Properties;
 
 export default class ErrorPage extends Block<Props> {
   constructor(props: Props) {
@@ -35,10 +34,10 @@ export default class ErrorPage extends Block<Props> {
 
     super(concatProps);
     this.props = concatProps;
-  };
+  }
 
   render() {
     const tmpl = new Templator(template);
     return tmpl.compile(this.props);
-  };
-};
+  }
+}

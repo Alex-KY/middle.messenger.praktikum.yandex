@@ -5,6 +5,29 @@
   margin-top: 10px;
   margin-bottom: 18px;
 
+  &__details {
+    display: none;
+    margin-top: 7px;
+    font-size: 8px;
+    line-height: 8px;
+  }
+
+  > .y-label {
+    position: absolute;
+    right: auto;
+    top: 6px;
+    left: 5px;
+    z-index: 1;
+    color: $gray;
+    pointer-events: none;
+    transform-origin: left top;
+
+    &--active {
+      max-width: 133%;
+      transform: translateY(-18px) scale(0.75);
+    }
+  }
+
   &__input {
     @include input;
 
@@ -23,34 +46,12 @@
       }
 
       ~ .y-label {
-        color: $error
+        color: $error;
       }
     }
   }
 
-  &__details {
-    display: none;
-    margin-top: 7px;
-    font-size: 8px;
-    line-height: 8px;
-  }
-
-  > .y-label {
-    position: absolute;
-    right: auto;
-    top: 6px;
-    left: 0;
-    z-index: 1;
-    color: $gray;
-    pointer-events: none;
-
-    &--active {
-      max-width: 133%;
-      transform: translate(-5%, -18px) scale(.75);
-    }
-  }
-
   &--hide-details {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 }
