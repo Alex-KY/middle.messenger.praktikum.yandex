@@ -14,7 +14,7 @@ const INTERVAL = 2000;
 const messagesController = class MessagesController {
   static EventBus: EventBus = new EventBus();
   static status: string;
-  static timeout: NodeJS.Timer;
+  static timeout: NodeJS.Timer | undefined;
   private _events(): Props['callback'] {
     return {
       onOpen: this._onOpenHandler.bind(this),
@@ -87,8 +87,9 @@ const messagesController = class MessagesController {
   }
 
   private _ping() {
-    if ((MessagesController.timeout as unknown as number) % 2 === 0) {
+    if (MessagesController.timeout) {
       clearTimeout(MessagesController.timeout);
+      MessagesController.timeout = undefined;
     }
 
     MessagesController.timeout = setTimeout(() => {
@@ -97,27 +98,36 @@ const messagesController = class MessagesController {
   }
 
   private _onOpenHandler() {
+    console.log('open socket');
     MessagesController.status = 'online';
     this.sendMessage();
   }
 
   private _onCloseHandler() {
+    console.log('close socket');
     MessagesController.status = 'offline';
-    clearTimeout(MessagesController.timeout);
+
+    if (MessagesController.timeout) {
+      clearTimeout(MessagesController.timeout);
+      MessagesController.timeout = undefined;
+    }
   }
 
   private _onMessageHandler(e: Event) {
+    console.log('message socket', e);
     const res = this.formingResponse(e);
 
     if (res.data?.type === 'pong') {
       MessagesController.status = 'online';
-    } else if (!res.data.reason && (Array.isArray(res.data) || res.data?.type === 'message')) {
+    } else if ((Array.isArray(res.data) || res.data?.type === 'message')) {
       const messages = store.getState('activeChatMessages') || [];
       const newMessages = Array.isArray(res.data) ? res.data : [res.data];
 
       store.set('activeChatMessages', (newMessages).concat(messages));
 
       chatsController.fetchChats();
+    } else if (res.data?.type === 'error') {
+      console.error(res.data.content);
     }
 
     this._ping();

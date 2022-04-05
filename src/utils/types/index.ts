@@ -7,7 +7,9 @@ interface Props {
 }
 
 interface API {
-  data: unknown,
+  data: {
+    reason?: string
+  },
   response?: string,
   responseText: string,
   status: number,

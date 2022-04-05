@@ -72,4 +72,8 @@ export default class Router {
   public getRoute(pathname: string) {
     return this._getRoute(pathname);
   }
+
+  public getRoutes() {
+    return this._routes;
+  }
 }

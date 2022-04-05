@@ -8,10 +8,10 @@ import { API, User, UserPasswordFormModel, UserDataFormModel, UserSearchModel } 
 
 const userApi = new UserAPI();
 
-function prepareUserData(data: User) {
-  const url = data.avatar;
+function prepareUserData(user: User) {
+  const url = user.avatar;
   const path = url ? `${baseResourcesApiUrl}${url}` : url;
-  const preparedData = Object.entries(data)
+  const preparedData = Object.entries(user)
     .reduce((acc, [key, value]) => {
       return Object.assign(acc, { [key]: [null, undefined].includes(value) ? '' : value });
     }, {});

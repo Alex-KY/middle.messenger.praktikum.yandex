@@ -6,6 +6,8 @@ import Signup from './views/Signup';
 import Chats from './views/Chats';
 import Profile from './views/Profile';
 
+import store from './utils/store';
+
 import authController from './controllers/AuthController';
 
 const controller = new authController();

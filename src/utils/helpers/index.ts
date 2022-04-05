@@ -70,9 +70,9 @@ import sanitizeHtml from 'sanitize-html';
 
 export function sanitize (html: string) {
   return sanitizeHtml(html, {
-    allowedAttributes: { a: ['href'], img: ['src', 'alt'] },
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img' ])
-  })
+    allowedTags: false,
+    allowedAttributes: false
+  });
 }
 
 

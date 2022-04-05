@@ -28,6 +28,8 @@ const chatsController = new ChatsController();
 function openChat(id: number) {
   const activeChatId = store.getState('activeChat')?.id;
 
+  if (activeChatId === id) return;
+
   if (activeChatId) {
     store.set('activeChat', null);
   }

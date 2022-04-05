@@ -6,6 +6,7 @@ import Templator from '../../utils/templater';
 import AuthController from '../../controllers/AuthController';
 
 import YButton from '../../components/YButton';
+
 import UserAvatarDialog from './components/UserAvatarDialog';
 import UserDataDialog from './components/UserDataDialog';
 import UserPasswordDialog from './components/UserPasswordDialog';
@@ -23,35 +24,35 @@ const template = `
   <div class="profile-page__content">
     <div class="profile-page__content__avatar-block">
       <div class="profile-page__content__avatar-block__avatar">
-        <img src="{{ state.avatar }}" />
+        <img src="{{ userData.avatar }}" />
         {{ buttonAvatar }}
       </div>
-      <span>{{ state.first_name }}</span>
+      <span>{{ userData.first_name }}</span>
     </div>
     <div class="profile-page__content__data-block dividered-content">
       <div class="dividered-content__row">
         <span>{{ rows[0].text }}</span>
-        <span>{{ state.email }}</span>
+        <span>{{ userData.email }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[1].text }}</span>
-        <span>{{ state.login }}</span>
+        <span>{{ userData.login }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[2].text }}</span>
-        <span>{{ state.first_name }}</span>
+        <span>{{ userData.first_name }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[3].text }}</span>
-        <span>{{ state.second_name }}</span>
+        <span>{{ userData.second_name }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[4].text }}</span>
-        <span>{{ state.display_name }}</span>
+        <span>{{ userData.display_name }}</span>
       </div>
       <div class="dividered-content__row">
         <span>{{ rows[5].text }}</span>
-        <span>{{ state.phone }}</span>
+        <span>{{ userData.phone }}</span>
       </div>
     </div>
     <div class="profile-page__content__buttons-block dividered-content">
@@ -105,7 +106,7 @@ function activateUserPasswordDialog() {
 }
 
 const context = {
-  state: {
+  userData: {
     avatar: image
   },
   rows: [
@@ -190,7 +191,7 @@ interface Props extends Properties {
 
 export default class Profile extends Block<Props> {
   constructor(props: Props = {}) {
-    const concatProps = Object.assign(context, props, { _state: 'userData', rootString: '#root' });
+    const concatProps = Object.assign(context, props, { _state: 'userData' });
 
     super(concatProps);
   }
