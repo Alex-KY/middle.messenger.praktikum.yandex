@@ -91,11 +91,11 @@ function checkInput (target: HTMLInputElement) {
 }
 
 const inputEventFocus = {
-  fu: checkField,
+  callback: checkField,
   params: ['event']
 };
 const inputEventBlur = {
-  fu: checkField,
+  callback: checkField,
   params: ['event']
 };
 
@@ -128,7 +128,7 @@ const context = {
     new YButton({
       text: 'Авторизоваться',
       click: {
-        fu: signin,
+        callback: signin,
         params: ['event']
       }
     }).render(),
@@ -136,7 +136,7 @@ const context = {
     new YButton({
       text: 'Нет аккаунта?',
       click: {
-        fu: toSignupPage
+        callback: toSignupPage
       },
       tagName: 'a'
     }).render()

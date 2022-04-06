@@ -25,14 +25,14 @@ export default class YDialog extends Block<Props> {
 
     if (!target.classList.contains('overlay')) return;
 
-    target.classList.toggle('y-dialog--active', false);
+    this.setProps({ active: false });
   }
 
   public render(): string {
     const {active, class: classes, title, color} = this.props;
     const contentTemplate = this.props.content?.template || '';
 
-    window[`hide-dialog__${this.id}`] = this.hide;
+    window[`hide-dialog__${this.id}`] = this.hide.bind(this);
 
     const template = `
       <div

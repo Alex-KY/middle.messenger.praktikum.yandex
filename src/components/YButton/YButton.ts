@@ -7,7 +7,7 @@ import { Props as Properties } from '../../utils/types';
 
 interface Props extends Properties {
   click?: {
-    fu?: (e: Event | string) => void,
+    callback?: (e: Event | string) => void,
     params?: string[]
   },
   title?: string,
@@ -29,7 +29,7 @@ export default class YButton extends Block<Props> {
     const {click, tagName = 'button', title, class: classes, text, textUnderline, icon, color, width} = this.props;
     const template = `
       <${tagName}
-        ${click ? `onclick="{{ click.fu }}(${click?.params || ''})"` : ``}
+        ${click ? `onclick="{{ click.callback }}(${click?.params || ''})"` : ``}
         ${title ? `title="${title}"` : ``}
         class="y-btn ${classes || ''} ${color ? `${color}-color` : ''} ${textUnderline ? `text--underline` : ''}"
         style="${width ? `width: ${width};` : ''}"

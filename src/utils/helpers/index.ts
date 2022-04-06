@@ -1,44 +1,11 @@
-import { format, parseISO } from 'date-fns';
-import { ru as locale } from 'date-fns/locale';
-
-function localeFormat(dateString: string, formatPattern: string) {
-  const date = parseISO(dateString);
-
-  return format(date, formatPattern, { locale });
-}
-
-function toCapitalCase(text: string) {
-  return text
-    .split('')
-    .map((a, i) => !i ? a.toUpperCase() : a)
-    .join('');
-}
-
-function lastMessageDate(dateString: string) {
-  if (!dateString) return '';
-  return localeFormat(dateString, 'k:mm');
-}
-
-function messageTime(dateString: string) {
-  if (!dateString) return '';
-  return localeFormat(dateString, 'k:mm');
-}
-
-function datetime(dateString: string) {
-  if (!dateString) return '';
-
-  const month = toCapitalCase(localeFormat(dateString, 'LLLL'));
-  const day = toCapitalCase(localeFormat(dateString, 'EEEE'));
-
-  return localeFormat(dateString, `${day}, d ${month} yyyy г. kk:mm:ss OOO`);
-}
+import sanitize from './sanitize';
+import { lastMessageDate, messageTime, datetime } from './date-fns';
 
 function trim(str: string, sym?: string): string {
   const replaced = sym?.length ? sym : '\s\uFEFF\xA0';
   const reg = new RegExp(`^[${replaced}]+|[${replaced}]+$`, 'g');
   return str.replace(reg, '');
 }
-
 
 type Indexed<T = unknown> = {
   [key in string]: T;
@@ -66,14 +33,4 @@ function isEqual(obj1: unknown, obj2: unknown) {
   return JSON.stringify(obj1) === JSON.stringify(obj2);
 }
 
-import sanitizeHtml from 'sanitize-html';
-
-export function sanitize (html: string) {
-  return sanitizeHtml(html, {
-    allowedTags: false,
-    allowedAttributes: false
-  });
-}
-
-
-export { trim, merge, isEqual, lastMessageDate, messageTime, datetime };
+export { trim, merge, isEqual, lastMessageDate, messageTime, datetime, sanitize };

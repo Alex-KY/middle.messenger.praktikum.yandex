@@ -116,14 +116,6 @@ export default abstract class Block<Props extends unknown | Properties> {
     return oldProps === newProps || true;
   }
 
-  public assignProps = (props: Props) => {
-    if (!props) {
-      return;
-    }
-
-    Object.assign(this.props, props);
-  };
-
   public setProps = (nextProps: Props) => {
     if (!nextProps) {
       return;

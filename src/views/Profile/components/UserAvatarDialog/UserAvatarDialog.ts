@@ -39,8 +39,8 @@ async function changeUserAvatar(e: PointerEvent) {
 
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
-
   const res = await userController.changeUserAvatar(formData);
+
   if (res.status === 200) {
     dialog.hide();
   } else {
@@ -72,7 +72,7 @@ const context = {
         text: 'Выбрать файл на компьютере',
         textUnderline: true,
         click: {
-          fu: clickOnFileInput,
+          callback: clickOnFileInput,
           params: ['event']
         },
         tagName: 'span',
@@ -82,7 +82,7 @@ const context = {
       new YButton({
         text: 'Поменять',
         click: {
-          fu: changeUserAvatar,
+          callback: changeUserAvatar,
           params: ['event']
         },
         width: '100%'
@@ -95,7 +95,7 @@ const context = {
         accept: 'image/jpeg,image/png,image/gif',
         required: true,
         change: {
-          fu: changeFile,
+          callback: changeFile,
           params: ['event']
         },
         class: 'hidden'

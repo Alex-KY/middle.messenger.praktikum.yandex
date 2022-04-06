@@ -2,6 +2,8 @@ import BaseAPI from './BaseAPI';
 
 import { ChatsParamsModel, CreateChatModel, ChatUsersModel, DeleteChatFormModel } from '../types';
 
+import { BASEAPIURL } from '../const';
+
 function prepareQueryParams(params: ChatsParamsModel) {
   return Object.entries(params)
     .map(([key, value]) => `${key}=${value}`)
@@ -10,11 +12,19 @@ function prepareQueryParams(params: ChatsParamsModel) {
 
 export default class UserAPI extends BaseAPI {
   constructor() {
-    super('/chats');
+    super(BASEAPIURL, '/chats');
   }
 
   public fetchChats(params: ChatsParamsModel) {
     return this.$http.get(`?${prepareQueryParams(params)}`);
+  }
+
+  public fetchChatUsers(id: number) {
+    return this.$http.get(`/${id}/users`);
+  }
+
+  public fetchChatNews(id: number) {
+    return this.$http.get(`/new/${id}`);
   }
 
   public createChat(data: CreateChatModel) {

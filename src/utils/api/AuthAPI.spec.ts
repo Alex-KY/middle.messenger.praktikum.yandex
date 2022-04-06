@@ -3,7 +3,7 @@ const sinon = require("sinon");
 
 import AuthAPI from "./AuthAPI";
 
-import { baseApiUrl } from "../HTTPTransport";
+import { BASEAPIURL } from '../const';
 
 const api = new AuthAPI();
 
@@ -44,7 +44,7 @@ describe("Тестирование AuthAPI", () => {
 
       const request = requests[0];
 
-      assert.equal(request.url, `${baseApiUrl}/auth/logout`);
+      assert.equal(request.url, `${BASEAPIURL}/auth/logout`);
     });
 
     it("Наличие заголовков", () => {
@@ -80,7 +80,7 @@ describe("Тестирование AuthAPI", () => {
       api.signin(data);
       const request = requests[0];
 
-      assert.equal(request.url, `${baseApiUrl}/auth/signin`);
+      assert.equal(request.url, `${BASEAPIURL}/auth/signin`);
     });
 
     it("Наличие заголовков", () => {
@@ -119,7 +119,7 @@ describe("Тестирование AuthAPI", () => {
       api.signup(data);
       const request = requests[0];
 
-      assert.equal(request.url, `${baseApiUrl}/auth/signup`);
+      assert.equal(request.url, `${BASEAPIURL}/auth/signup`);
     });
 
     it("Наличие заголовков", () => {
@@ -150,7 +150,7 @@ describe("Тестирование AuthAPI", () => {
       api.fetchUser();
       const request = requests[0];
 
-      assert.equal(request.url, `${baseApiUrl}/auth/user`);
+      assert.equal(request.url, `${BASEAPIURL}/auth/user`);
     });
 
     it("Наличие заголовков", () => {

@@ -60,11 +60,11 @@ async function changeUserPassword(e: PointerEvent) {
 }
 
 const inputEventFocus = {
-  fu: checkField,
+  callback: checkField,
   params: ['event']
 };
 const inputEventBlur = {
-  fu: checkField,
+  callback: checkField,
   params: ['event']
 };
 
@@ -112,7 +112,7 @@ const context = {
     button: new YButton({
         text: 'Поменять',
         click: {
-          fu: changeUserPassword,
+          callback: changeUserPassword,
           params: ['event']
         }
       }).render()

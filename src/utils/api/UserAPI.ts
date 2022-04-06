@@ -2,9 +2,11 @@ import BaseAPI from './BaseAPI';
 
 import { UserPasswordFormModel, UserDataFormModel, UserSearchModel } from '../types';
 
+import { BASEAPIURL } from '../const';
+
 export default class UserAPI extends BaseAPI {
   constructor() {
-    super('/user');
+    super(BASEAPIURL, '/user');
   }
 
   public changeUserAvatar(form: FormData) {

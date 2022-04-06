@@ -1,6 +1,6 @@
 import { API } from "../types";
 
-enum METHOD {
+enum Method {
   GET = 'GET',
   POST = 'POST',
   PUT = 'PUT',
@@ -8,7 +8,7 @@ enum METHOD {
 }
 
 type Options = {
-  method: METHOD,
+  method: Method,
   data?: string | FormData,
   title?: string,
   contentType?: string
@@ -16,14 +16,12 @@ type Options = {
 
 type OptionsWithoutMethod = Omit<Options, 'method'>;
 
-export const baseApiUrl = 'https://ya-praktikum.tech/api/v2';
-export const baseResourcesApiUrl = `${baseApiUrl}/resources`;
-
 export default class HTTPTransport {
-  constructor(endpoint?: string) {
-    this.APIUrl += (endpoint || '');
+  constructor(origin: string, endPoint?: string) {
+    this.APIUrl = `${origin}${endPoint || ''}`;
   }
-  protected APIUrl = baseApiUrl;
+
+  protected APIUrl: string;
 
   protected formingResponse(res: API) {
     const { response, responseText, status, statusText } = res;
@@ -41,19 +39,19 @@ export default class HTTPTransport {
   }
 
   public get(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
-    return this.request(`${this.APIUrl}${url}`, { ...options, method: METHOD.GET });
+    return this.request(`${this.APIUrl}${url}`, { ...options, method: Method.GET });
   }
   public post(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
-    return this.request(`${this.APIUrl}${url}`, { ...options, method: METHOD.POST });
+    return this.request(`${this.APIUrl}${url}`, { ...options, method: Method.POST });
   }
   public put(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
-    return this.request(`${this.APIUrl}${url}`, { ...options, method: METHOD.PUT });
+    return this.request(`${this.APIUrl}${url}`, { ...options, method: Method.PUT });
   }
   public delete(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
-    return this.request(`${this.APIUrl}${url}`, { ...options, method: METHOD.DELETE });
+    return this.request(`${this.APIUrl}${url}`, { ...options, method: Method.DELETE });
   }
 
-  protected async request(url: string, options: Options = { method: METHOD.GET }): Promise<API | string> {
+  protected async request(url: string, options: Options = { method: Method.GET }): Promise<API | string> {
     const { method, contentType = 'application/json' } = options;
     let data = options.data;
 
@@ -76,7 +74,7 @@ export default class HTTPTransport {
       xhr.onerror = reject;
       xhr.ontimeout = reject;
 
-      if (method === METHOD.GET || !data) {
+      if (method === Method.GET || !data) {
         xhr.send();
       } else {
         xhr.send(data);

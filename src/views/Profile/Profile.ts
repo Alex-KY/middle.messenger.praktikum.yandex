@@ -95,14 +95,14 @@ async function logout(e: PointerEvent) {
 }
 
 function activateUserAvatarDialog() {
-  UserAvatarDialog.assignProps({ active: true });
+  UserAvatarDialog.setProps({ active: true });
 }
 function activateUserDataDialog() {
   getContext();
-  UserDataDialog.assignProps({ active: true });
+  UserDataDialog.setProps({ active: true });
 }
 function activateUserPasswordDialog() {
-  UserPasswordDialog.assignProps({ active: true });
+  UserPasswordDialog.setProps({ active: true });
 }
 
 const context = {
@@ -134,13 +134,13 @@ const context = {
       text: 'Поменять аватар',
       class: 'avatar-button',
       click: {
-        fu: activateUserAvatarDialog
+        callback: activateUserAvatarDialog
       }
     }).render(),
   buttonBack: new YButton({
       icon: arrow,
       click: {
-        fu: back
+        callback: back
       },
       class: 'y-btn--fab'
     }).render(),
@@ -149,7 +149,7 @@ const context = {
     new YButton({
       text: 'Изменить данные',
       click: {
-        fu: activateUserDataDialog
+        callback: activateUserDataDialog
       },
       tagName: 'span',
       class: 'y-btn--link'
@@ -158,7 +158,7 @@ const context = {
     new YButton({
       text: 'Изменить пароль',
       click: {
-        fu: activateUserPasswordDialog
+        callback: activateUserPasswordDialog
       },
       tagName: 'span',
       class: 'y-btn--link'
@@ -167,7 +167,7 @@ const context = {
     new YButton({
       text: 'Выйти',
       click: {
-        fu: logout,
+        callback: logout,
         params: ['event']
       },
       tagName: 'span',

@@ -19,6 +19,11 @@ import { Props as Properties } from '../../utils/types';
 
 import "./Chats.scss";
 
+import * as deleteIcon from 'bundle-text:/static/icons/delete.svg';
+import * as plus from 'bundle-text:/static/icons/plus.svg';
+import * as arrow from 'bundle-text:/static/icons/arrow.svg';
+import * as clip from 'bundle-text:/static/icons/clip.svg';
+
 const template = `
   {{ LeftSide }}
   {{ MessageBlock }}
@@ -33,7 +38,7 @@ const leftSideProps = {
     new YButton({
       text: 'Профиль >',
       click: {
-        fu: toProfilePage
+        callback: toProfilePage
       },
       tagName: 'span',
       class: 'y-btn--link gray-text'
@@ -70,7 +75,7 @@ async function fetchChats(offset = 0, limit = 5, title = '') {
 }
 
 function activateCreateChatDialog() {
-  CreateChatDialog.assignProps({ active: true });
+  CreateChatDialog.setProps({ active: true });
 }
 
 async function deleteChat() {
@@ -79,18 +84,13 @@ async function deleteChat() {
   fetchChats();
 }
 
-import * as deleteIcon from 'bundle-text:/static/icons/delete.svg';
-import * as plus from 'bundle-text:/static/icons/plus.svg';
-import * as arrow from 'bundle-text:/static/icons/arrow.svg';
-import * as clip from 'bundle-text:/static/icons/clip.svg';
-
 const messagesBlockProps = {
   empty: 'Выберите чат чтобы отправить сообщение',
   buttonAdd:
     new YButton({
       icon: plus,
       click: {
-        fu: activateCreateChatDialog
+        callback: activateCreateChatDialog
       },
       title: 'Добавить пользователя',
       class: 'y-btn--fab',
@@ -103,7 +103,7 @@ const messagesBlockProps = {
         class: 'y-btn--fab',
         title: 'Удалить чат',
         click: {
-          fu: deleteChat
+          callback: deleteChat
         },
         color: 'transparent'
       }).render()
@@ -129,7 +129,7 @@ const messagesBlockProps = {
       new YButton({
         icon: arrow,
         click: {
-          fu: send,
+          callback: send,
           params: ['event']
         },
         class: 'y-btn--fab send'
@@ -152,7 +152,7 @@ interface Props extends Properties {
   MessageBlock: string
 }
 
-export default class Chat extends Block<Props> {
+export default class Chats extends Block<Props> {
   constructor(props: Props) {
     const concatProps = Object.assign(generateTemplate(), props,  { _state: 'userData' });
 

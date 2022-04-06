@@ -2,9 +2,11 @@ import BaseAPI from './BaseAPI';
 
 import { SinginFormModel, SingupFormModel } from '../types';
 
+import { BASEAPIURL } from '../const';
+
 export default class AuthAPI extends BaseAPI {
   constructor() {
-    super('/auth');
+    super(BASEAPIURL, '/auth');
   }
 
   public logout() {

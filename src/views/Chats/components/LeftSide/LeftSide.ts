@@ -8,12 +8,11 @@ import store from '../../../../utils/store';
 
 import { lastMessageDate } from '../../../../utils/helpers';
 
-import { baseResourcesApiUrl } from '../../../../utils/HTTPTransport';
+import { BASERESOURCESAPIURL } from '../../../../utils/const';
 
 import { Props as Properties } from '../../../../utils/types';
 
 import "./LeftSide.scss";
-
 
 interface Props extends Properties {
   button: string,
@@ -42,12 +41,14 @@ function openChat(id: number) {
 }
 
 function generateTemplate() {
+  const userId = store.getState('userData').id;
   const state = store.getState('chats') || [];
   const activeChat = store.getState('activeChat');
 
   const chats = state.map(chat => {
     const { id, title, last_message, unread_count } = chat;
     const { avatar, first_name, second_name } = (last_message?.user || {});
+    const chatAvatar = avatar || chat.users.find(({ id }) => userId !== id)?.avatar;
 
     window[`openChat-${id}`] = openChat;
 
@@ -58,8 +59,8 @@ function generateTemplate() {
       >
         <div class="unit__avatar">
         ${
-          avatar ? `
-            <img src="${baseResourcesApiUrl}${avatar}" />
+          chatAvatar ? `
+            <img src="${BASERESOURCESAPIURL}${chatAvatar}" />
           ` : ``
         }
         </div>

@@ -9,7 +9,7 @@ import ChatsController from "./ChatsController";
 import { MessagesAPI as Props, MessageFormModel } from '../utils/types';
 
 const chatsController = new ChatsController();
-const INTERVAL = 2000;
+const INTERVAL = 20000;
 
 const messagesController = class MessagesController {
   static EventBus: EventBus = new EventBus();
@@ -25,7 +25,7 @@ const messagesController = class MessagesController {
   }
   private $wss: MessagesAPI;
 
-  protected formingResponse(res: MessageFormModel) {
+  protected formingResponse(res: MessageFormModel): MessageFormModel {
     const { data: response, type } = res;
     let data;
 
@@ -64,7 +64,7 @@ const messagesController = class MessagesController {
 
     if (!chatId || !userId) return;
 
-    const token = await chatsController.fetchChatToken(chatId);
+    const token = await chatsController.fetchChatToken(chatId) as string;
 
     if (!token) return;
 
