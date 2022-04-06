@@ -107,11 +107,11 @@ function checkInput (target: HTMLInputElement) {
 }
 
 const inputEventFocus = {
-  fu: checkField,
+  callback: checkField,
   params: ['event']
 };
 const inputEventBlur = {
-  fu: checkField,
+  callback: checkField,
   params: ['event']
 };
 
@@ -189,11 +189,11 @@ const context = {
       pattern: passwordPattern.source,
       errorText: 'Пароли должны совпадать',
       focus: {
-        fu: checkPassword,
+        callback: checkPassword,
         params: ['event']
       },
       blur: {
-        fu: checkPassword,
+        callback: checkPassword,
         params: ['event']
       }
     }).render()
@@ -204,7 +204,7 @@ const context = {
     new YButton({
       text: 'Зарегистрироваться',
       click: {
-        fu: signup,
+        callback: signup,
         params: ['event']
       }
     }).render()

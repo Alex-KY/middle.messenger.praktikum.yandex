@@ -7,19 +7,19 @@ import { Props as Properties } from '../../utils/types';
 
 interface Props extends Properties {
   focus?: {
-    fu: (e: Event) => void,
+    callback: (e: Event) => void,
     params: string[]
   },
   blur?: {
-    fu: (e: Event) => void,
+    callback: (e: Event) => void,
     params: string[]
   },
   input?: {
-    fu: (e: Event) => void,
+    callback: (e: Event) => void,
     params: string[]
   },
   change?: {
-    fu: (e: Event) => void,
+    callback: (e: Event) => void,
     params: string[]
   },
   type?: string,
@@ -46,10 +46,10 @@ export default class YInput extends Block<Props> {
     const template = `
       <div class="y-input ${hideDetails ? 'y-input--hide-details ': ''}${classes || ''}">
         <input
-          ${focus ? `onfocus="{{ focus.fu }}(${focus?.params || ''})"` : ``}
-          ${blur ? `onblur="{{ blur.fu }}(${blur?.params || ''})"` : ``}
-          ${input ? `oninput="{{ input.fu }}(${input?.params || ''})"` : ``}
-          ${change ? `onchange="{{ change.fu }}(${change?.params || ''})"` : ``}
+          ${focus ? `onfocus="{{ focus.callback }}(${focus?.params || ''})"` : ``}
+          ${blur ? `onblur="{{ blur.callback }}(${blur?.params || ''})"` : ``}
+          ${input ? `oninput="{{ input.callback }}(${input?.params || ''})"` : ``}
+          ${change ? `onchange="{{ change.callback }}(${change?.params || ''})"` : ``}
           type="${type || 'text'}"
           ${accept ? `accept="${accept}"` : ``}
           ${name ? `name="${name}"` : ``}

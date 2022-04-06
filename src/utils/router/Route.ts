@@ -1,6 +1,6 @@
 import { Props as Properties } from '../types';
 
-import sanitize from '../helpers';
+import { sanitize } from '../helpers';
 
 interface Props extends Properties{
   rootQuery: string,

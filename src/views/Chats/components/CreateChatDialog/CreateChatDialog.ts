@@ -89,11 +89,11 @@ const context = {
         name: 'login',
         label: 'Логин',
         focus: {
-          fu: checkField,
+          callback: checkField,
           params: ['event']
         },
         blur: {
-          fu: checkField,
+          callback: checkField,
           params: ['event']
         },
         required: true
@@ -103,7 +103,7 @@ const context = {
     button: new YButton({
         text: 'Добавить',
         click: {
-          fu: createChat,
+          callback: createChat,
           params: ['event']
         }
       }).render()

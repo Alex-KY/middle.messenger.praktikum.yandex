@@ -10,18 +10,18 @@ export default class Templator<Props extends Properties> {
   COMPILE_REGEXP = /\{\{(.*?)\}\}/gi;
   SPEC_SYMBOLS_REGEXP = /\[|\]/g;
 
-  _template: string;
+  private _template: string;
 
   constructor(template: string) {
     this._template = template;
   }
 
-  compile(ctx: Props): string {
+  public compile(ctx: Props): string {
     this._precompileTemplate(ctx);
     return this._compileTemplate(ctx);
   }
 
-  _precompileTemplate(ctx: Props) {
+  private _precompileTemplate(ctx: Props) {
     let tmpl: string = this._template;
     let key = null;
     const regExp = this.PRECOMPILE_REGEXP;
@@ -57,7 +57,7 @@ export default class Templator<Props extends Properties> {
     this._template = tmpl;
   }
 
-  _compileTemplate(ctx: Props) {
+  private _compileTemplate(ctx: Props) {
     let tmpl: string = this._template;
     let key = null;
     const regExp = this.COMPILE_REGEXP;

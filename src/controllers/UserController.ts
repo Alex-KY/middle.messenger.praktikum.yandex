@@ -2,16 +2,16 @@ import UserAPI from '../utils/api/UserAPI';
 
 import store from '../utils/store';
 
-import { baseResourcesApiUrl } from '../utils/HTTPTransport';
+import { BASERESOURCESAPIURL } from '../utils/const';
 
 import { API, User, UserPasswordFormModel, UserDataFormModel, UserSearchModel } from '../utils/types';
 
 const userApi = new UserAPI();
 
-function prepareUserData(data: User) {
-  const url = data.avatar;
-  const path = url ? `${baseResourcesApiUrl}${url}` : url;
-  const preparedData = Object.entries(data)
+function prepareUserData(user: User) {
+  const url = user.avatar;
+  const path = url ? `${BASERESOURCESAPIURL}${url}` : url;
+  const preparedData = Object.entries(user)
     .reduce((acc, [key, value]) => {
       return Object.assign(acc, { [key]: [null, undefined].includes(value) ? '' : value });
     }, {});
@@ -20,9 +20,8 @@ function prepareUserData(data: User) {
 }
 
 export default class UserController {
-  public changeUserAvatar(form: FormData) {
+  public changeUserAvatar(form: FormData): Promise<API | string> {
     try {
-
       return userApi.changeUserAvatar(form)
         .then((res: API) => {
           if (res.data) {
@@ -31,25 +30,21 @@ export default class UserController {
 
           return res;
         });
-
     } catch (error) {
       return error;
     }
   }
 
-  public changeUserPassword(data: UserPasswordFormModel) {
+  public changeUserPassword(data: UserPasswordFormModel): Promise<API | string> {
     try {
-
       return userApi.changeUserPassword(data);
-
     } catch (error) {
       return error;
     }
   }
 
-  public changeUserData(data: UserDataFormModel) {
+  public changeUserData(data: UserDataFormModel): Promise<API | string> {
     try {
-
       return userApi.changeUserData(data)
       .then((res: API) => {
         if (res.data) {
@@ -58,17 +53,14 @@ export default class UserController {
 
         return res;
       });
-
     } catch (error) {
       return error;
     }
   }
 
-  public searchUser(data: UserSearchModel) {
+  public searchUser(data: UserSearchModel): Promise<API | string> {
     try {
-
       return userApi.searchUser(data);
-
     } catch (error) {
       return error;
     }

@@ -68,12 +68,12 @@ async function changeUserData(e: PointerEvent) {
 }
 
 const inputEventFocus = {
-  fu: checkField,
+  callback: checkField,
   params: ['event']
 };
 
 const inputEventBlur = {
-  fu: checkField,
+  callback: checkField,
   params: ['event']
 };
 
@@ -170,7 +170,7 @@ const context = {
     button: new YButton({
         text: 'Поменять',
         click: {
-          fu: changeUserData,
+          callback: changeUserData,
           params: ['event']
         }
       }).render()

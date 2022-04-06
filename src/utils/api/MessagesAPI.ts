@@ -1,6 +1,6 @@
-const wss = 'wss://ya-praktikum.tech/ws/chats';
-
 import { MessagesAPI as Props, MessageFormModel } from '../types';
+
+import { WSS } from '../const';
 
 export default class MessagesAPI {
   protected socket: WebSocket;
@@ -8,7 +8,7 @@ export default class MessagesAPI {
   constructor(props: Props) {
     const { userId, chatId, token, callback } = props;
 
-    this.socket = new WebSocket(`${wss}/${userId}/${chatId}/${token}`);
+    this.socket = new WebSocket(`${WSS}/${userId}/${chatId}/${token}`);
 
     this._registerEvents(callback);
   }

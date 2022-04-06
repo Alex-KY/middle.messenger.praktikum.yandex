@@ -1,6 +1,6 @@
 import EventBus from '../eventBus';
 
-import sanitize from 'sanitize-html';
+import { sanitize } from '../helpers';
 
 import store from '../store';
 
@@ -19,7 +19,7 @@ export default abstract class Block<Props extends unknown | Properties> {
 
   public id = nanoid(10).replace(/[0-9-_]/g, '');
 
-  private _timeoutId: NodeJS.Timer;
+  private _timeoutId: NodeJS.Timer | undefined;
 
   private _element: HTMLElement | null = null;
 
@@ -40,7 +40,7 @@ export default abstract class Block<Props extends unknown | Properties> {
 
     this._registerEvents(eventBus);
 
-    if (!props.$state && this._state) {
+    if (!props.state && this._state) {
       Object.assign(props, this._computeState());
     }
 
@@ -68,12 +68,11 @@ export default abstract class Block<Props extends unknown | Properties> {
   private _computeState() {
     if (Array.isArray(this._state)) {
       return this._state.reduce((acc, key) => {
-        return Object.assign(acc, { [`$${key}`]: store.getState(key) });
+        return Object.assign(acc, { [`${key}`]: store.getState(key) });
       }, {});
     } else if (typeof this._state === 'string') {
-      return { [`$${this._state}`]: store.getState(this._state) };
+      return { [`${this._state}`]: store.getState(this._state) };
     }
-    return {};
   }
 
   private _storeDidUpdate(path: string) {
@@ -101,8 +100,14 @@ export default abstract class Block<Props extends unknown | Properties> {
       if (this._timeoutId) return;
 
       this._timeoutId = setTimeout(() => {
+        const timeout = this._timeoutId;
+
         this._eventBus().emit(Block.EVENTS.FLOW_RENDER);
-        clearTimeout(this._timeoutId);
+
+        if (timeout) {
+          clearTimeout(timeout);
+          this._timeoutId = undefined;
+        }
       }, 200);
     }
   }
@@ -110,14 +115,6 @@ export default abstract class Block<Props extends unknown | Properties> {
   protected componentDidUpdate(oldProps: Props, newProps: Props) {
     return oldProps === newProps || true;
   }
-
-  public assignProps = (props: Props) => {
-    if (!props) {
-      return;
-    }
-
-    Object.assign(this.props, props);
-  };
 
   public setProps = (nextProps: Props) => {
     if (!nextProps) {

@@ -3,7 +3,7 @@ const sinon = require("sinon");
 
 import AuthAPI from "./AuthAPI";
 
-import { baseApiUrl } from "../HTTPTransport";
+import { BASEAPIURL } from '../const';
 
 const api = new AuthAPI();
 
@@ -44,7 +44,7 @@ describe("Тестирование AuthAPI", () => {
 
       const request = requests[0];
 
-      assert.equal(request.url, `${baseApiUrl}/auth/logout`);
+      assert.equal(request.url, `${BASEAPIURL}/auth/logout`);
     });
 
     it("Наличие заголовков", () => {
@@ -64,33 +64,30 @@ describe("Тестирование AuthAPI", () => {
     };
 
     it("Наличие запроса", () => {
-        api.signin(data);
+      api.signin(data);
 
-        assert.equal(requests.length, 1);
+      assert.equal(requests.length, 1);
     });
 
     it("Необходимый метод", () => {
-        api.signin(data);
+      api.signin(data);
+      const request = requests[0];
 
-        const request = requests[0];
-
-        assert.equal(request.method, 'POST');
+      assert.equal(request.method, 'POST');
     });
 
     it("Корректный адрес", () => {
-        api.signin(data);
-
+      api.signin(data);
       const request = requests[0];
 
-        assert.equal(request.url, `${baseApiUrl}/auth/signin`);
+      assert.equal(request.url, `${BASEAPIURL}/auth/signin`);
     });
 
     it("Наличие заголовков", () => {
-        api.signin(data);
-
+      api.signin(data);
       const request = requests[0];
 
-        assert.deepEqual(request.requestHeaders, { credentials: 'include', mode: 'cors' });
+      assert.deepEqual(request.requestHeaders, { credentials: 'include', mode: 'cors' });
     });
 
   });
@@ -106,33 +103,30 @@ describe("Тестирование AuthAPI", () => {
     };
 
     it("Наличие запроса", () => {
-        api.signup(data);
+      api.signup(data);
 
-        assert.equal(requests.length, 1);
+      assert.equal(requests.length, 1);
     });
 
     it("Необходимый метод", () => {
-        api.signup(data);
+      api.signup(data);
+      const request = requests[0];
 
-        const request = requests[0];
-
-        assert.equal(request.method, 'POST');
+      assert.equal(request.method, 'POST');
     });
 
     it("Корректный адрес", () => {
-        api.signup(data);
-
+      api.signup(data);
       const request = requests[0];
 
-        assert.equal(request.url, `${baseApiUrl}/auth/signup`);
+      assert.equal(request.url, `${BASEAPIURL}/auth/signup`);
     });
 
     it("Наличие заголовков", () => {
-        api.signup(data);
-
+      api.signup(data);
       const request = requests[0];
 
-        assert.deepEqual(request.requestHeaders, { credentials: 'include', mode: 'cors' });
+      assert.deepEqual(request.requestHeaders, { credentials: 'include', mode: 'cors' });
     });
 
   });
@@ -140,33 +134,30 @@ describe("Тестирование AuthAPI", () => {
   describe("Тестирование запроса информации о пользователе", () => {
 
     it("Наличие запроса", () => {
-        api.fetchUser();
+      api.fetchUser();
 
-        assert.equal(requests.length, 1);
+      assert.equal(requests.length, 1);
     });
 
     it("Необходимый метод", () => {
-        api.fetchUser();
+      api.fetchUser();
+      const request = requests[0];
 
-        const request = requests[0];
-
-        assert.equal(request.method, 'GET');
+      assert.equal(request.method, 'GET');
     });
 
     it("Корректный адрес", () => {
-        api.fetchUser();
-
+      api.fetchUser();
       const request = requests[0];
 
-        assert.equal(request.url, `${baseApiUrl}/auth/user`);
+      assert.equal(request.url, `${BASEAPIURL}/auth/user`);
     });
 
     it("Наличие заголовков", () => {
-        api.fetchUser();
-
+      api.fetchUser();
       const request = requests[0];
 
-        assert.deepEqual(request.requestHeaders, { credentials: 'include', mode: 'cors' });
+      assert.deepEqual(request.requestHeaders, { credentials: 'include', mode: 'cors' });
     });
 
   });
