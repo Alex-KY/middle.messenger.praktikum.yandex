@@ -1,36 +1,44 @@
-const pages = {
-  'login': async function () {
-    await import('./views/Login');
-  },
-  'signup': async function () {
-    await import('./views/Signup');
-  },
-  'chat': async function () {
-    await import('./views/Chat');
-  },
-  'profile': async function () {
-    await import('./views/Profile');
-  },
-  '404': async function () {
-    await import('./views/404');
-  },
-  '500': async function () {
-    await import('./views/500');
-  }
-};
+import Router from './utils/router';
 
-// Роутинг
-// Стартовая страница - /login
-// Если страница не найдена - /404
+import ErrorPage from './views/Error';
+import Signin from './views/Signin';
+import Signup from './views/Signup';
+import Chats from './views/Chats';
+import Profile from './views/Profile';
+
+import store from './utils/store';
+
+import authController from './controllers/AuthController';
+
+const controller = new authController();
+
 async function ready () {
-  if (window.location.pathname === '/') {
-    window.location.href = `${window.location.origin}/login`;
+  await controller.fetchUser();
+
+  const router = new Router();
+  router
+    .use('/404', ErrorPage, { classes: 'error-page', code: 404 })
+    .use('/500', ErrorPage, { classes: 'error-page', code: 500 })
+    .use('/signin', Signin, { classes: 'signin-page' })
+    .use('/signup', Signup, { classes: 'signup-page' })
+    .use('/chats', Chats, { classes: 'chats-page' })
+    .use('/profile', Profile, { classes: 'profile-page' })
+    .start();
+
+  const user = store.getState('userData');
+
+  if (!user) {
+    router.go('/signin');
   } else {
     const page = window.location.pathname.split('/')[1];
-    if (!page || !Object.keys(pages).includes(page)) {
-      pages['404']();
+    const path = `/${page}`;
+
+    if (['/', '/signin', '/signup'].includes(path)) {
+      router.go('/chats');
+    } else if (router.getRoute(path)) {
+      router.go(path);
     } else {
-      pages[page]();
+      router.replace('/404');
     }
   }
 }

@@ -50,47 +50,40 @@
       text-align: center;
 
       &__avatar {
+        @include flex-center;
+
         width: 130px;
         height: 130px;
+        overflow: hidden;
         border-radius: 50%;
         background-color: $gray-light;
+        background-position: center;
+        background-repeat: no-repeat;
         position: relative;
         cursor: pointer;
         margin: 20px auto;
 
-        button svg {
+        > img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+
+        button.avatar-button {
+          display: none;
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background-color: rgba(0, 0, 0, 50%);
           position: absolute;
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
+          z-index: 0;
         }
 
         &:hover {
-          &::after {
-            position: absolute;
-            content: "";
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background-color: $black;
-            opacity: 0.5;
-          }
-
-          &::before {
-            @include flex-center;
-
-            position: absolute;
-            content: "Поменять аватар";
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            word-spacing: 100vw;
-            color: $light;
-            z-index: 1;
+          button.avatar-button {
+            display: block;
           }
         }
       }

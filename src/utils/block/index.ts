@@ -1,9 +1,13 @@
 import EventBus from '../eventBus';
+
+import { sanitize } from '../helpers';
+
+import store from '../store';
+
 import { nanoid } from 'nanoid';
 
-import Properties from '../types';
-
-export default abstract class Block<Props extends Properties> {
+import { Props as Properties } from '../types';
+export default abstract class Block<Props extends unknown | Properties> {
   static EVENTS = {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
@@ -11,7 +15,11 @@ export default abstract class Block<Props extends Properties> {
     FLOW_RENDER: "flow:render"
   } as const;
 
-  public id = nanoid(6);
+  private _state: string | string[];
+
+  public id = nanoid(10).replace(/[0-9-_]/g, '');
+
+  private _timeoutId: NodeJS.Timer | undefined;
 
   private _element: HTMLElement | null = null;
 
@@ -21,11 +29,22 @@ export default abstract class Block<Props extends Properties> {
 
   protected children: Record<string, Block<Props>>;
 
+  protected rootString: string;
+
   constructor(props: Props) {
     const eventBus = new EventBus();
 
     this._eventBus = () => eventBus;
+
+    this._state = props?._state;
+
     this._registerEvents(eventBus);
+
+    if (!props.state && this._state) {
+      Object.assign(props, this._computeState());
+    }
+
+    this.rootString = props.rootString;
 
     this.props = this._makePropsProxy(props) as Props;
 
@@ -37,35 +56,67 @@ export default abstract class Block<Props extends Properties> {
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+    if (this._state) {
+      store.eventBus.on(store.getEvents().STATE_SDU, this._storeDidUpdate.bind(this));
+    }
   }
 
   init() {
     this._eventBus().emit(Block.EVENTS.FLOW_RENDER, this.props);
   }
 
+  private _computeState() {
+    if (Array.isArray(this._state)) {
+      return this._state.reduce((acc, key) => {
+        return Object.assign(acc, { [`${key}`]: store.getState(key) });
+      }, {});
+    } else if (typeof this._state === 'string') {
+      return { [`${this._state}`]: store.getState(this._state) };
+    }
+  }
+
+  private _storeDidUpdate(path: string) {
+    const keys = Array.isArray(this._state) ?  this._state : [this._state];
+
+    if (!this._state || !keys.some(key => path.includes(key))) return;
+
+    this._render();
+  }
+
   private _componentDidMount() {
     this.componentDidMount();
   }
 
-  componentDidMount() {
+  protected componentDidMount() {
     this.dispatchComponentDidMount();
   }
 
-  dispatchComponentDidMount() {
+  protected dispatchComponentDidMount() {
     this._eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
   private _componentDidUpdate (oldProps: Props, newProps: Props) {
     if (this.componentDidUpdate(oldProps, newProps)) {
-      this._eventBus().emit(Block.EVENTS.FLOW_RENDER);
+      if (this._timeoutId) return;
+
+      this._timeoutId = setTimeout(() => {
+        const timeout = this._timeoutId;
+
+        this._eventBus().emit(Block.EVENTS.FLOW_RENDER);
+
+        if (timeout) {
+          clearTimeout(timeout);
+          this._timeoutId = undefined;
+        }
+      }, 200);
     }
   }
 
-  componentDidUpdate(oldProps: Props, newProps: Props) {
-    return true;
+  protected componentDidUpdate(oldProps: Props, newProps: Props) {
+    return oldProps === newProps || true;
   }
 
-  setProps = (nextProps: Props) => {
+  public setProps = (nextProps: Props) => {
     if (!nextProps) {
       return;
     }
@@ -78,13 +129,20 @@ export default abstract class Block<Props extends Properties> {
   }
 
   private _render() {
-    const fragment = this.render();
 
     this._addEvents();
+
+    const element = document.querySelector(`#${this.id}`) as HTMLElement;
+    const root = document.querySelector(`${this.rootString}`) as HTMLElement;
+    if (element) {
+      element.outerHTML = sanitize(this.render());
+    } else if (root) {
+      root.innerHTML = sanitize(this.render());
+    }
   }
 
-  protected render(): DocumentFragment | string {
-    return new DocumentFragment();
+  protected render(): string {
+    return '';
   }
 
   getContent(): HTMLElement | null {
@@ -103,27 +161,28 @@ export default abstract class Block<Props extends Properties> {
       },
 
       set: (target: Record<string, unknown>, prop: string, value: unknown) => {
+        const oldProps = {...target};
         target[prop] = value;
 
-        this._eventBus().emit(Block.EVENTS.FLOW_CDU, { ...target }, target);
+        this._eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target);
         return true;
       },
 
       deleteProperty: () => {
         throw new Error('Отказано в доступе');
       }
-    })
+    });
   }
 
   private _addEvents() {
-    const events: Record<string, () => void> = this.props.events;
+    const events: { string: () => void; } | undefined = this.props?.events;
 
     if (!events || !this._element) {
       return;
     }
 
     Object.entries(events).forEach(([event, listener]) => {
-      this._element.addEventListener(event, listener);
+      this._element?.addEventListener(event, listener);
     });
   }
 }

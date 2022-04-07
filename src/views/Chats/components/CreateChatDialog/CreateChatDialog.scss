@@ -1,0 +1,5 @@
+@import "/src/styles/index";
+
+.create-chat__form {
+  @include dialog-form;
+}

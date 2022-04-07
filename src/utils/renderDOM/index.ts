@@ -1,10 +1,7 @@
-export default function(renderedTemplate: string, props: { class: string }) {
-  const root = document.querySelector('.root') as HTMLElement;
-  const { class: classes } = props;
+import { sanitize } from "../helpers";
 
-  if (classes) {
-    root.classList.add(classes);
-  }
+export default function(renderedTemplate: string, rootString = '#root') {
+  const root = document.querySelector(rootString) as HTMLElement;
 
-  root.innerHTML = renderedTemplate;
-};
+  root.innerHTML = sanitize(renderedTemplate);
+}

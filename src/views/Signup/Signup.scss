@@ -11,7 +11,7 @@
     padding: 30px;
     margin: auto;
     background: $light;
-    box-shadow: 0 0 6px rgb(0 0 0 / 14%);
+    box-shadow: 0 0 6px rgb(0, 0, 0, 14%);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -44,6 +44,21 @@
 
         a {
           @include link;
+        }
+      }
+
+      &__response-error {
+        display: none;
+        background-color: $error;
+        color: $light;
+        padding: 20px 10px;
+        width: calc(100% + 60px);
+        transform: translate(-30px, 30px);
+        border-radius: 0 0 10px 10px;
+        text-align: center;
+
+        &.error--active {
+          @include flex-center;
         }
       }
     }

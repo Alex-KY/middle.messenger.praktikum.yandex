@@ -1,0 +1,18 @@
+@import "/src/styles/index";
+
+.error-page {
+  @include flex-center;
+
+  height: 100%;
+
+  &__block {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    .title {
+      margin-top: 20px;
+      margin-bottom: 60px;
+    }
+  }
+}
