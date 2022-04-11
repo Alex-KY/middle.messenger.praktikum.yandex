@@ -10,7 +10,7 @@ import { lastMessageDate } from '../../../../utils/helpers';
 
 import { BASERESOURCESAPIURL } from '../../../../utils/const';
 
-import { Props as Properties } from '../../../../utils/types';
+import { Props as Properties, User } from '../../../../utils/types';
 
 import "./LeftSide.scss";
 
@@ -20,6 +20,18 @@ interface Props extends Properties {
       name: string,
       placeholder: string
   }[]
+}
+
+interface Chat {
+  id: number,
+  title: string,
+  last_message: {
+    user: User,
+    content: string,
+    time: string
+  },
+  unread_count: number,
+  users: User[]
 }
 
 const chatsController = new ChatsController();
@@ -45,12 +57,12 @@ function generateTemplate() {
   const state = store.getState('chats') || [];
   const activeChat = store.getState('activeChat');
 
-  const chats = state.map(chat => {
+  const chats = state.map((chat: Chat) => {
     const { id, title, last_message, unread_count } = chat;
     const { avatar, first_name, second_name } = (last_message?.user || {});
-    const chatAvatar = avatar || chat.users.find(({ id }) => userId !== id)?.avatar;
+    const chatAvatar = avatar || chat.users?.find(({ id }) => userId !== id)?.avatar;
 
-    window[`openChat-${id}`] = openChat;
+    Object.assign(window, { [`openChat-${id}`]: openChat });
 
     return `
       <div
@@ -109,7 +121,7 @@ function generateTemplate() {
 
 export default class LeftSide extends Block<Props> {
   constructor(props: Props) {
-    const concatProps = Object.assign({}, props, { _state: ['chats', 'activeChat'] });
+    const concatProps = Object.assign({}, props, { watchState: ['chats', 'activeChat'] });
 
     super(concatProps);
   }

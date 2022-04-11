@@ -1,4 +1,4 @@
-type Void = () => void;
+type Void = (...args: any[]) => void;
 interface Events {
   [k: string]: Void[]
 }
@@ -10,7 +10,7 @@ export default class EventBus {
     this._listeners = {};
   }
 
-  on(event: string, callback: () => Void) {
+  on(event: string, callback: Void): void {
     if (!this._listeners[event]) {
       this._listeners[event] = [];
     }
@@ -18,7 +18,7 @@ export default class EventBus {
     this._listeners[event].push(callback);
   }
 
-  off(event: string, callback: () => Void) {
+  off(event: string, callback: Void): void {
     if (!this._listeners[event]) {
       throw new Error(`Нет события: ${event}`);
     }
@@ -28,13 +28,13 @@ export default class EventBus {
     );
   }
 
-  emit(event: string, ...args: Void[]) {
+  emit(event: string, ...args: any[]): void {
     if (!this._listeners[event]) {
       return;
     }
 
     if (Array.isArray(this._listeners[event])) {
-      this._listeners[event].forEach(function(listener: () => void) {
+      this._listeners[event].forEach(function(listener: Void) {
         listener(...args);
       });
     }

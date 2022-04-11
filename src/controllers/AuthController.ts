@@ -6,63 +6,46 @@ import { BASERESOURCESAPIURL } from '../utils/const';
 
 import { API, User, SingupFormModel, SinginFormModel } from '../utils/types';
 
+const avatar = require('/static/imgs/image.png');
+
 const authApi = new AuthAPI();
 
 function prepareUserData(data: User) {
   const url = data.avatar;
-  const path = url ? `${BASERESOURCESAPIURL}${url}` : url;
+  const path = url ? `${BASERESOURCESAPIURL}${url}` : avatar;
 
   return Object.assign(data, { avatar: path });
 }
 
 export default class AuthController {
-  public signup(data: SingupFormModel): Promise<API | string> {
-    try {
-      return authApi.signup(data);
-    } catch (error) {
-      return error;
-    }
+  public signup(data: SingupFormModel): Promise<API> {
+    return authApi.signup(data);
   }
 
-  public signin(data: SinginFormModel): Promise<API | string> {
-    try {
-      return authApi.signin(data);
-    } catch (error) {
-      return error;
-    }
+  public signin(data: SinginFormModel): Promise<API> {
+    return authApi.signin(data);
   }
 
-  public logout(): Promise<API | string> {
-    try {
-      return authApi.logout()
-      .then((res: API) => {
-        if (res.data) {
-          if (!res.data.reason) {
-            store.clear();
-          }
+  public logout(): Promise<API> {
+    return authApi.logout()
+    .then((res: API) => {
+      if (res.data) {
+        if (!res.data.reason) {
+          store.clear();
         }
+      }
 
-        return res;
-      });
-    } catch (error) {
-      return error;
-    }
+      return res;
+    });
   }
 
-  public fetchUser(): Promise<API | string> {
-    try {
-      return authApi.fetchUser()
-        .then((res: API) => {
-          if (res.data) {
-            if (!res.data.reason) {
-              store.set('userData', prepareUserData(res.data));
-            }
-          }
+  public async fetchUser(): Promise<API> {
+    const res = await authApi.fetchUser();
 
-          return res;
-        });
-    } catch (error) {
-      return error;
+    if (!res.data.reason) {
+      store.set('userData', prepareUserData(res.data));
     }
+
+    return res;
   }
 }

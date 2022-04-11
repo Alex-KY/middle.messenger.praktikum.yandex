@@ -6,11 +6,13 @@ import { BASERESOURCESAPIURL } from '../utils/const';
 
 import { API, User, UserPasswordFormModel, UserDataFormModel, UserSearchModel } from '../utils/types';
 
+const avatar = require('/static/imgs/image.png');
+
 const userApi = new UserAPI();
 
 function prepareUserData(user: User) {
   const url = user.avatar;
-  const path = url ? `${BASERESOURCESAPIURL}${url}` : url;
+  const path = url ? `${BASERESOURCESAPIURL}${url}` : avatar;
   const preparedData = Object.entries(user)
     .reduce((acc, [key, value]) => {
       return Object.assign(acc, { [key]: [null, undefined].includes(value) ? '' : value });
@@ -20,7 +22,7 @@ function prepareUserData(user: User) {
 }
 
 export default class UserController {
-  public changeUserAvatar(form: FormData): Promise<API | string> {
+  public changeUserAvatar(form: FormData): Promise<API> {
     try {
       return userApi.changeUserAvatar(form)
         .then((res: API) => {
@@ -35,7 +37,7 @@ export default class UserController {
     }
   }
 
-  public changeUserPassword(data: UserPasswordFormModel): Promise<API | string> {
+  public changeUserPassword(data: UserPasswordFormModel): Promise<API> {
     try {
       return userApi.changeUserPassword(data);
     } catch (error) {
@@ -43,7 +45,7 @@ export default class UserController {
     }
   }
 
-  public changeUserData(data: UserDataFormModel): Promise<API | string> {
+  public changeUserData(data: UserDataFormModel): Promise<API> {
     try {
       return userApi.changeUserData(data)
       .then((res: API) => {
@@ -58,7 +60,7 @@ export default class UserController {
     }
   }
 
-  public searchUser(data: UserSearchModel): Promise<API | string> {
+  public searchUser(data: UserSearchModel): Promise<API> {
     try {
       return userApi.searchUser(data);
     } catch (error) {

@@ -14,7 +14,7 @@ export default class Router {
     Router.__instance = this;
   }
 
-  public use(pathname: string, block: ClassDecorator, props: object = {}) {
+  public use(pathname: string, block: any, props: object = {}) {
     const routeProps = Object.assign({ rootQuery: '#root' }, props);
     const route = new Route(pathname, block, routeProps);
 

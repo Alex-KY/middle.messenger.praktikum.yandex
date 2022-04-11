@@ -32,7 +32,7 @@ export default class YDialog extends Block<Props> {
     const {active, class: classes, title, color} = this.props;
     const contentTemplate = this.props.content?.template || '';
 
-    window[`hide-dialog__${this.id}`] = this.hide.bind(this);
+    Object.assign(window, { [`hide-dialog__${this.id}`]: this.hide.bind(this) });
 
     const template = `
       <div

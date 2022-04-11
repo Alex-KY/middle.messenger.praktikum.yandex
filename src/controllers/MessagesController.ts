@@ -26,18 +26,18 @@ const messagesController = class MessagesController {
   private $wss: MessagesAPI;
 
   protected formingResponse(res: MessageFormModel): MessageFormModel {
-    const { data: response, type } = res;
+    const { data: response } = res;
     let data;
 
     if (typeof response === 'string') {
-      try {
-        data = JSON.parse(response);
-      } catch (err) {
-        data = JSON.parse(JSON.stringify(response));
-      }
+      data = JSON.parse(response);
+    } else {
+      data = response;
     }
 
-    return { data, type };
+    const content = data?.content;
+
+    return Object.assign({ data, type: data?.type }, content ? { content } : {});
   }
 
   constructor() {
@@ -64,7 +64,7 @@ const messagesController = class MessagesController {
 
     if (!chatId || !userId) return;
 
-    const token = await chatsController.fetchChatToken(chatId) as string;
+    const token = await chatsController.fetchChatToken(chatId);
 
     if (!token) return;
 
@@ -79,7 +79,7 @@ const messagesController = class MessagesController {
 
   public sendMessage(data: MessageFormModel = {}) {
     const { type = 'get old', content = '0' } = data;
-    this.$wss.send({ type, content });
+    return this.$wss.send({ type, content });
   }
 
   private _sendPing() {
@@ -117,17 +117,15 @@ const messagesController = class MessagesController {
     console.log('message socket', e);
     const res = this.formingResponse(e);
 
-    if (res.data?.type === 'pong') {
+    if (res.type === 'pong') {
       MessagesController.status = 'online';
-    } else if ((Array.isArray(res.data) || res.data?.type === 'message')) {
-      const messages = store.getState('activeChatMessages') || [];
+    } else if ((Array.isArray(res.data) || res.type === 'message')) {
       const newMessages = Array.isArray(res.data) ? res.data : [res.data];
-
-      store.set('activeChatMessages', (newMessages).concat(messages));
+      store.set('activeChatMessages', newMessages);
 
       chatsController.fetchChats();
-    } else if (res.data?.type === 'error') {
-      console.error(res.data.content);
+    } else if (res.type === 'error') {
+      console.error(res.content);
     }
 
     this._ping();

@@ -11,13 +11,13 @@ type Indexed<T = unknown> = {
   [key in string]: T;
 }
 
-function merge(lhs: Indexed, rhs: Indexed): Indexed {
+function merge(lhs: Indexed<any>, rhs: Indexed<any>): Indexed {
   for (const p in rhs) {
       if (!rhs.hasOwnProperty(p)) {
           continue;
       }
       try {
-          if (rhs[p].constructor === Object) {
+          if (rhs[p] instanceof Object) {
               rhs[p] = merge(lhs[p] as Indexed, rhs[p] as Indexed);
           } else {
               lhs[p] = rhs[p];

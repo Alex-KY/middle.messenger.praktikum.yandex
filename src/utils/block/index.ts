@@ -7,7 +7,7 @@ import store from '../store';
 import { nanoid } from 'nanoid';
 
 import { Props as Properties } from '../types';
-export default abstract class Block<Props extends unknown | Properties> {
+export default abstract class Block<Props extends Properties> {
   static EVENTS = {
     INIT: "init",
     FLOW_CDM: "flow:component-did-mount",
@@ -15,7 +15,7 @@ export default abstract class Block<Props extends unknown | Properties> {
     FLOW_RENDER: "flow:render"
   } as const;
 
-  private _state: string | string[];
+  private _state: string | string[] | undefined;
 
   public id = nanoid(10).replace(/[0-9-_]/g, '');
 
@@ -29,14 +29,14 @@ export default abstract class Block<Props extends unknown | Properties> {
 
   protected children: Record<string, Block<Props>>;
 
-  protected rootString: string;
+  protected rootString: string | undefined;
 
   constructor(props: Props) {
     const eventBus = new EventBus();
 
     this._eventBus = () => eventBus;
 
-    this._state = props?._state;
+    this._state = props?.watchState;
 
     this._registerEvents(eventBus);
 
@@ -76,9 +76,11 @@ export default abstract class Block<Props extends unknown | Properties> {
   }
 
   private _storeDidUpdate(path: string) {
+    if (!this._state) return
+
     const keys = Array.isArray(this._state) ?  this._state : [this._state];
 
-    if (!this._state || !keys.some(key => path.includes(key))) return;
+    if (!keys.some(key => path.includes(key))) return;
 
     this._render();
   }

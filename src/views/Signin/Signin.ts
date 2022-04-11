@@ -13,7 +13,7 @@ import {
   passwordPattern
 } from '../../utils/verifications/patterns';
 
-import { Props as Properties } from '../../utils/types';
+import { Props as Properties, SinginFormModel } from '../../utils/types';
 
 import "./Signin.scss";
 
@@ -57,7 +57,7 @@ async function signin(e: PointerEvent) {
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
   const formObject = [...formData.entries()]
-    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
+    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {}) as SinginFormModel;
 
   const res = await authController.signin(formObject);
 

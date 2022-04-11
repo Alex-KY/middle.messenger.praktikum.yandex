@@ -5,7 +5,7 @@ import Message from '../Message/Message';
 
 import store from '../../../../utils/store';
 
-import { Props as Properties } from '../../../../utils/types';
+import { Props as Properties, ChatMessage, Chat } from '../../../../utils/types';
 
 import "./MessagesBlock.scss";
 
@@ -24,7 +24,7 @@ function activeMessages() {
   if (!messages) return '';
 
   return messages
-    .map(message => new Message(message).render())
+    .map((message: ChatMessage) => new Message(message).render())
     .join('');
 }
 
@@ -54,7 +54,7 @@ function generateTemplate() {
     body = emptyBlock();
   } else {
     const chats = store.getState('chats');
-    const title = chats.find(({ id }) => id === activeChat.id).title;
+    const title = chats.find((chat: Chat) => chat.id === activeChat.id).title;
     body = activeChatBlock(title);
   }
 
@@ -67,20 +67,20 @@ function generateTemplate() {
 
 interface Props extends Properties {
   empty: string,
+  buttonAdd: string,
   header: {
       components: string[]
   },
   footer: {
       attachIcon: string,
-      sendIcon: string,
       components: string[],
-      fnSubmit: void
+      fnSubmit: (e: PointerEvent) => void
   }
 }
 
 export default class MessagesBlock extends Block<Props> {
   constructor(props: Props) {
-    const concatProps = Object.assign({}, props, { _state: ['activeChat', 'activeChatMessages'] });
+    const concatProps = Object.assign({}, props, { watchState: ['activeChat', 'activeChatMessages'] });
 
     super(concatProps);
   }

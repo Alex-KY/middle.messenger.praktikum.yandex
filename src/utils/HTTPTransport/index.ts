@@ -9,7 +9,7 @@ enum Method {
 
 type Options = {
   method: Method,
-  data?: string | FormData,
+  data?: any,
   title?: string,
   contentType?: string
 };
@@ -38,20 +38,20 @@ export default class HTTPTransport {
     return { data, responseText, status, statusText };
   }
 
-  public get(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
+  public get(url: string, options: OptionsWithoutMethod = {}): Promise<API> {
     return this.request(`${this.APIUrl}${url}`, { ...options, method: Method.GET });
   }
-  public post(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
+  public post(url: string, options: OptionsWithoutMethod = {}): Promise<API> {
     return this.request(`${this.APIUrl}${url}`, { ...options, method: Method.POST });
   }
-  public put(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
+  public put(url: string, options: OptionsWithoutMethod = {}): Promise<API> {
     return this.request(`${this.APIUrl}${url}`, { ...options, method: Method.PUT });
   }
-  public delete(url: string, options: OptionsWithoutMethod = {}): Promise<API | string> {
+  public delete(url: string, options: OptionsWithoutMethod = {}): Promise<API> {
     return this.request(`${this.APIUrl}${url}`, { ...options, method: Method.DELETE });
   }
 
-  protected async request(url: string, options: Options = { method: Method.GET }): Promise<API | string> {
+  protected async request(url: string, options: Options = { method: Method.GET }): Promise<API> {
     const { method, contentType = 'application/json' } = options;
     let data = options.data;
 

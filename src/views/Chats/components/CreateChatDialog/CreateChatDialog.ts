@@ -32,7 +32,7 @@ async function createChat(e: PointerEvent) {
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
   const formObject: UserSearchModel = [...formData.entries()]
-    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
+    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {}) as UserSearchModel;
 
   let res = await userController.searchUser(formObject);
 

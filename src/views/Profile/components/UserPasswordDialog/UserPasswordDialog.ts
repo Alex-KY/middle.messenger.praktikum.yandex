@@ -6,6 +6,8 @@ import YInput from '../../../../components/YInput';
 
 import { passwordPattern } from '../../../../utils/verifications/patterns';
 
+import { UserPasswordFormModel } from '../../../../utils/types';
+
 import "./UserPasswordDialog.scss";
 
 const userController = new UserController();
@@ -42,7 +44,7 @@ async function changeUserPassword(e: PointerEvent) {
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
   const formObject = [...formData.entries()]
-    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
+    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {}) as UserPasswordFormModel;
 
   if (!form.checkValidity()) {
     [...form.elements].forEach((item: HTMLElement) => {

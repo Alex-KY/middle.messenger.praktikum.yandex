@@ -13,10 +13,14 @@ import {
   phonePattern
 } from '../../../../utils/verifications/patterns';
 
+import { UserDataFormModel } from '../../../../utils/types';
+
 import "./UserDataDialog.scss";
 
 const userController = new UserController();
-const state = (value: string) => store.getState().userData?.[value] || '';
+const state = (value: string) => {
+  return store.getState().userData?.[value] || '';
+}
 
 function setErrorBlock (text?: string) {
   const errorBlock = document.querySelector('.user-data__form__response-error');
@@ -50,7 +54,7 @@ async function changeUserData(e: PointerEvent) {
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
   const formObject = [...formData.entries()]
-    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {});
+    .reduce((accum, [key, value]) => Object.assign(accum, { [key]: value }), {}) as UserDataFormModel;
 
   if (!form.checkValidity()) {
     [...form.elements].forEach((item: HTMLElement) => {

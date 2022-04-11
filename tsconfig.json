@@ -9,5 +9,8 @@
     "noUnusedParameters": true,
     "sourceMap": true,
     "strictNullChecks": true
-  }
+  },
+  "exclude": [
+    "**.spec.ts"
+  ]
 }
