@@ -119,6 +119,10 @@ interface MessageFormModel {
   type?: string
 }
 
+type Indexed<T = unknown> = {
+  [key in string]: T;
+}
+
 export {
   Props, API, MessagesAPI,
 
@@ -130,5 +134,7 @@ export {
 
   ChatsParamsModel, CreateChatModel, ChatUsersModel,
 
-  MessageFormModel
+  MessageFormModel,
+
+  Indexed
 };

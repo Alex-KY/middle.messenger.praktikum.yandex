@@ -20,7 +20,7 @@ import "./UserDataDialog.scss";
 const userController = new UserController();
 const state = (value: string) => {
   return store.getState().userData?.[value] || '';
-}
+};
 
 function setErrorBlock (text?: string) {
   const errorBlock = document.querySelector('.user-data__form__response-error');

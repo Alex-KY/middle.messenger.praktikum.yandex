@@ -76,7 +76,7 @@ export default abstract class Block<Props extends Properties> {
   }
 
   private _storeDidUpdate(path: string) {
-    if (!this._state) return
+    if (!this._state) return;
 
     const keys = Array.isArray(this._state) ?  this._state : [this._state];
 

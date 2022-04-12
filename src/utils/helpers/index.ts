@@ -1,17 +1,15 @@
 import sanitize from './sanitize';
 import { lastMessageDate, messageTime, datetime } from './date-fns';
 
+import { Indexed } from '../types';
+
 function trim(str: string, sym?: string): string {
   const replaced = sym?.length ? sym : '\s\uFEFF\xA0';
   const reg = new RegExp(`^[${replaced}]+|[${replaced}]+$`, 'g');
   return str.replace(reg, '');
 }
 
-type Indexed<T = unknown> = {
-  [key in string]: T;
-}
-
-function merge(lhs: Indexed<any>, rhs: Indexed<any>): Indexed {
+function merge(lhs: Indexed, rhs: Indexed): Indexed {
   for (const p in rhs) {
       if (!rhs.hasOwnProperty(p)) {
           continue;

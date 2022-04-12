@@ -8,7 +8,7 @@ import image from '/static/icons/image.svg';
 
 export default function initSVG () {
   const url = arrow.url.split('#')[0];
-  const sprite: string = `
+  const sprite = `
     <img hidden src="${url}">
   `;
   const root = document.querySelector('body');
@@ -24,4 +24,4 @@ export const icons = {
   checkDouble: `<svg viewBox="${checkDouble.viewBox}"><use xlink:href="${checkDouble.url}"></use></svg>`,
   ellipsisVert: `<svg viewBox="${ellipsisVert.viewBox}"><use xlink:href="${ellipsisVert.url}"></use></svg>`,
   image: `<svg viewBox="${image.viewBox}"><use xlink:href="${image.url}"></use></svg>`,
-}
+};

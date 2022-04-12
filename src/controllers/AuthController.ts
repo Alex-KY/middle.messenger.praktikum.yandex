@@ -10,7 +10,7 @@ const avatar = require('/static/imgs/image.png');
 
 const authApi = new AuthAPI();
 
-function prepareUserData(data: User) {
+function prepareUserData(data: User): User {
   const url = data.avatar;
   const path = url ? `${BASERESOURCESAPIURL}${url}` : avatar;
 

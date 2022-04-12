@@ -1,4 +1,4 @@
-import { Props as Properties } from '../types';
+import { Props as Properties, Indexed } from '../types';
 
 import { sanitize } from '../helpers';
 
@@ -14,7 +14,7 @@ export default class Route {
   private _props: Props;
   private _root: HTMLElement | null;
 
-  constructor(pathname: string, view: any, props: Props) {
+  constructor(pathname: string, view: Indexed, props: Props) {
     this._pathname = pathname;
     this._blockClass = view;
     this._block = null;

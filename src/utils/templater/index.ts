@@ -1,5 +1,6 @@
-import get from "./utils/get";
 import { nanoid } from 'nanoid';
+
+import get from "./utils/get";
 
 interface Properties {
   template?: string

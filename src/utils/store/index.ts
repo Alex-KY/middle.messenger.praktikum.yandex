@@ -2,11 +2,7 @@ import EventBus from '../eventBus';
 
 import { merge } from '../helpers';
 
-import { User, Chats, Chat, ChatMessage } from '../../utils/types';
-
-type Indexed<T = unknown> = {
-  [key in string]: T;
-}
+import { User, Chats, Chat, ChatMessage, Indexed } from '../../utils/types';
 
 interface storeData {
   userData?: User,

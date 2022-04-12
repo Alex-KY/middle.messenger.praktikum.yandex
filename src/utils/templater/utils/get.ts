@@ -1,6 +1,6 @@
-type T = string;
+import { Indexed } from "../../types";
 
-export default function get (obj: Object | Array<T> | string, path: string, defaultValue?: unknown) {
+export default function get (obj: Indexed | unknown, path: string, defaultValue?: unknown) {
   const keys = path.match(/\w{1,}/g) || [];
 
   let result = obj;
