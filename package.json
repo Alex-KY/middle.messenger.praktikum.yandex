@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "source": "src/index.html",
-  "engines": {
-    "node": ">=12.22.10 <16"
-  },
   "alias": {
     "buffer": false
   },
@@ -67,8 +64,8 @@
   },
   "scripts": {
     "dev": "webpack serve",
-    "start": "rm -rf dist && parcel build src/index.html && node ./src/server.ts",
-    "build": "parcel build src/index.html",
+    "start": "rm -rf dist && webpack serve",
+    "build": "webpack",
     "lint": "stylelint **.scss && eclint check src/ && eslint \"src/**/*.{js,ts}\"",
     "lint-fix": "stylelint --fix **.scss && eclint fix src/ && eslint --fix \"src/**/*.{js,ts}\"",
     "test": "NODE_ENV=test mocha --require mocks.js --require babel-register.js",
