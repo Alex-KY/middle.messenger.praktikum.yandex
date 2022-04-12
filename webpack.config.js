@@ -16,7 +16,8 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: '/src/index.html',
-      filename: 'index.html'
+      filename: 'index.html',
+      favicon: 'static/icons/favicon.ico'
     }),
     new SpriteLoaderPlugin({
       plainSprite: true,
@@ -47,7 +48,7 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.(png|ttf)$/,
+        test: /\.(png|ttf|ico)$/,
         type: 'asset/resource'
       },
       {
