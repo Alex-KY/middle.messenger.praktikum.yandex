@@ -1,12 +1,13 @@
 const express = require('express');
-const PORT = 3000;
+const expressHistory = require('express-history-api-fallback');
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 app.use(express.static('./dist'));
 
-app.use('/*', express.static('./dist'));
+app.use(expressHistory('index.html', { root: 'dist' }));
 
-app.listen(process.env.PORT || PORT, function () {
+app.listen(PORT, function () {
   console.log(`Example app listening on port ${PORT}!`);
 });
