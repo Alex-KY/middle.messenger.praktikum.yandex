@@ -4,8 +4,11 @@
 ## Описание
 Это учебный проект Яндекс.Практикума первого модуля курса Мидл фронтенд-разработчик.
 
-## Демо
+## Демо 3 спринт
 <h2 align="center"><a href="https://yandex-praktikum-middle-dev-chat.netlify.app">Netlify</a></h2>
+
+## Демо 4 спринт
+<h2 align="center"><a href="https://chat-up-messenger.herokuapp.com">Herokuapp</a></h2>
 
 ## Макет
 <a href="https://www.figma.com/file/24EUnEHGEDNLdOcxg7ULwV/Chat">Макет</a>
