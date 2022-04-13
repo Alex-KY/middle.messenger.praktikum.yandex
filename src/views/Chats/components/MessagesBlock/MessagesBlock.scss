@@ -99,6 +99,7 @@
   &__empty {
     @include flex-center;
 
+    position: relative;
     flex-grow: 1;
 
     .y-btn {
@@ -107,7 +108,7 @@
       top: 10px;
 
       & > svg {
-        transform: scale(1.25);
+        transform: scale(0.75);
       }
     }
   }

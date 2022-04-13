@@ -17,6 +17,8 @@ import { Props as Properties } from '../../utils/types';
 
 import './Profile.scss';
 
+import { icons } from '../../utils/svgSprite';
+
 const template = `
   <div class="profile-page__side-button">
     {{ buttonBack }}
@@ -75,9 +77,6 @@ const template = `
 const router = new Router();
 const authController = new AuthController();
 
-import * as arrow from 'bundle-text:/static/icons/arrow.svg';
-const image = require('/static/icons/image.svg');
-
 function toSigninPage() {
   router.go('/signin');
 }
@@ -106,9 +105,6 @@ function activateUserPasswordDialog() {
 }
 
 const context = {
-  userData: {
-    avatar: image
-  },
   rows: [
     {
       text: 'Почта'
@@ -138,7 +134,7 @@ const context = {
       }
     }).render(),
   buttonBack: new YButton({
-      icon: arrow,
+      icon: icons.arrow,
       click: {
         callback: back
       },
@@ -191,7 +187,7 @@ interface Props extends Properties {
 
 export default class Profile extends Block<Props> {
   constructor(props: Props = {}) {
-    const concatProps = Object.assign(context, props, { _state: 'userData' });
+    const concatProps = Object.assign(context, props, { watchState: 'userData' });
 
     super(concatProps);
   }

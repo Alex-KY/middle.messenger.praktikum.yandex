@@ -16,7 +16,7 @@ import {
   passwordPattern
 } from '../../utils/verifications/patterns';
 
-import { Props as Properties } from '../../utils/types';
+import { Props as Properties, SingupFormModel } from '../../utils/types';
 
 import "./Signup.scss";
 
@@ -57,7 +57,7 @@ async function signup(e: PointerEvent) {
   const { form } = e.target as HTMLFormElement;
   const formData = new FormData(form);
   const formObject = [...formData.entries()]
-    .reduce((accum, [key, value]) => value ? Object.assign(accum, { [key]: value }) : accum, {});
+    .reduce((accum, [key, value]) => value ? Object.assign(accum, { [key]: value }) : accum, {}) as SingupFormModel;
 
   if (!form.checkValidity()) {
     [...form.elements].forEach((item: HTMLElement) => {
@@ -65,15 +65,18 @@ async function signup(e: PointerEvent) {
     });
   } else {
     const res = await authController.signup(formObject);
-    if (res.status === 200) {
+
+    if (typeof res !== 'string' && res.status === 200) {
       const res = await authController.fetchUser();
-      if (res.data?.id) {
+
+      if (typeof res !== 'string' && res.data?.id) {
         toChatPage();
       } else {
         setErrorBlock(`Ошибка входа. Попробуйте позже`);
       }
     } else {
-      setErrorBlock(`${res.status}. ${res.data.reason || 'Неизвестная ошибка'}`);
+      const message = typeof res === 'string' ? res : `${res.status}. ${res.data.reason}`;
+      setErrorBlock(`${message}`);
     }
   }
 }

@@ -1,14 +1,8 @@
 import EventBus from '../eventBus';
 
-import Block from '../block';
+import { merge } from '../helpers';
 
-import { merge, isEqual } from '../helpers';
-
-import { Props, User, Chats, Chat, ChatMessage } from '../../utils/types';
-
-type Indexed<T = unknown> = {
-  [key in string]: T;
-}
+import { User, Chats, Chat, ChatMessage, Indexed } from '../../utils/types';
 
 interface storeData {
   userData?: User,
@@ -40,7 +34,7 @@ class Store extends EventBus {
   private _state: storeData = {};
 
   public getState(path?: string) {
-    return path ? this._state[path] : this._state;
+    return path ? Object.entries(this._state).find(([key,]) => key === path)?.[1] : this._state;
   }
 
   public eventBus = eventBus;
@@ -49,7 +43,7 @@ class Store extends EventBus {
     return Store.EVENTS;
   }
 
-  public set(path: keyof storeData, value: unknown) {
+  public set(path: keyof storeData, value: any) {
     set(this._state, path, value);
 
     this.eventBus.emit(Store.EVENTS.STATE_SDU, path, value);
@@ -65,25 +59,5 @@ class Store extends EventBus {
 }
 
 const store = new Store();
-
-export function withStore(mapStateToProps: (state: storeData) => Record<string, unknown>) {
-  return function(Component: typeof Block) {
-    return class extends Component<Props> {
-      constructor(props: Props) {
-        const state = mapStateToProps(store.getState());
-
-        super({...props, ...state});
-
-        const newState = mapStateToProps(store.getState());
-
-        if (!isEqual(state, newState)) {
-          store.on(StoreEvents.Updated, () => {
-            this.setProps({...newState});
-          });
-        }
-      }
-    };
-  };
-}
 
 export default store;

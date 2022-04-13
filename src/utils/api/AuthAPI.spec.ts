@@ -8,18 +8,18 @@ import { BASEAPIURL } from '../const';
 const api = new AuthAPI();
 
 describe("Тестирование AuthAPI", () => {
-  let requests = [];
+  let requests: any[] = [];
 
   beforeEach(() => {
-    global.XMLHttpRequest = sinon.useFakeXMLHttpRequest();
+    (global as any).XMLHttpRequest = sinon.useFakeXMLHttpRequest();
 
-    global.XMLHttpRequest.onCreate = request => {
+    (global as any).XMLHttpRequest.onCreate = (request: any) => {
       requests.push(request);
     };
   });
 
   afterEach(() => {
-    global.XMLHttpRequest.restore();
+    (global as any).XMLHttpRequest.restore();
     requests = [];
   });
 

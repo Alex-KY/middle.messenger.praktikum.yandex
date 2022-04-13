@@ -6,6 +6,8 @@ import Signup from './views/Signup';
 import Chats from './views/Chats';
 import Profile from './views/Profile';
 
+import initSVG from './utils/svgSprite';
+
 import store from './utils/store';
 
 import authController from './controllers/AuthController';
@@ -41,6 +43,8 @@ async function ready () {
       router.replace('/404');
     }
   }
+
+  initSVG();
 }
 
 document.addEventListener('DOMContentLoaded', ready);

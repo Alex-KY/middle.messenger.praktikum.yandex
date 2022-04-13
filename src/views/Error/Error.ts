@@ -24,7 +24,9 @@ const context = [
   }
 ];
 
-type Props = Properties;
+interface Props extends Properties {
+  code: number
+}
 
 export default class ErrorPage extends Block<Props> {
   constructor(props: Props) {

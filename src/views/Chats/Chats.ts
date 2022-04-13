@@ -17,12 +17,9 @@ import YInput from '../../components/YInput';
 
 import { Props as Properties } from '../../utils/types';
 
-import "./Chats.scss";
+import './Chats.scss';
 
-import * as deleteIcon from 'bundle-text:/static/icons/delete.svg';
-import * as plus from 'bundle-text:/static/icons/plus.svg';
-import * as arrow from 'bundle-text:/static/icons/arrow.svg';
-import * as clip from 'bundle-text:/static/icons/clip.svg';
+import { icons } from '../../utils/svgSprite';
 
 const template = `
   {{ LeftSide }}
@@ -59,10 +56,10 @@ function send(e: PointerEvent) {
   const input = form.querySelector('.y-input__input') as HTMLInputElement;
   const value = input.value;
 
-  if (!value.trim()) return;
-
-  MessagesController.sendMessage({ type: 'message', content: value });
-  input.value = '';
+  if (value.trim()) {
+    MessagesController.sendMessage({ type: 'message', content: value });
+    input.value = '';
+  }
 }
 
 function toProfilePage() {
@@ -88,7 +85,7 @@ const messagesBlockProps = {
   empty: 'Выберите чат чтобы отправить сообщение',
   buttonAdd:
     new YButton({
-      icon: plus,
+      icon: icons.plus,
       click: {
         callback: activateCreateChatDialog
       },
@@ -99,7 +96,7 @@ const messagesBlockProps = {
   header: {
     components: [
       new YButton({
-        icon: deleteIcon,
+        icon: icons.delete,
         class: 'y-btn--fab',
         title: 'Удалить чат',
         click: {
@@ -110,12 +107,11 @@ const messagesBlockProps = {
     ]
   },
   footer: {
-    attachIcon: clip,
-    sendIcon: arrow,
+    attachIcon: icons.clip,
     components: [
 
       new YButton({
-        icon: clip,
+        icon: icons.clip,
         class: 'y-btn--fab',
         color: 'transparent'
       }).render(),
@@ -127,7 +123,7 @@ const messagesBlockProps = {
       }).render(),
 
       new YButton({
-        icon: arrow,
+        icon: icons.arrow,
         click: {
           callback: send,
           params: ['event']
@@ -154,7 +150,7 @@ interface Props extends Properties {
 
 export default class Chats extends Block<Props> {
   constructor(props: Props) {
-    const concatProps = Object.assign(generateTemplate(), props,  { _state: 'userData' });
+    const concatProps = Object.assign(generateTemplate(), props,  { watchState: 'userData' });
 
     super(concatProps);
   }

@@ -1,7 +1,7 @@
-import sanitizeHtml from 'sanitize-html';
+const sanitizeHTML = require('sanitize-html');
 
 export default function sanitize (html: string) {
-  return sanitizeHtml(html, {
+  return sanitizeHTML(html, {
     allowedTags: false,
     allowedAttributes: false
   });

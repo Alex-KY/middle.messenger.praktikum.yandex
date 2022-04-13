@@ -1,5 +1,6 @@
-import get from "./utils/get";
 import { nanoid } from 'nanoid';
+
+import get from "./utils/get";
 
 interface Properties {
   template?: string
@@ -16,7 +17,7 @@ export default class Templator<Props extends Properties> {
     this._template = template;
   }
 
-  public compile(ctx: Props): string {
+  public compile(ctx: any): string {
     this._precompileTemplate(ctx);
     return this._compileTemplate(ctx);
   }
@@ -34,7 +35,7 @@ export default class Templator<Props extends Properties> {
           .map(char => char.match(this.SPEC_SYMBOLS_REGEXP) ? `\\${char}` : char)
           .join('');
 
-        const data = get(ctx, tmplValue);
+        const data = get(ctx, tmplValue) as string;
 
         if (Array.isArray(data)) {
           let tmplData = '';
@@ -70,12 +71,13 @@ export default class Templator<Props extends Properties> {
           .map(char => char.match(this.SPEC_SYMBOLS_REGEXP) ? `\\${char}` : char)
           .join('');
 
-        const data = get(ctx, tmplValue);
+        const data = get(ctx, tmplValue) as string;
 
         if (typeof data === "function") {
           const id: string = nanoid(6);
           const key = `${tmplValue}-${id}`;
-          window[key] = data;
+          Object.assign(window, { [key]: data });
+
           tmpl = tmpl.replace(
             new RegExp(tmplKey, "gi"),
             `window['${tmplValue}-${id}']`

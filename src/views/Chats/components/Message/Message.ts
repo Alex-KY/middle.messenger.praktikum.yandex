@@ -5,23 +5,16 @@ import store from '../../../../utils/store';
 
 import { messageTime, datetime } from '../../../../utils/helpers';
 
-import { Props as Properties } from '../../../../utils/types';
+import { ChatMessage } from '../../../../utils/types';
 
 import './Message.scss';
 
-interface Props extends Properties {
-  time: string,
-  content?: string,
-  file?: string,
-  user_id?: number
-}
-
-export default class Message extends Block<Props> {
-  constructor(props: Props) {
+export default class Message extends Block<ChatMessage> {
+  constructor(props: ChatMessage) {
     super(props);
   }
 
-  _computedClasses(props: Props) {
+  _computedClasses(props: ChatMessage) {
     const { content, file, user_id: userId } = props;
     const id = store.getState('userData')?.id;
     const isMine = id === userId;

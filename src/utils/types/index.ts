@@ -1,19 +1,19 @@
 interface Props {
   id?: string,
+  rootString?: string,
   events?: {
     string: () => void
   },
-  state?: unknown
+  state?: unknown,
+  watchState?: string | string[]
 }
 
 interface API {
-  data: {
-    reason?: string
-  },
+  data: any,
   response?: string,
-  responseText: string,
+  responseText?: string,
   status: number,
-  statusText: string
+  statusText?: string
 }
 
 interface MessagesAPI {
@@ -45,7 +45,7 @@ interface Chat {
   id: string
 }
 
-interface ChatMessage {
+interface ChatMessage extends Props {
   chat_id: number,
   time: string,
   type: string,
@@ -119,6 +119,10 @@ interface MessageFormModel {
   type?: string
 }
 
+type Indexed<T = unknown> = {
+  [key in string]: T;
+}
+
 export {
   Props, API, MessagesAPI,
 
@@ -130,5 +134,7 @@ export {
 
   ChatsParamsModel, CreateChatModel, ChatUsersModel,
 
-  MessageFormModel
+  MessageFormModel,
+
+  Indexed
 };
